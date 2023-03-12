@@ -46,3 +46,17 @@ horde of fantasy looters.
 2. The Enemy has a set number of hit points and will take hits from Structures.
 3. When the enemy hit points reaches 0, points are awarded both to the player and to the cache
 4. The number and strength of enemies increases with each turn.
+
+### The Road
+1. The Enemy starts on the entrance
+2. Each enemy appears at the entrance and marches towards the cache.
+3. At the end of the turn the entrance expands.
+
+### The Playing Field
+1. Playing field contains location of cache and structures.
+2. Playing field is three spaces to either side of road.
+3. Playing field grows at the end of each turn.
+
+### THe Game Server
+1. Spawns each game object
+2. Controls communications with each object
