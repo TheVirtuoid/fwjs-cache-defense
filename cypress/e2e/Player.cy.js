@@ -7,14 +7,30 @@
 
  */
 
+import Player from "../../src/Player.js";
+
 describe('Player: ', () => {
 
 	/*
 			new Player();
 	 */
 	describe(' creation: ', () => {
-		it('should create an instance.', () => {});
-		it('should be immutable', () => {});
+		/*
+				new Player();
+		 */
+		it('should create an instance.', () => {
+			const player = new Player();
+			expect(player instanceof Player).to.be.true;
+		});
+		it('should be immutable', () => {
+			const player = new Player();
+			try {
+				player.id = 'badone';
+				expect(true).to.be.false;
+			} catch (err) {
+				expect(err.name).to.equal('TypeError');
+			}
+		});
 		it('should create with default number of points', () => {});
 	});
 
@@ -22,8 +38,24 @@ describe('Player: ', () => {
 			player.update(structure, points)
 	 */
 	describe('point usage (upgrade)', () => {
-		it('should throw error if structure is an invalid argument', () => {});
-		it('should throw error if structure is not present on playing field', () => {});
+		it('should throw error if structure is an invalid argument', () => {
+			const player = new Player();
+			try {
+				player.update('badone', 0);
+				expect(true).to.be.false;
+			} catch (err) {
+				expect(err.name).to.equal('TypeError');
+			}
+		});
+		it('should throw error if structure is not present on playing field', () => {
+			const player = new Player();
+			try {
+				player.id = 'badone';
+				expect(true).to.be.false;
+			} catch (err) {
+				expect(err.name).to.equal('TypeError');
+			}
+		});
 		it('should throw error is points is an invalid argument', () => {});
 		it('should upgrade the structure', () => {});
 	});
