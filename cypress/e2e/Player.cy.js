@@ -5,34 +5,15 @@
 4. Points increase with the elimination of enemies
 5. Points increase at the end of each turn based upon the number of points associated with the Cache
 
- Receive messages from the Player
-   1. Quit Game
-   2. Pause Game?
-   3. Restart Game
-   4. Upgrade Structure
-   5. Build Structure
-   6. Place Structure
-9. Receive messages from the GUI
-10. Receive messages from the Cache
-    1. End of Game
-    2. End of Turn / Allocation of points to player
-11. Receive messages from the Field
-12. Receive Messages from the Structure
-    1. Composition of New Structure
-    2. List of supported Structures
-    3. Notification of Destruction?
-    4. Fire direction / damage
-13. Received Message from the Enemy
-    1. Movement
-    2. Damage to Cache
-    3. Damage to Structure
-    4. Creation
-    5. Elimination
-14. Sent Messages to the Player
-    1. Add Points
-    2. End Game
-    3. Available Structures to Build
-
+I want to quit the game!
+I want to pause the game.
+I want to resume the game.
+I have finished my turn.
+I have upgraded a structure
+I have created a new structure
+I have placed a new structure
+I have removed a structure
+I have changed the point allocation for the cache.
 
 
  */
@@ -40,8 +21,25 @@
 import Player from "../../src/Player.js";
 
 describe('Player: ', () => {
-	it('should create', () => {});
-	it('should process GameQuit', () => {});
-	it('should process GamePause', () => {});
-	it('should process GameRestart', () => {});
+	it('should be asked to create', () => {});
+	it('should throw error if attempting to create again', () => {});
+
+	describe('dealing with the game: ', () => {
+		it('should quit the game', () => {});
+		it('should pause the game', () => {});
+		it('should resume the game', () => {});
+		it('should finish the top of the round', () => {});
+	});
+
+	describe('dealing with structures: ', () => {
+		it('should upgrade a structure', () => {});
+		it('should remove a structure', () => {});
+		it('should create a new structure', () => {});
+		it('should place a new structure', () => {});
+	});
+
+	describe('dealing with the cache', () => {
+		it('should change the resource allocation of the cache', () => {});
+	});
+
 })

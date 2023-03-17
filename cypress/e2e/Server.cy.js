@@ -1,48 +1,98 @@
 /*
-### The Game Server
-1. Spawns each game object
-2. Controls communications with each object
-3. Creates a starting Field
-4. Creates a starting Cache
-5. Creates the Player
-6. Begins the turn
-7. Allows the player to build and/or upgrade structures
-8. Determines number and type of Enemies to create, and creates them.
-9. Runs the turn
-   1. Advances the enemies
-   2. If enemy has reached Cache, damage the cache.
-   3. End turn and End Game if cache.points === 0
-   4. Fire at enemies
-   5. Determine if enemy has been eliminated, allocate points to player
-   6. Repeat until no more enemies.
-10.
+What does the Server say to the Player?
+Create the Player
+What do you do during this turn in the run?
+
+What does the Server say to the Field?
+Create the Field
+Add onto the Field
+Place a Structure on the Field
+Place an Enemy on the Field
+Move an Enemy on the Field
+What do you do during this turn in the run?
+
+What does the Server say to the Cache?
+Create the Cache
+Subtract points due to Enemy Hit
+Add points due to Enemy Elimination
+What do you do during this turn in the run?
+
+What does the Server say to the Structure Factory?
+Create a certain type of Structure
+Subtract points due to Enemy Hit
+Add points to a structure due to player upgrade
+Remove a structure from list
+What do you do during this turn in the run?
+
+What does the Server say to the Enemy Factory?
+Create a certain type of Enemy
+Subtract points due to Structure hit
+What do you do during this turn in the run?
+
  */
 
 describe('Server: ', () => {
+	describe('creation: ', () => {});
+	describe('server to Player: ', () => {
+		it('should create a Player', () => {});
+		it('should throw error if creating a second player', () => {});
+	});
 	/*
-			const server = new Server();
+	Create the Field
+Add onto the Field
+Place a Structure on the Field
+Place an Enemy on the Field
+Move an Enemy on the Field
 	 */
-	describe('creation: ', () => {
-		it('should create the instance.', () => {});
+	describe('server to Field: ', () => {
+		it('should create a field', () => {});
+		it('should throw error if creating a second field', () => {});
+		describe('work with structures: ', () => {
+			it('should place a structure on the field', () => {});
+			it('should throw error if arguments are invalid', () => {});
+		});
+		describe('work with enemies: ', () => {
+			it('should place a enemy on the field', () => {});
+			it('should throw error if arguments are invalid', () => {});
+			it('should be able to move an enemy', () => {});
+		});
 	});
-	describe('starting a game: ', () => {
-		it('should create the player', () => {});
-		it('should create the cache', () => {});
-		it('should create the initial field', () => {});
+
+	/*
+	Create the Cache
+Subtract points due to Enemy Hit
+Add points due to Enemy Elimination
+
+	 */
+	describe('server to Cache', () => {
+		it('should create the Cache', () => {});
+		it('should throw error if a second cache is created', () => {});
+		describe('work with enemies: ', () => {
+			it('should subtract points due to enemy hit', () => {});
+			it('should add points due to enemy elimination', () => {});
+		});
 	});
-	describe('ending the game: ', () => {
-		it('after initialization, should run a turn then end', () => {});
-		it('after initialization, should run two turns then end', () => {});
+
+	/*
+	Create a certain type of Structure
+Subtract points due to Enemy Hit
+Add points to a structure due to player upgrade
+Remove a structure from list
+	 */
+	describe('server to StructureFactory', () => {
+		it('should create the StructureFactory', () => {});
+		it('should throw error if a second StructureFactory is created', () => {});
+		it('should add points due to player upgrade', () => {});
+		it('should remove structure from the list', () => {});
 	});
-	describe('running a turn', () => {
-		it('should determine the correct number and type of enemies', () => {});
-		it('should place the enemies at the entrance to the path', () => {});
-		it('should advance the enemies one movement', () => {});
-		it('should check to see if the cache has been breached', () => {});
-		it('should fire at the enemies', () => {});
-		it('should determine if a hit has been achieved', () => {});
-		it('should allocate points if the enemy has been eliminated', () => {});
-		it('should not end the game if the game has not ended', () => {});
-		it('should end the game if the game has ended', () => {});
+
+	/*
+	Create a certain type of Enemy
+Subtract points due to Structure hit
+	 */
+	describe('server to EnemyFactory', () => {
+		it('should create the EnemyFactory', () => {});
+		it('should throw error if a second EnemyFactory is created', () => {});
+		it('should remove points if a Structure is hit', () => {});
 	});
 });
