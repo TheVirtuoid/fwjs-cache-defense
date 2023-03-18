@@ -5,8 +5,18 @@
 4. The Enemy starts on the entrance
 5. Each enemy appears at the entrance and marches towards the cache.
 6. At the end of the turn the entrance expands.
+
+
+1. I have created a new extension.
+
  */
 
 describe('Field: ', () => {
-	describe('creation: ', () => {});
+	describe('creation: ', () => {
+		it('should create the field', () => {});
+		it('should throw error if more than one field created', () => {});
+	});
+	describe('communications with server: ', () => {
+		it('should tell server it has created a new extension', () => {});
+	});
 });

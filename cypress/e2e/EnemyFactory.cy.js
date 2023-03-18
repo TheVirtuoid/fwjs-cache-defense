@@ -4,6 +4,8 @@
 2. The Enemy has a set number of hit points and will take hits from Structures.
 3. When the enemy hit points reaches 0, points are awarded both to the player and to the cache
 4. The number and strength of enemies increases with each turn.
+
+1. I have moved certain number of spaces
  */
 
 describe('Enemy: ', () => {

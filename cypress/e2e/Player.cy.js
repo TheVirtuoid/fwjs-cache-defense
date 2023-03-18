@@ -18,7 +18,7 @@ I have changed the point allocation for the cache.
 
  */
 
-import Player from "../../src/Player.js";
+import Player from "../../src/objects/Player.js";
 
 describe('Player: ', () => {
 	it('should be asked to create', () => {});
