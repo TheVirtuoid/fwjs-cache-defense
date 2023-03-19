@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "npx cypress open",
-    "test:ci": "npx cypress run"
+    "test:ci": "npx cypress run",
+    "test:full": "vite build & vite preview & npx cypress open",
+    "test:full:ci": "vite build & vite preview & npx cypress run"
   },
   "devDependencies": {
     "cypress": "^12.7.0",

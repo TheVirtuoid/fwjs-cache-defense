@@ -18,9 +18,9 @@ I have changed the point allocation for the cache.
 
  */
 
-import Player from "../../src/objects/Player.js";
+/*import Player from "../../../src/objects/Player.js";*/
 
-describe('Player: ', () => {
+/*describe('Player: ', () => {
 	it('should be asked to create', () => {});
 	it('should throw error if attempting to create again', () => {});
 
@@ -42,4 +42,4 @@ describe('Player: ', () => {
 		it('should change the resource allocation of the cache', () => {});
 	});
 
-})
+});*/

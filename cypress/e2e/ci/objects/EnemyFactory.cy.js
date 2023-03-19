@@ -8,27 +8,27 @@
 1. I have moved certain number of spaces
  */
 
-describe('Enemy: ', () => {
-	/*
+/*describe('Enemy: ', () => {
+	/!*
 			new Enemy();
-	 */
+	 *!/
 	describe('creation', () => {});
 
-	/*
+	/!*
 			enemy.move();
 
-	 */
+	 *!/
 	describe('move: ', () => {
 		it('should increase enemy position relative of movement speed', () => {});
 		it('should report current position to server', () => {});
 	});
 
-	/*
+	/!*
 			addEventListener('enemy-hit', (payload) => {});
-	 */
+	 *!/
 	describe('enemy hit event: ', () => {
 		it('should receive the event', () => {});
 		it('should throw error if event is not the correct payload', () => {});
 		it('should process the event particular to the enemy', () => {});
 	});
-})
+});*/

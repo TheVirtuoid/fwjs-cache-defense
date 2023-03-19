@@ -11,11 +11,12 @@
 
  */
 
+/*
 describe('Cache: ', () => {
 
-	/*
+	/!*
 			new Cache();
-	 */
+	 *!/
 	describe('creation: ', () => {
 		it('should create the Cache', () => {});
 		it('should create with the default number of points', () => {});
@@ -28,4 +29,4 @@ describe('Cache: ', () => {
 	});
 
 
-});
+});*/

@@ -11,6 +11,7 @@
 
  */
 
+/*
 describe('Field: ', () => {
 	describe('creation: ', () => {
 		it('should create the field', () => {});
@@ -19,4 +20,4 @@ describe('Field: ', () => {
 	describe('communications with server: ', () => {
 		it('should tell server it has created a new extension', () => {});
 	});
-});
+});*/

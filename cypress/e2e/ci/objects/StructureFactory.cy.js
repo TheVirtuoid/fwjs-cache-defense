@@ -12,10 +12,11 @@
 
  */
 
+/*
 describe('StructureFactory: ', () => {
-	/*
+	/!*
 			const structure = new Structure()
-	 */
+	 *!/
 	describe('creation: ', () => {
 		it('should create a StructureFactory', () => {});
 		it('should throw an error is creating a second one.', () => {});
@@ -27,4 +28,4 @@ describe('StructureFactory: ', () => {
 	});
 
 
-});
+});*/
