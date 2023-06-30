@@ -38,7 +38,8 @@ export default class Scene extends Phaser.Scene {
 	}
 
 	shootLaser() {
-		const { x, y } =  this.physics.velocityFromAngle(this.angle, LaserGroup.SHOTSPEED);
+		// const { x, y } =  this.physics.velocityFromAngle(this.angle, LaserGroup.SHOTSPEED);
+		const { x, y } =  this.physics.velocityFromAngle(this.gun001.angle, LaserGroup.SHOTSPEED);
 		this.laserGroup.fireLaser(this.gun001.x, this.gun001.y, { x, y });
 	}
 
@@ -47,9 +48,13 @@ export default class Scene extends Phaser.Scene {
 		if (this.angle >= 360) {
 			this.angle = 0;
 		}
-		this.gun001.setAngle(this.angle);
+		// this.gun001.setAngle(this.angle);
+		console.log(this.alien001.active);
 		this.alien001.x += 1;
 		this.physics.collide(this.alien001, this.laserGroup, this.gotHit);
+		const degrees = Phaser.Math.Angle.Between(this.gun001.x, this.gun001.y, this.alien001.x, this.alien001.y) * 180 / Math.PI;
+		const newAngle = degrees >= 0 ? degrees : 360 + degrees;
+		this.gun001.setAngle(degrees);
 	}
 
 	gotHit(alien, laser) {
