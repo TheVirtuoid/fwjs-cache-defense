@@ -2,12 +2,18 @@ import ItemPosition from "./ItemPosition.js";
 import { v4 as uuidv4 } from 'uuid';
 
 export default class BaseGameItem {
+
+	static ERROR_ARG_NOT_ITEMPOSITION = new TypeError(`"position" argument must be ItemPosition.`);
+
 	#id;
 	#position;
 	constructor(args = {}) {
-		const { id = uuidv4() } = args;
+		const { id = uuidv4(), position = new ItemPosition() } = args;
 		this.#id = id;
-		this.#position = new ItemPosition();
+		if (!(position instanceof ItemPosition)) {
+			throw BaseGameItem.ERROR_ARG_NOT_ITEMPOSITION;
+		}
+		this.#position = position;
 	}
 
 	get id() {
@@ -19,6 +25,9 @@ export default class BaseGameItem {
 	}
 
 	setPosition(position) {
+		if (!(position instanceof ItemPosition)) {
+			throw BaseGameItem.ERROR_ARG_NOT_ITEMPOSITION;
+		}
 		this.#position = position;
 	}
 }
