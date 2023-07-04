@@ -6,6 +6,8 @@ export default class Game {
 	#arsenalController;
 	#monsterController;
 	#round;
+
+	#workerBoard;
 	constructor() {
 		this.#gameInProgress = false;
 		this.#boardController = null;

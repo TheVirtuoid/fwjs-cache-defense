@@ -2,6 +2,24 @@
 
 import Game from "../../src/classes/Game.js";
 
+const waitForChange = (object, property, timing) => {
+	const checkValues = () => {
+		if (object[property] !== originalValue) {
+			clearInterval(timer);
+			return Promise.resolve(true);
+		} else {
+			timeLeft -= 10;
+			if (timeLeft <= 0) {
+				clearInterval(timer);
+				return Promise.reject(true);
+			}
+		}
+	}
+	let timeLeft = timing;
+	const originalValue = object[property];
+	let timer = setInterval(checkValues, 10);
+}
+
 describe('Game Object', () => {
 
 	describe('creation', () => {
