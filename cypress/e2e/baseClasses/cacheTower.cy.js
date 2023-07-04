@@ -1,4 +1,4 @@
-import CacheTower from "../../src/classes/CacheTower.js";
+import CacheTower from "../../../src/classes/CacheTower.js";
 
 describe('cacheTower', () => {
 	describe('creation', () => {

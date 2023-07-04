@@ -1,6 +1,6 @@
 // game object
 
-import Game from "../../src/classes/Game.js";
+import Game from "../../../src/classes/Game.js";
 
 const waitForChange = (object, property, timing) => {
 	const checkValues = () => {

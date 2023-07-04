@@ -1,5 +1,5 @@
-import BaseGameItem from "../../src/classes/BaseGameItem.js";
-import ItemPosition from "../../src/classes/ItemPosition.js";
+import BaseGameItem from "../../../src/classes/BaseGameItem.js";
+import ItemPosition from "../../../src/classes/ItemPosition.js";
 
 describe('base game item', () => {
 

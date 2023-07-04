@@ -1,6 +1,6 @@
-import MonsterController from "../../src/classes/controllers/MonsterController.js";
-import Monster from "../../src/classes/Monster.js";
-import MonsterType from "../../src/classes/types/MonsterType.js";
+import MonsterController from "../../../src/classes/controllers/MonsterController.js";
+import Monster from "../../../src/classes/Monster.js";
+import MonsterType from "../../../src/classes/types/MonsterType.js";
 
 describe('monsterController', () => {
 

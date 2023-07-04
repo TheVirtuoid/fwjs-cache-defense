@@ -1,4 +1,4 @@
-import ItemPosition from "../../src/classes/ItemPosition.js";
+import ItemPosition from "../../../src/classes/ItemPosition.js";
 
 describe('ItemPosition', () => {
 	describe('creation', () => {

@@ -1,5 +1,5 @@
-import CacheTowerController from "../../src/classes/controllers/CacheTowerController.js";
-import CacheTower from "../../src/classes/CacheTower.js";
+import CacheTowerController from "../../../src/classes/controllers/CacheTowerController.js";
+import CacheTower from "../../../src/classes/CacheTower.js";
 
 describe('cache controller', () => {
 

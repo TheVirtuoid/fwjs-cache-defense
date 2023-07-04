@@ -1,5 +1,5 @@
-import MonsterType from "../../src/classes/types/MonsterType.js";
-import Monster from "../../src/classes/Monster.js";
+import MonsterType from "../../../src/classes/types/MonsterType.js";
+import Monster from "../../../src/classes/Monster.js";
 
 describe('monster', () => {
 

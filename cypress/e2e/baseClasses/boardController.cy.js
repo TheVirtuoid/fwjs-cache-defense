@@ -1,6 +1,6 @@
-import BoardController from "../../src/classes/controllers/BoardController.js";
-import BaseGameItem from "../../src/classes/BaseGameItem.js";
-import ItemPosition from "../../src/classes/ItemPosition.js";
+import BoardController from "../../../src/classes/controllers/BoardController.js";
+import BaseGameItem from "../../../src/classes/BaseGameItem.js";
+import ItemPosition from "../../../src/classes/ItemPosition.js";
 
 /*
 

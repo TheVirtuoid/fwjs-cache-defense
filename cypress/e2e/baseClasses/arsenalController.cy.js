@@ -1,6 +1,6 @@
-import ArsenalController from "../../src/classes/controllers/ArsenalController.js";
-import Weapon from "../../src/classes/Weapon.js";
-import WeaponType from "../../src/classes/types/WeaponType.js";
+import ArsenalController from "../../../src/classes/controllers/ArsenalController.js";
+import Weapon from "../../../src/classes/Weapon.js";
+import WeaponType from "../../../src/classes/types/WeaponType.js";
 
 describe('arsenalController', () => {
 

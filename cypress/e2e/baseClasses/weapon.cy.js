@@ -1,5 +1,5 @@
-import WeaponType from "../../src/classes/types/WeaponType.js";
-import Weapon from "../../src/classes/Weapon.js";
+import WeaponType from "../../../src/classes/types/WeaponType.js";
+import Weapon from "../../../src/classes/Weapon.js";
 
 describe('weapon', () => {
 

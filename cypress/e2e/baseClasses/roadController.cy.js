@@ -1,6 +1,6 @@
-import RoadController from "../../src/classes/controllers/RoadController.js";
-import RoadType from "../../src/classes/types/RoadType.js";
-import Road from "../../src/classes/Road.js";
+import RoadController from "../../../src/classes/controllers/RoadController.js";
+import RoadType from "../../../src/classes/types/RoadType.js";
+import Road from "../../../src/classes/Road.js";
 
 describe('roadController', () => {
 	describe('creation', () => {
