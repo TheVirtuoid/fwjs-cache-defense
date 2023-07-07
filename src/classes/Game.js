@@ -9,6 +9,8 @@ export default class Game {
 	#monsterController;
 	#round;
 
+	#dom;
+
 	#readyFlag = {
 		'arsenal': false,
 		'board': false,
@@ -21,7 +23,11 @@ export default class Game {
 	#readyTimeout = 5000;
 	#readyInterval = 1;
 
-	constructor() {
+	constructor(args = {}) {
+
+		const { dom = {} } = args;
+		this.#dom = dom;
+
 		this.#gameInProgress = false;
 		this.#arsenalController = new Worker('/src/classes/workers/arsenalController.js');
 		this.#boardController =  new Worker('/src/classes/workers/boardController.js');
@@ -78,6 +84,8 @@ export default class Game {
 	newGame() {
 		this.#gameInProgress = true;
 		this.#round = 0;
+		this.#hide(this.#dom.newGameButton);
+		this.#show(this.#dom.gameBoard);
 	}
 
 	sendMessage(worker, message) {
@@ -105,6 +113,10 @@ export default class Game {
 		const { arsenal, board, cacheTower, monster, road } = this.#readyFlag;
 		if (arsenal && board && cacheTower && monster && road) {
 			clearInterval(this.#readyHandle);
+			const { loading, gameReady, newGameButton } = this.#dom;
+			this.#hide(loading);
+			this.#show(gameReady);
+			newGameButton.addEventListener('click', this.newGame.bind(this), { once: true });
 			document.getElementById('loading').classList.add('hidden');
 			document.getElementById('game-ready').classList.remove('hidden');
 		}
@@ -112,5 +124,13 @@ export default class Game {
 		if (this.#readyTimeout <= 0) {
 			clearInterval(this.#readyHandle);
 		}
+	}
+
+	#hide(dom) {
+		dom.classList.add('hidden');
+	}
+
+	#show(dom) {
+		dom.classList.remove('hidden');
 	}
 }

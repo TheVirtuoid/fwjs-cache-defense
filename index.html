@@ -4,13 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fun With JavaScript Presents Cache Defense</title>
-    <!--<style>.hidden {display: none;}</style>-->
   </head>
   <body>
-    <section id="game-ready" class="hidden">
+    <section data-cy="game-ready" id="game-ready" class="hidden">
       <h1>Welcome to Cache Defense!</h1>
+      <p><button data-cy="new-game-button" id="new-game-button">New Game</button></p>
+      <section data-cy="game-board" id="game-board" class="hidden">
+        <p>This is the game</p>
+      </section>
     </section>
-    <section id="loading">Loading...</section>
+    <section data-cy="loading" id="loading">Loading...</section>
     <script type="module" src="/src/cache-defense.js"></script>
   </body>
 </html>
