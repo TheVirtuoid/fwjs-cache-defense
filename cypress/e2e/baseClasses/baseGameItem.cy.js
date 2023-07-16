@@ -32,5 +32,15 @@ describe('base game item', () => {
 		});
 	});
 
+	describe('toObject', () => {
+		it('should return the correct object', () => {
+			const baseGameItem = new BaseGameItem({ id: 'test', position: new ItemPosition({ x:1, y:2 })});
+			const baseGameItemObject = baseGameItem.toObject();
+			expect(baseGameItemObject.id).to.equal('test');
+			expect(baseGameItemObject.position).not.to.be.undefined;
+		});
+	});
+
+
 
 });

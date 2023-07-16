@@ -23,4 +23,13 @@ describe('ItemPosition', () => {
 			expect(itemPosition.y).to.equal(2);
 		});
 	});
+
+	describe('toObject', () => {
+		it('should return the correct object', () => {
+			const itemPosition = new ItemPosition({ x: 1, y: 2 });
+			const itemPositionObject = itemPosition.toObject();
+			expect(itemPositionObject.x).to.equal(1);
+			expect(itemPositionObject.y).to.equal(2);
+		});
+	});
 });

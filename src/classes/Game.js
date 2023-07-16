@@ -1,6 +1,19 @@
-import CacheDefensePublicData from "./CacheDefensePublicData.js";
+import ControlPanel from "./inGame/ControlPanel.js";
+import WeaponType from "./types/WeaponType.js";
+import Weapon from "./Weapon.js";
+
+
 
 export default class Game {
+
+
+	static DEFAULT_COINS = 100;
+	static INITIAL_ROUND_NUMBER = 1;
+	static DEFAULT_HEALTH = 10;
+	static DEFAULT_WEAPON = [
+		new Weapon({ type: WeaponType.SHOOTER })
+	];
+
 	#gameInProgress;
 	#boardController;
 	#cacheTowerController;
@@ -10,6 +23,7 @@ export default class Game {
 	#round;
 
 	#dom;
+	#controlPanel;
 
 	#readyFlag = {
 		'arsenal': false,
@@ -25,18 +39,16 @@ export default class Game {
 
 	constructor(args = {}) {
 
-		const { dom = {} } = args;
+		const {dom = {}} = args;
 		this.#dom = dom;
 
 		this.#gameInProgress = false;
 		this.#arsenalController = new Worker('/src/classes/workers/arsenalController.js');
-		this.#boardController =  new Worker('/src/classes/workers/boardController.js');
+		this.#boardController = new Worker('/src/classes/workers/boardController.js');
 		this.#cacheTowerController = new Worker('/src/classes/workers/cacheTowerController.js');
 		this.#monsterController = new Worker('/src/classes/workers/monsterController.js');
 		this.#roadController = new Worker('/src/classes/workers/roadController.js');
 		this.#round = null;
-
-		window.cacheDefensePublicData = new CacheDefensePublicData();
 
 		this.#arsenalController.onmessage = this.#arsenalMessage.bind(this);
 		this.#boardController.onmessage = this.#boardMessage.bind(this);
@@ -49,6 +61,8 @@ export default class Game {
 		this.#cacheTowerController.postMessage('initialize');
 		this.#monsterController.postMessage('initialize');
 		this.#roadController.postMessage('initialize');
+
+		this.#controlPanel = new ControlPanel({ dom: this.#dom?.controlPanelDoms });
 
 		this.#readyHandle = setInterval(this.#readyChecker.bind(this), this.#readyInterval);
 	}
@@ -86,6 +100,11 @@ export default class Game {
 		this.#round = 0;
 		this.#hide(this.#dom.newGameButton);
 		this.#show(this.#dom.gameBoard);
+		this.#controlPanel.setCoins(Game.DEFAULT_COINS);
+		this.#controlPanel.setRoundNumber(Game.INITIAL_ROUND_NUMBER);
+		this.#controlPanel.setHealth(Game.DEFAULT_HEALTH);
+		this.#controlPanel.setWeapons(Game.DEFAULT_WEAPON);
+		this.#show(this.#dom.controlPanel);
 	}
 
 	sendMessage(worker, message) {
@@ -99,26 +118,27 @@ export default class Game {
 	#boardMessage(message) {
 		this.#readyFlag.board = true;
 	}
+
 	#cacheTowerMessage(message) {
 		this.#readyFlag.cacheTower = true;
 	}
+
 	#monsterMessage(message) {
 		this.#readyFlag.monster = true;
 	}
+
 	#roadMessage(message) {
 		this.#readyFlag.road = true;
 	}
 
 	#readyChecker() {
-		const { arsenal, board, cacheTower, monster, road } = this.#readyFlag;
+		const {arsenal, board, cacheTower, monster, road} = this.#readyFlag;
 		if (arsenal && board && cacheTower && monster && road) {
 			clearInterval(this.#readyHandle);
-			const { loading, gameReady, newGameButton } = this.#dom;
+			const {loading, gameReady, newGameButton} = this.#dom;
 			this.#hide(loading);
 			this.#show(gameReady);
-			newGameButton.addEventListener('click', this.newGame.bind(this), { once: true });
-			document.getElementById('loading').classList.add('hidden');
-			document.getElementById('game-ready').classList.remove('hidden');
+			newGameButton.addEventListener('click', this.newGame.bind(this), {once: true});
 		}
 		this.#readyTimeout--;
 		if (this.#readyTimeout <= 0) {

@@ -1,3 +1,7 @@
+import ControlPanel from "../../../src/classes/inGame/ControlPanel.js";
+import WeaponType from "../../../src/classes/types/WeaponType.js";
+import Game from "../../../src/classes/Game.js";
+
 const indexPage = 'localhost:5173/index.html';
 
 describe('starting the game', () => {
@@ -13,11 +17,26 @@ describe('starting the game', () => {
 		cy.get('[data-cy="loading"]').should('not.be.visible');
 		cy.get('[data-cy="new-game-button"]').click();
 		cy.get('[data-cy="game-board"]').should('be.visible');
-		cy.get('[data-cy="new-game-button]').should('not.be.visible');
+		cy.get('[data-cy="new-game-button"]').should('not.be.visible');
 	});
 });
 
+describe('initialboard', () => {
+	beforeEach( () => {
+		cy.visit(indexPage);
+		cy.get('[data-cy="loading"]').should('not.be.visible');
+		cy.get('[data-cy="new-game-button"]').click();
+	});
+	it('should have the control panel', () => {
+		cy.get('[data-cy="control-panel"]').should('be.visible');
+	});
+});
+
+
 describe('build portion of the round', () => {
+	it('should have the default screen', () => {
+
+	});
 	it('should allow for clicking on adding a weapon if there is enough money', () => {});
 	it('should not allow for clicking on adding a weapon if there is not enough money', () => {});
 	it('should allow for clicking on a weapon and bringing up a dialog for upgrade cost', () => {});

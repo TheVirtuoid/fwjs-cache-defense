@@ -24,4 +24,8 @@ export default class ItemPosition {
 	get y() {
 		return this.#y;
 	}
+
+	toObject() {
+		return { x: this.#x, y: this.#y };
+	}
 }

@@ -30,4 +30,9 @@ export default class BaseGameItem {
 		}
 		this.#position = position;
 	}
+
+	toObject() {
+		return { id: this.#id, position: this.#position.toObject() };
+	}
+
 }

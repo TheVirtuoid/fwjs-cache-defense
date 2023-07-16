@@ -19,5 +19,24 @@ describe('weapon', () => {
 			const weapon = new Weapon({ type: WeaponType.SHOOTER, id: 'test' });
 			expect(weapon.id).to.equal('test');
 		});
+		it('should get the type', () => {
+			const weapon = new Weapon({ type: WeaponType.SHOOTER });
+			expect(weapon.type).to.equal(WeaponType.SHOOTER);
+		});
+		it('should get the name', () => {
+			const weapon = new Weapon({ type: WeaponType.SHOOTER });
+			expect(weapon.name).not.to.be.undefined;
+			expect(weapon.name).to.equal(WeaponType.SHOOTER.name);
+		});
+	});
+
+	describe('toObject', () => {
+		it('should create a good object', () => {
+			const weapon = new Weapon({ type: WeaponType.SHOOTER });
+			const weaponObject = weapon.toObject();
+			expect(weaponObject.type).to.equal(WeaponType.SHOOTER);
+			expect(weaponObject.id).not.to.be.undefined;
+			expect(weaponObject.position).not.to.be.undefined;
+		});
 	});
 });
