@@ -34,10 +34,9 @@ describe('initialboard', () => {
 
 
 describe('build portion of the round', () => {
-	it('should have the default screen', () => {
+	it('should allow for clicking on adding a weapon if there is enough money', () => {
 
 	});
-	it('should allow for clicking on adding a weapon if there is enough money', () => {});
 	it('should not allow for clicking on adding a weapon if there is not enough money', () => {});
 	it('should allow for clicking on a weapon and bringing up a dialog for upgrade cost', () => {});
 	it('should allow for upgrade if enough money', () => {});
