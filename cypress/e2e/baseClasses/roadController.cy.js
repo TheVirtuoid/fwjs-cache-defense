@@ -2,6 +2,7 @@ import RoadController from "../../../src/classes/controllers/RoadController.js";
 import RoadType from "../../../src/classes/types/RoadType.js";
 import Road from "../../../src/classes/Road.js";
 import RoadDirection from "../../../src/classes/types/RoadDirection.js";
+import ItemPosition from "../../../src/classes/ItemPosition.js";
 
 describe('roadController', () => {
 	describe('creation', () => {
@@ -40,6 +41,19 @@ describe('roadController', () => {
 				expect(road.id).to.equal('test');
 			});
 		});
+
+		describe('position argument', () => {
+			it('should set the default position', () => {
+				const road = roadController.createRoad({ type: RoadType.CORNER_BOTTOM_LEFT });
+				expect(road.position.x).to.equal(ItemPosition.DEFAULT_X);
+				expect(road.position.y).to.equal(ItemPosition.DEFAULT_Y);
+			});
+			it('should set the correct position', () => {
+				const road = roadController.createRoad({ type: RoadType.CORNER_BOTTOM_LEFT, position: new ItemPosition({ x: 1, y: 2 }) });
+				expect(road.position.x).to.equal(1);
+				expect(road.position.y).to.equal(2);
+			});
+		});
 	});
 
 	describe('getRoad', () => {
@@ -57,12 +71,30 @@ describe('roadController', () => {
 		});
 	});
 
+	describe('getRoadByPosition', () => {
+		let roadController;
+		beforeEach(() => {
+			roadController = new RoadController();
+		});
+		it('should throw error if argument is not a valid position', () => {
+			expect(() => roadController.getRoadByPosition('bad')).to.throw(RoadController.ERROR_GETROADBYPOSITION_POSITION_INVALID.message);
+		});
+		it('should return null if no road at position', () => {
+			expect(roadController.getRoadByPosition(new ItemPosition({ x: 0, y: 0 }))).to.be.null;
+		});
+		it('should return the road', () => {
+			const road = roadController.createRoad({ type: RoadType.CORNER_BOTTOM_LEFT, id: 'test', position: new ItemPosition({ x: 0, y: 0 }) });
+			expect(roadController.getRoadByPosition(new ItemPosition({ x: 0, y: 0 }))).to.equal(road);
+		});
+	});
+
 	describe('initialize', () => {
 		it('should initialize the roadController', () => {
 			const roadController = new RoadController();
-			roadController.createRoad({ type: RoadType.CORNER_BOTTOM_LEFT, id: 'test' });
+			roadController.createRoad({ type: RoadType.CORNER_BOTTOM_LEFT, id: 'test', position: new ItemPosition({ x: 0, y: 0 }) });
 			roadController.initialize();
 			expect(roadController.getRoad('test')).to.be.null;
+			expect(roadController.getRoadByPosition(new ItemPosition({ x:0, y: 0 }))).to.be.null;
 		});
 	});
 	/*
@@ -70,7 +102,7 @@ describe('roadController', () => {
 			With direction of 'TOP', we want to get all pieces that have a BOTTOM connection, because
 				a BOTTOM connection will connect with another piece that has a TOP connection
 	*/
-	describe('get road to match direction', () => {
+	/*describe('get road to match direction', () => {
 		let roadController;
 		beforeEach(() => {
 			roadController = new RoadController();
@@ -122,72 +154,44 @@ describe('roadController', () => {
 			expect(roadDirections.indexOf(RoadType.T_TOP_BOTTOM_RIGHT)).not.to.equal(-1);
 			expect(roadDirections.indexOf(RoadType.STRAIGHT_LEFT_RIGHT)).not.to.equal(-1);
 		});
-	});
+	});*/
 
-	describe('filterRoadDirections', () => {
+	describe('canPlace', () => {
 		let roadController;
 		beforeEach(() => {
 			roadController = new RoadController();
 		});
-		it('should throw error if roadDirectionArray is not an array', () => {
-			expect(() => roadController.filterRoadDirections({ roadDirectionArray: 'bad', entryDirection: RoadDirection.TOP }))
-					.to.throw(RoadController.ERROR_FILTERROADDIRECTIONS_ROADDIRECTIONARRAY_INVALID.message);
+		it('should throw error is road property is not instance of Road', () => {
+			expect(() => roadController.canPlaceRoad({ road: 'bad' })).to.throw(RoadController.ERROR_CANPLACEROAD_ARGUMENT_ROAD_INVALID.message);
 		});
-		it('should throw error if roadDirectionArray does not have 9 elements', () => {
-			expect(() => roadController.filterRoadDirections({
-				roadDirectionArray: [1, 2, 3, 4, 5, 6, 7, 8],
-				entryDirection: RoadDirection.TOP }))
-				.to.throw(RoadController.ERROR_FILTERROADDIRECTIONS_ROADDIRECTIONARRAY_TOO_FEW_ENTRIES.message);
+		it('should throw error is direction is not one of the RoadDirection values', () => {
+			expect(() => roadController.canPlaceRoad({ road: new Road({ type: RoadType.HALF_TOP }), direction: 'bad' })).to.throw(RoadController.ERROR_CANPLACEROAD_ARGUMENT_DIRECTION_INVALID.message);
 		});
-		it('should throw error if roadDirectionArray does not contain all RoadTypes', () => {
-			expect(() => roadController.filterRoadDirections({ roadDirectionArray: [
-					RoadType.NO_ROAD, RoadType.NO_ROAD, RoadType.NO_ROAD, RoadType.NO_ROAD,
-					RoadType.NO_ROAD, RoadType.NO_ROAD, RoadType.NO_ROAD, RoadType.NO_ROAD, 9],
-					entryDirection: RoadDirection.TOP }))
-					.to.throw(RoadController.ERROR_FILTERROADDIRECTIONS_ROADDIRECTIONARRAY_INVALID_TYPES.message);
-		});
-		it('should throw error if entryDirection is not a valid RoadDirection', () => {
-			expect(() => roadController.filterRoadDirections({ roadDirectionArray: [
-					RoadType.NO_ROAD, RoadType.NO_ROAD, RoadType.NO_ROAD, RoadType.NO_ROAD,
-					RoadType.NO_ROAD, RoadType.NO_ROAD, RoadType.NO_ROAD, RoadType.NO_ROAD, RoadType.NO_ROAD],
-				entryDirection: 'bad' }))
-					.to.throw(RoadController.ERROR_FILTERROADDIRECTIONS_ENTRYDIRECTION_INVALID_DIRECTION.message);
-		});
-		/*
-			Operations for the filterRoadDirections function:
-			1
-		 */
-		describe('matching roads TOP', () => {
-			let roadDirections;
-			beforeEach(() => {
-				roadDirections = roadController.getRoadsByDirection(RoadDirection.TOP);
-			});
-			it('should select something', () => {
-				const roads = buildRoads([
-					{ type: RoadType.NO_ROAD, position: { x: 0, y: 0 } },
-					{ type: RoadType.NO_ROAD, position: { x: 1, y: 0 } },
-					{ type: RoadType.BRANCH_ROAD, position: { x: 2, y: 0 } },
 
-				]);
-			});
-		});
-		describe('matching roads RIGHT', () => {
-			let roadDirections;
+		describe('connection top - step 1', () => {
+			let road;
 			beforeEach(() => {
-				roadDirections = roadController.getRoadsByDirection(RoadDirection.RIGHT);
+				roadController.createRoad({ type: RoadType.HALF_TOP, position: { x: 0, y: 0 }, id: 'test' });
+				road = roadController.getRoad('test');
+			});
+			it('should not be able to place because there is a road', () => {
+				roadController.createRoad({ type: RoadType.STRAIGHT_LEFT_RIGHT, position: { x: 0, y: 1 } });
+				const canPlace = roadController.canPlaceRoad({ road, direction: RoadDirection.TOP });
+				expect(canPlace).to.be.false;
+			});
+			it('should not place road as the board limit has been reached', () => {
+				roadController.createRoad({ type: RoadType.OFF_ROAD, position: { x: 0, y: 1 } });
+				const canPlace = roadController.canPlaceRoad({ road, direction: RoadDirection.TOP });
+				expect(canPlace).to.be.false;
+			});
+			it('should be able to place because there is no existing road', () => {
+				const canPlace = roadController.canPlaceRoad({ road, direction: RoadDirection.TOP });
+				expect(canPlace).to.be.true;
 			});
 		});
-		describe('matching roads BOTTOM', () => {
-			let roadDirections;
-			beforeEach(() => {
-				roadDirections = roadController.getRoadsByDirection(RoadDirection.BOTTOM);
-			});
-		});
-		describe('matching roads LEFT', () => {
-			let roadDirections;
-			beforeEach(() => {
-				roadDirections = roadController.getRoadsByDirection(RoadDirection.LEFT);
-			});
-		});
+		describe('connection right - step 1', () => {});
+		describe('connection bottom - step 1', () => {});
+		describe('connection left - step 1', () => {});
 	});
+
 });

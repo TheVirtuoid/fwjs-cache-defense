@@ -13,4 +13,8 @@ export default class RoadDirection {
 			RoadDirection.TOP, RoadDirection.RIGHT, RoadDirection.BOTTOM, RoadDirection.LEFT,
 			RoadDirection.TOP_LEFT, RoadDirection.TOP_RIGHT, RoadDirection.BOTTOM_RIGHT, RoadDirection.BOTTOM_LEFT
 	];
+
+	static isDirection(direction) {
+		return RoadDirection.DIRECTIONS.indexOf(direction) !== -1;
+	}
 }

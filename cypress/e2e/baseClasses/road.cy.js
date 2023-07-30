@@ -1,5 +1,6 @@
 import Road from "../../../src/classes/Road.js";
 import RoadType from "../../../src/classes/types/RoadType.js";
+import RoadDirection from "../../../src/classes/types/RoadDirection.js";
 
 describe('road', () => {
 
@@ -14,6 +15,10 @@ describe('road', () => {
 		it('should set any defaults', () => {
 			const road = new Road({ type: RoadType.CORNER_BOTTOM_LEFT });
 			expect(typeof(road.id)).to.equal('string');
+			expect(road.getRoadByDirection(RoadDirection.TOP)).to.be.null;
+			expect(road.getRoadByDirection(RoadDirection.RIGHT)).to.be.null;
+			expect(road.getRoadByDirection(RoadDirection.BOTTOM)).to.be.null;
+			expect(road.getRoadByDirection(RoadDirection.LEFT)).to.be.null;
 		});
 	});
 
@@ -145,6 +150,42 @@ describe('road', () => {
 			expect(road.right).to.be.undefined;
 			expect(road.bottom).to.be.undefined;
 			expect(road.left).to.be.undefined;
+		});
+	});
+
+	describe('getRoadByDirection', () => {
+		let road;
+		beforeEach(() => {
+			road = new Road({ type: RoadType.STRAIGHT_TOP_BOTTOM });
+		});
+		it('should throw an error if direction is not valid', () => {
+			expect(() => road.getRoadByDirection('invalid')).to.throw(Road.ERROR_GETROADBYDIRECTION_INVALID_DIRECTION.message);
+		});
+		it('should return null if there is no road', () => {
+			expect(road.getRoadByDirection(RoadDirection.TOP)).to.be.null;
+		});
+		it('should return a road', () => {
+			const newRoad = new Road({ type: RoadType.STRAIGHT_LEFT_RIGHT });
+			road.setRoadInDirection({ road: newRoad, direction: RoadDirection.TOP });
+			expect(road.getRoadByDirection(RoadDirection.TOP)).to.equal(newRoad);
+		});
+	});
+
+	describe('setRoadInDirection', () => {
+		let road;
+		beforeEach(() => {
+			road = new Road({ type: RoadType.STRAIGHT_TOP_BOTTOM });
+		});
+		it('should throw an error if direction is not valid', () => {
+			expect(() => road.setRoadInDirection({ road, direction: 'invalid' })).to.throw(Road.ERROR_SETROADINDIRECTION_INVALID_DIRECTION.message);
+		});
+		it('should throw an error if road is not valid', () => {
+			expect(() => road.setRoadInDirection({ road: 'invalid', direction: RoadDirection.TOP })).to.throw(Road.ERROR_SETROADINDIRECTION_INVALID_ROAD.message);
+		});
+		it('should set the road', () => {
+			const newRoad = new Road({ type: RoadType.STRAIGHT_LEFT_RIGHT });
+			road.setRoadInDirection({ road: newRoad, direction: RoadDirection.TOP });
+			expect(road.getRoadByDirection(RoadDirection.TOP)).to.equal(newRoad);
 		});
 	});
 });
