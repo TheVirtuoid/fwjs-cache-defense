@@ -1,17 +1,20 @@
 export default class RoadDirection {
-	static TOP = 0;
-	static RIGHT = 1;
-	static BOTTOM = 2;
-	static LEFT = 3;
+	static TOP = { index: 0, x: 0, y: 1 };
+	static RIGHT = { index: 1, x: 1, y: 0 };
+	static BOTTOM = { index: 2, x: 0, y: -1 };
+	static LEFT = { index: 3, x: -1, y: 0 };
 
-	static TOP_LEFT = 4;
-	static TOP_RIGHT = 5;
-	static BOTTOM_RIGHT = 6;
-	static BOTTOM_LEFT = 7;
+	static TOP_LEFT = { index: 4, x: -1, y: 1 };
+	static TOP_RIGHT = { index: 5, x: 1, y: 1 };
+	static BOTTOM_RIGHT = { index: 6, x: 1, y: -1 };
+	static BOTTOM_LEFT = { index: 7, x: -1, y: -1 };
+
+	static NONE = { index: 8, x: 0, y: 0 };
 
 	static DIRECTIONS = [
 			RoadDirection.TOP, RoadDirection.RIGHT, RoadDirection.BOTTOM, RoadDirection.LEFT,
-			RoadDirection.TOP_LEFT, RoadDirection.TOP_RIGHT, RoadDirection.BOTTOM_RIGHT, RoadDirection.BOTTOM_LEFT
+			RoadDirection.TOP_LEFT, RoadDirection.TOP_RIGHT, RoadDirection.BOTTOM_RIGHT, RoadDirection.BOTTOM_LEFT,
+			RoadDirection.NONE
 	];
 
 	static isDirection(direction) {

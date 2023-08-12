@@ -24,7 +24,8 @@ export default class RoadController {
 		const { type, id, position } = args;
 		const road = new Road({ type, id, position });
 		this.#roads.set(road.id, road);
-		// this.#setConnections(road);
+		this.#roadPositions.set(road.position.toString(), road);
+		this.#setConnections(road);
 		return road;
 	}
 
@@ -36,7 +37,7 @@ export default class RoadController {
 		if (!(position instanceof ItemPosition)) {
 			throw RoadController.ERROR_GETROADBYPOSITION_POSITION_INVALID;
 		}
-		return this.#roads.get(position.id) || null;
+		return this.#roadPositions.get(position.toString()) || null;
 	}
 
 	initialize() {
@@ -92,8 +93,16 @@ export default class RoadController {
 		return roads;
 	}*/
 
+	/**
+	 *
+	 * @param {Object} args - Arguments object
+	 * @param {Road} args.road - Road to check
+	 * @param {RoadDirection} args.direction - Direction to check
+	 * @returns {RoadType[]} - Array of RoadTypes that can be placed in the given direction
+	 */
 	canPlaceRoad(args = {}) {
 		const { road, direction } = args;
+		const legalRoads = [];
 		if (!(road instanceof Road)) {
 			throw RoadController.ERROR_CANPLACEROAD_ARGUMENT_ROAD_INVALID;
 		}
@@ -101,19 +110,64 @@ export default class RoadController {
 			throw RoadController.ERROR_CANPLACEROAD_ARGUMENT_DIRECTION_INVALID;
 		}
 		const destinationRoad = this.#getRoadByDirection({ road, direction });
-		return destinationRoad === null || destinationRoad.type === RoadType.NO_ROAD;
+		if (destinationRoad === null || destinationRoad.type === RoadType.NO_ROAD) {
+			// no road, so check the other roads
+			const hits = {
+				top: false,
+				right: false,
+				bottom: false,
+				left: false
+			};
+			const position = road.position.getAdjacentPosition(direction);
+			const top = this.getRoadByPosition(new ItemPosition({ x: position.x + RoadDirection.TOP.x, y: position.y + RoadDirection.TOP.y }));
+			const right = this.getRoadByPosition(new ItemPosition({ x: position.x + RoadDirection.RIGHT.x, y: position.y + RoadDirection.RIGHT.y }));
+			const bottom = this.getRoadByPosition(new ItemPosition({ x: position.x + RoadDirection.BOTTOM.x, y: position.y + RoadDirection.BOTTOM.y }));
+			const left = this.getRoadByPosition(new ItemPosition({ x: position.x + RoadDirection.LEFT.x, y: position.y + RoadDirection.LEFT.y }));
+			hits.top = top === road || top === null || top.type === RoadType.NO_ROAD;
+			hits.right = right === road || right === null || right.type === RoadType.NO_ROAD;
+			hits.bottom = bottom === road || bottom === null || bottom.type === RoadType.NO_ROAD;
+			hits.left = left === road || left === null || left.type === RoadType.NO_ROAD;
+			// check for 
+			if (hits.top && hits.right && hits.bottom) {
+				legalRoads.push(RoadType.CORNER_TOP_RIGHT);
+			}
+
+		}
+		return legalRoads;
 	}
 
 	#getRoadByDirection(args = {}) {
 		const { road, direction } = args;
-		return road.getRoadByDirection(direction);
+		const newPosition = road.position.getAdjacentPosition(direction);
+		return this.getRoadByPosition(newPosition);
 	}
 
 	#setConnections(road) {
-		const top = road.position.y - 1;
-		const right = road.position.x + 1;
-		const bottom = road.position.y + 1;
-		const left = road.position.x - 1;
+		let destinationRoad;
+
+		destinationRoad = this.#getRoadByDirection({ road, direction: RoadDirection.TOP });
+		if (destinationRoad instanceof Road) {
+			road.setRoadInDirection({direction: RoadDirection.TOP, road: destinationRoad});
+			destinationRoad.setRoadInDirection({direction: RoadDirection.BOTTOM, road});
+		}
+
+		destinationRoad = this.#getRoadByDirection({ road, direction: RoadDirection.RIGHT });
+		if (destinationRoad instanceof Road) {
+			road.setRoadInDirection({direction: RoadDirection.RIGHT, road: destinationRoad});
+			destinationRoad.setRoadInDirection({direction: RoadDirection.LEFT, road});
+		}
+
+		destinationRoad = this.#getRoadByDirection({ road, direction: RoadDirection.BOTTOM });
+		if (destinationRoad instanceof Road) {
+			road.setRoadInDirection({direction: RoadDirection.BOTTOM, road: destinationRoad});
+			destinationRoad.setRoadInDirection({direction: RoadDirection.RIGHT, road});
+		}
+
+		destinationRoad = this.#getRoadByDirection({ road, direction: RoadDirection.LEFT });
+		if (destinationRoad instanceof Road) {
+			road.setRoadInDirection({direction: RoadDirection.LEFT, road: destinationRoad});
+			destinationRoad.setRoadInDirection({direction: RoadDirection.RIGHT, road});
+		}
 
 	}
 

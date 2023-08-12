@@ -26,19 +26,23 @@ export default class Road extends BaseGameItem {
 	}
 
 	get top() {
-		return this.#type?.directions?.[RoadDirection.TOP];
+		return this.#type?.directions?.[RoadDirection.TOP.index];
 	}
 
 	get right() {
-		return this.#type?.directions?.[RoadDirection.RIGHT];
+		return this.#type?.directions?.[RoadDirection.RIGHT.index];
 	}
 
 	get bottom() {
-		return this.#type?.directions?.[RoadDirection.BOTTOM];
+		return this.#type?.directions?.[RoadDirection.BOTTOM.index];
 	}
 
 	get left() {
-		return this.#type?.directions?.[RoadDirection.LEFT];
+		return this.#type?.directions?.[RoadDirection.LEFT.index];
+	}
+
+	get value() {
+		return this.#type?.value || 0;
 	}
 
 	getRoadByDirection(direction) {
@@ -58,5 +62,9 @@ export default class Road extends BaseGameItem {
 		}
 		this.#connections.set(direction, road);
 	};
+
+	get connections () {
+		return this.#connections;
+	}
 
 }

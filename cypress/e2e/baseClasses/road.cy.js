@@ -29,6 +29,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.false;
 			expect(road.left).to.be.false;
 			expect(road.right).to.be.false;
+			expect(road.value).to.equal(1);
 		});
 		it('should create half road right', () => {
 			const road = new Road({ type: RoadType.HALF_RIGHT });
@@ -36,6 +37,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.false;
 			expect(road.left).to.be.false;
 			expect(road.right).to.be.true;
+			expect(road.value).to.equal(2);
 		});
 		it('should create half road bottom', () => {
 			const road = new Road({ type: RoadType.HALF_BOTTOM });
@@ -43,6 +45,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.true;
 			expect(road.left).to.be.false;
 			expect(road.right).to.be.false;
+			expect(road.value).to.equal(4);
 		});
 		it('should create half road left', () => {
 			const road = new Road({ type: RoadType.HALF_LEFT });
@@ -50,6 +53,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.false;
 			expect(road.left).to.be.true;
 			expect(road.right).to.be.false;
+			expect(road.value).to.equal(8);
 		});
 
 		it('should create corner top right', () => {
@@ -58,6 +62,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.false;
 			expect(road.left).to.be.false;
 			expect(road.right).to.be.true;
+			expect(road.value).to.equal(3);
 		});
 		it('should create corner top left', () => {
 			const road = new Road({ type: RoadType.CORNER_TOP_LEFT });
@@ -65,6 +70,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.false;
 			expect(road.left).to.be.true;
 			expect(road.right).to.be.false;
+			expect(road.value).to.equal(9);
 		});
 		it('should create corner bottom right', () => {
 			const road = new Road({ type: RoadType.CORNER_BOTTOM_RIGHT });
@@ -72,6 +78,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.true;
 			expect(road.left).to.be.false;
 			expect(road.right).to.be.true;
+			expect(road.value).to.equal(6);
 		});
 		it('should create corner bottom left', () => {
 			const road = new Road({ type: RoadType.CORNER_BOTTOM_LEFT });
@@ -79,6 +86,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.true;
 			expect(road.left).to.be.true;
 			expect(road.right).to.be.false;
+			expect(road.value).to.equal(12);
 		});
 
 		it('should create t-road top bottom right', () => {
@@ -87,6 +95,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.true;
 			expect(road.left).to.be.false;
 			expect(road.right).to.be.true;
+			expect(road.value).to.equal(7);
 		});
 		it('should create t-road top bottom left', () => {
 			const road = new Road({ type: RoadType.T_TOP_BOTTOM_LEFT });
@@ -94,6 +103,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.true;
 			expect(road.left).to.be.true;
 			expect(road.right).to.be.false;
+			expect(road.value).to.equal(13);
 		});
 		it('should create t-road right left top', () => {
 			const road = new Road({ type: RoadType.T_LEFT_RIGHT_TOP });
@@ -101,6 +111,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.false;
 			expect(road.left).to.be.true;
 			expect(road.right).to.be.true;
+			expect(road.value).to.equal(11);
 		});
 		it('should create t-road right left bottom', () => {
 			const road = new Road({ type: RoadType.T_LEFT_RIGHT_BOTTOM });
@@ -108,6 +119,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.true;
 			expect(road.left).to.be.true;
 			expect(road.right).to.be.true;
+			expect(road.value).to.equal(14);
 		});
 
 		it('should create straight top bottom', () => {
@@ -116,6 +128,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.true;
 			expect(road.left).to.be.false;
 			expect(road.right).to.be.false;
+			expect(road.value).to.equal(5);
 		});
 		it('should create straight left right', () => {
 			const road = new Road({ type: RoadType.STRAIGHT_LEFT_RIGHT });
@@ -123,6 +136,7 @@ describe('road', () => {
 			expect(road.bottom).to.be.false;
 			expect(road.left).to.be.true;
 			expect(road.right).to.be.true;
+			expect(road.value).to.equal(10);
 		});
 
 		// deprecated
@@ -141,6 +155,7 @@ describe('road', () => {
 			expect(road.right).to.be.undefined;
 			expect(road.bottom).to.be.undefined;
 			expect(road.left).to.be.undefined;
+			expect(road.value).to.equal(0);
 		});
 
 		it('should create an Off Road', () => {
@@ -150,6 +165,7 @@ describe('road', () => {
 			expect(road.right).to.be.undefined;
 			expect(road.bottom).to.be.undefined;
 			expect(road.left).to.be.undefined;
+			expect(road.value).to.equal(0);
 		});
 	});
 
