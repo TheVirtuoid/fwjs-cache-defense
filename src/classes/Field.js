@@ -1,6 +1,7 @@
 import Road from "./Road.js";
 import ItemPosition from "./ItemPosition.js";
 import BaseGameItem from "./BaseGameItem.js";
+import RoadDirection from "./types/RoadDirection.js";
 
 export default class Field {
 
@@ -14,6 +15,11 @@ export default class Field {
 	static ERROR_PLACEITEM_CANNOT_PLACE_ROAD = new TypeError(`Cannot place Road on Field.`);
 	static ERROR_GETITEMBYPOSITION_INVALID_POSITION = new TypeError(`"position" argument must be ItemPosition.`);
 	static ERROR_REMOVEITEM_INVALID_ITEM = new TypeError(`"item" argument must be BaseGameItem.`);
+
+	static ERROR_PLACENEXTROAD_INVALID_POSITION = new TypeError(`"position" argument must be ItemPosition.`);
+	static ERROR_PLACENEXTROAD_INVALID_DIRECTION = new TypeError(`"direction" argument must be Direction.`);
+	static ERROR_PLACENEXTROAD_NO_ROAD_AT_POSITION = new TypeError(`No road at "position".`);
+	static ERROR_PLACENEXTROAD_CANNOT_PLACE_IN_DIRECTION = new TypeError(`Road at "position" has no connection to direction specified.`);
 
 	#itemPositions;
 	#roads;
@@ -95,4 +101,22 @@ export default class Field {
 		this.#itemPositions.delete(itemKey);
 		this.#items.delete(item);
 	}
+
+	placeNextRoad(args = {}) {
+		const { position, direction } = args;
+		if (!(position instanceof ItemPosition)) {
+			throw Field.ERROR_PLACENEXTROAD_INVALID_POSITION;
+		}
+		if (!RoadDirection.isDirection(direction)) {
+			throw Field.ERROR_PLACENEXTROAD_INVALID_DIRECTION;
+		}
+		if(this.#roads.get(position.toString()) === undefined) {
+			throw Field.ERROR_PLACENEXTROAD_NO_ROAD_AT_POSITION;
+		}
+		const anchorRoad = this.#roads.get(position.toString());
+		const legalDirection = anchorRoad.value & direction.value;
+		if (legalDirection === 0) {
+			throw Field.ERROR_PLACENEXTROAD_CANNOT_PLACE_IN_DIRECTION;
+		}
+	};
 }

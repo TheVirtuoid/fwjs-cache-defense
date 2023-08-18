@@ -3,6 +3,7 @@ import Road from "../../../src/classes/Road.js";
 import RoadType from "../../../src/classes/types/RoadType.js";
 import ItemPosition from "../../../src/classes/ItemPosition.js";
 import BaseGameItem from "../../../src/classes/BaseGameItem.js";
+import RoadDirection from "../../../src/classes/types/RoadDirection.js";
 
 describe('field', () => {
 	describe('creation', () => {
@@ -138,7 +139,62 @@ describe('field', () => {
 		});
 	});
 
-	xdescribe('placeRoad', () => {
+	const placementRoads = [
+		{ msg: 'TOP', type: RoadType.HALF_TOP, direction: RoadDirection.TOP, tests: [
+				{ roads: [], results: [] }
+			] },
+		{ msg: 'RIGHT', type: RoadType.HALF_RIGHT, direction: RoadDirection.RIGHT, tests: [
+				{ roads: [], results: [] }
+			] },
+		{ msg: 'BOTTOM', type: RoadType.HALF_BOTTOM, direction: RoadDirection.RIGHT, tests: [
+				{ roads: [], results: [] }
+			] },
+		{ msg: 'LEFT', type: RoadType.HALF_LEFT, direction: RoadDirection.RIGHT, tests: [
+				{ roads: [], results: []}
+			] },
+	];
+
+	describe('placeNextRoad - errors', () => {
+		let field;
+		beforeEach(() => {
+			field = new Field();
+		});
+		it('should throw error if position is not ItemPosition', () => {
+			expect(() => field.placeNextRoad({ position: 'bad', direction: RoadDirection.TOP })).to.throw(Field.ERROR_PLACENEXTROAD_INVALID_POSITION.message);
+		});
+		it('should throw error if direction is not RoadDirection', () => {
+			expect(() => field.placeNextRoad({ position: new ItemPosition({ x: 0, y: 0 }), direction: 'bad' })).to.throw(Field.ERROR_PLACENEXTROAD_INVALID_DIRECTION.message);
+		});
+		it('should throw error if there is no road at ItemPosition', () => {
+			expect(() => field.placeNextRoad({ position: new ItemPosition({ x: 0, y: 0 }), direction: RoadDirection.TOP })).to.throw(Field.ERROR_PLACENEXTROAD_NO_ROAD_AT_POSITION.message);
+		});
+		it('should throw error if Direction is not possible at the ItemPosition', () => {
+			field.addRoad({ road: new Road({ type: RoadType.HALF_TOP, position: new ItemPosition({ x: 0, y: 0 }) }) });
+			expect(() => field.placeNextRoad({ position: new ItemPosition({ x: 0, y: 0 }), direction: RoadDirection.RIGHT })).to.throw(Field.ERROR_PLACENEXTROAD_CANNOT_PLACE_IN_DIRECTION.message);
+			expect(() => field.placeNextRoad({ position: new ItemPosition({ x: 0, y: 0 }), direction: RoadDirection.BOTTOM })).to.throw(Field.ERROR_PLACENEXTROAD_CANNOT_PLACE_IN_DIRECTION.message);
+			expect(() => field.placeNextRoad({ position: new ItemPosition({ x: 0, y: 0 }), direction: RoadDirection.LEFT })).to.throw(Field.ERROR_PLACENEXTROAD_CANNOT_PLACE_IN_DIRECTION.message);
+		});
+	});
+
+	describe('placeNextRoad', () => {
+		placementRoads.forEach((checkRoad) => {
+			const { msg, type, direction, tests } = checkRoad;
+			tests.forEach((test) => {
+				const { roads, results } = test;
+				it(`should place the next road on the ${msg}`, () => {
+					const field = new Field();
+					field.addRoad({ road: new Road({ type, position: new ItemPosition({ x: 0, y: 0 }) }) });
+					const roadPlacement = field.placeNextRoad({ position: new ItemPosition({ x: 0, y: 0 }), direction });
+					const { road, legalRoadTypes } = roadPlacement;
+					expect(results.some((expectedRoadType) => expectedRoadType === road.type)).to.be.true;
+					expect(legalRoadTypes.length).to.equal(results.length);
+					legalRoadTypes.forEach((roadType) => {
+						expect(results.some((expectedRoadType) => expectedRoadType === roadType)).to.be.true;
+					});
+				});
+			});
+		});
+
 
 	});
 });

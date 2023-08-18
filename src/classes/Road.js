@@ -15,4 +15,9 @@ export default class Road extends BaseGameItem {
 		this.#type = type;
 	}
 
+	get value() {
+		return this.#type.value;
+	}
+
+
 }

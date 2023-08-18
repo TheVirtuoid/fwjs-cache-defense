@@ -14,6 +14,7 @@ describe('road', () => {
 		it('should set any defaults', () => {
 			const road = new Road({ type: RoadType.CORNER_BOTTOM_LEFT });
 			expect(typeof(road.id)).to.equal('string');
+			expect(road.value).to.equal(RoadType.CORNER_BOTTOM_LEFT.value);
 		});
 	});
 });
