@@ -32,4 +32,29 @@ describe('ItemPosition', () => {
 			expect(itemPositionObject.y).to.equal(2);
 		});
 	});
+
+	describe('isDefault', () => {
+		it('should return true if x and y are not specified', () => {
+			const itemPosition = new ItemPosition();
+			expect(itemPosition.isDefault()).to.be.true;
+		});
+		it('should return false if x and y are specified', () => {
+			const itemPosition = new ItemPosition({ x: 1, y: 1 });
+			expect(itemPosition.isDefault()).to.be.false;
+		});
+	});
+
+	describe('clone', () => {
+		it('should return a new ItemPosition', () => {
+			const itemPosition = new ItemPosition();
+			const clone = itemPosition.clone();
+			expect(clone instanceof ItemPosition).to.be.true;
+		});
+		it('should return a new ItemPosition with the same x and y', () => {
+			const itemPosition = new ItemPosition({ x: 1, y: 2 });
+			const clone = itemPosition.clone();
+			expect(clone.x).to.equal(itemPosition.x);
+			expect(clone.y).to.equal(itemPosition.y);
+		});
+	});
 });
