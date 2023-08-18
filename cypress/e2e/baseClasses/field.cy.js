@@ -141,15 +141,19 @@ describe('field', () => {
 
 	const placementRoads = [
 		{ msg: 'TOP', type: RoadType.HALF_TOP, direction: RoadDirection.TOP, tests: [
+				{ results: null, testMsg: 'Any Road', roads: [ { x: 0, y: 1, type: RoadType.HALF_TOP} ] },		// any road at this position
 				{ roads: [], results: [] }
 			] },
 		{ msg: 'RIGHT', type: RoadType.HALF_RIGHT, direction: RoadDirection.RIGHT, tests: [
+				{ results: null, testMsg: 'Any Road', roads: [ { x: 1, y: 0, type: RoadType.HALF_TOP} ] },		// any road at this position
 				{ roads: [], results: [] }
 			] },
 		{ msg: 'BOTTOM', type: RoadType.HALF_BOTTOM, direction: RoadDirection.RIGHT, tests: [
+				{ results: null, testMsg: 'Any Road', roads: [ { x: 0, y: -1, type: RoadType.HALF_TOP} ] },		// any road at this position
 				{ roads: [], results: [] }
 			] },
 		{ msg: 'LEFT', type: RoadType.HALF_LEFT, direction: RoadDirection.RIGHT, tests: [
+				{ results: null, testMsg: 'Any Road', roads: [ { x: -1, y: 0, type: RoadType.HALF_TOP} ] },		// any road at this position
 				{ roads: [], results: []}
 			] },
 	];
@@ -180,17 +184,26 @@ describe('field', () => {
 		placementRoads.forEach((checkRoad) => {
 			const { msg, type, direction, tests } = checkRoad;
 			tests.forEach((test) => {
-				const { roads, results } = test;
+				const { roads, results, testMsg } = test;
 				it(`should place the next road on the ${msg}`, () => {
 					const field = new Field();
 					field.addRoad({ road: new Road({ type, position: new ItemPosition({ x: 0, y: 0 }) }) });
+					roads.forEach((road) => {
+						const { x, y, type } = road;
+						field.addRoad({ road: new Road({ type, position: new ItemPosition({ x, y }) })});
+						console.log(road);
+					});
 					const roadPlacement = field.placeNextRoad({ position: new ItemPosition({ x: 0, y: 0 }), direction });
 					const { road, legalRoadTypes } = roadPlacement;
-					expect(results.some((expectedRoadType) => expectedRoadType === road.type)).to.be.true;
-					expect(legalRoadTypes.length).to.equal(results.length);
-					legalRoadTypes.forEach((roadType) => {
-						expect(results.some((expectedRoadType) => expectedRoadType === roadType)).to.be.true;
-					});
+					if (results === null) {
+						expect(road, `...${testMsg}`).to.equal(results);
+					} else {
+						expect(results.some((expectedRoadType) => expectedRoadType === road.type)).to.be.true;
+						expect(legalRoadTypes.length).to.equal(results.length);
+						legalRoadTypes.forEach((roadType) => {
+							expect(results.some((expectedRoadType) => expectedRoadType === roadType)).to.be.true;
+						});
+					}
 				});
 			});
 		});

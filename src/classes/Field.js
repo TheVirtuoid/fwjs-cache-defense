@@ -118,5 +118,7 @@ export default class Field {
 		if (legalDirection === 0) {
 			throw Field.ERROR_PLACENEXTROAD_CANNOT_PLACE_IN_DIRECTION;
 		}
+		const targetPosition = new ItemPosition({ x: position.x + direction.x, y: position.y + direction.y });
+		const targetRoad = this.#roads.getRoadByPosition(targetPosition);
 	};
 }
