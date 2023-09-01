@@ -39,4 +39,8 @@ export default class ItemPosition {
 	clone() {
 		return new ItemPosition({ x: this.#x, y: this.#y });
 	}
+
+	toKey() {
+		return `${this.#x},${this.#y}`;
+	}
 }

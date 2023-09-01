@@ -2,6 +2,7 @@ import Road from "./Road.js";
 import ItemPosition from "./ItemPosition.js";
 import BaseGameItem from "./BaseGameItem.js";
 import RoadDirection from "./types/RoadDirection.js";
+import RoadType from "./types/RoadType.js";
 
 export default class Field {
 
@@ -21,13 +22,43 @@ export default class Field {
 	static ERROR_PLACENEXTROAD_NO_ROAD_AT_POSITION = new TypeError(`No road at "position".`);
 	static ERROR_PLACENEXTROAD_CANNOT_PLACE_IN_DIRECTION = new TypeError(`Road at "position" has no connection to direction specified.`);
 
+	static ROAD_OPPOSITES = new Map([
+		[RoadDirection.TOP, RoadDirection.BOTTOM],
+		[RoadDirection.BOTTOM, RoadDirection.TOP],
+		[RoadDirection.LEFT, RoadDirection.RIGHT],
+		[RoadDirection.RIGHT, RoadDirection.LEFT]
+	]);
+
+	static ROAD_CONNECTIONS = new Map([
+		[RoadDirection.TOP, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.TOP.value) === 0)],
+		[RoadDirection.RIGHT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.RIGHT.value) === 0)],
+		[RoadDirection.BOTTOM, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.BOTTOM.value) === 0)],
+		[RoadDirection.LEFT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.LEFT.value) === 0)]
+	]);
+
+	static getOppositeRoadConnections(direction) {
+		return Field.ROAD_CONNECTIONS.get(Field.ROAD_OPPOSITES.get(direction));
+	}
+
 	#itemPositions;
 	#roads;
 	#items;
+	#roadConnections = new Map();
 	constructor() {
 		this.#itemPositions = new Map();
 		this.#items = new Set();
 		this.#roads = new Map();
+		// build roadConnections
+		RoadDirection.ROAD_DIRECTIONS.forEach((direction) => {
+			const roadOpposite = Field.ROAD_OPPOSITES.get(direction);
+			const legalRoads = [];
+			RoadType.ROAD_TYPES.forEach((roadType) => {
+				if ((roadType.value & roadOpposite.value) !== 0) {
+					legalRoads.push(roadType);
+				}
+			});
+			this.#roadConnections.set(direction, legalRoads);
+		});
 	}
 
 	addRoad(args = {}) {
@@ -44,7 +75,7 @@ export default class Field {
 		if (!(modifiedPosition instanceof ItemPosition)) {
 			throw Field.ERROR_ADDROAD_INVALID_POSITION;
 		}
-		const roadKey = modifiedPosition.toString();
+		const roadKey = modifiedPosition.toKey();
 		if (this.#roads.has(roadKey)) {
 			throw Field.ERROR_ADDROAD_POSITION_OCCUPIED;
 		}
@@ -52,13 +83,14 @@ export default class Field {
 			road.setPosition(modifiedPosition);
 		}
 		this.#roads.set(roadKey, road);
+		return road;
 	}
 
 	getRoadByPosition(position) {
 		if (!(position instanceof ItemPosition)) {
 			throw Field.ERROR_GETROADBYPOSITION_INVALID_POSITION;
 		}
-		return this.#roads.get(position.toString()) || null;
+		return this.#roads.get(position.toKey()) || null;
 	}
 
 	placeItem(args = {}) {
@@ -75,7 +107,7 @@ export default class Field {
 		if (!(modifiedPosition instanceof ItemPosition)) {
 			throw Field.ERROR_PLACEITEM_INVALID_POSITION;
 		}
-		const itemKey = modifiedPosition.toString();
+		const itemKey = modifiedPosition.toKey();
 		if (item instanceof Road) {
 			throw Field.ERROR_PLACEITEM_CANNOT_PLACE_ROAD;
 		}
@@ -90,19 +122,19 @@ export default class Field {
 		if (!(position instanceof ItemPosition)) {
 			throw Field.ERROR_GETITEMBYPOSITION_INVALID_POSITION;
 		}
-		return this.#itemPositions.get(position.toString()) || null;
+		return this.#itemPositions.get(position.toKey()) || null;
 	}
 
 	removeItem(item) {
 		if (!(item instanceof BaseGameItem)) {
 			throw Field.ERROR_REMOVEITEM_INVALID_ITEM;
 		}
-		const itemKey = item.position.toString();
+		const itemKey = item.position.toKey();
 		this.#itemPositions.delete(itemKey);
 		this.#items.delete(item);
 	}
 
-	placeNextRoad(args = {}) {
+	legalRoadsToPlace(args = {}) {
 		const { position, direction } = args;
 		if (!(position instanceof ItemPosition)) {
 			throw Field.ERROR_PLACENEXTROAD_INVALID_POSITION;
@@ -110,15 +142,107 @@ export default class Field {
 		if (!RoadDirection.isDirection(direction)) {
 			throw Field.ERROR_PLACENEXTROAD_INVALID_DIRECTION;
 		}
-		if(this.#roads.get(position.toString()) === undefined) {
+		const anchorRoad = this.getRoadByPosition(position);
+		if(!anchorRoad) {
 			throw Field.ERROR_PLACENEXTROAD_NO_ROAD_AT_POSITION;
 		}
-		const anchorRoad = this.#roads.get(position.toString());
 		const legalDirection = anchorRoad.value & direction.value;
 		if (legalDirection === 0) {
 			throw Field.ERROR_PLACENEXTROAD_CANNOT_PLACE_IN_DIRECTION;
 		}
 		const targetPosition = new ItemPosition({ x: position.x + direction.x, y: position.y + direction.y });
-		const targetRoad = this.#roads.getRoadByPosition(targetPosition);
+		const targetRoad = this.getRoadByPosition(targetPosition);
+		let legalRoadTypes = Field.ROAD_CONNECTIONS.get(direction);
+		if (!targetRoad) {
+			// there is no road. Now we check for Level 1 roads
+			const roadTop = this.getRoadByPosition(new ItemPosition({ x: targetPosition.x + RoadDirection.TOP.x, y: targetPosition.y + RoadDirection.TOP.y }));
+			const roadRight = this.getRoadByPosition(new ItemPosition({ x: targetPosition.x + RoadDirection.RIGHT.x, y: targetPosition.y + RoadDirection.RIGHT.y }));
+			const roadBottom = this.getRoadByPosition(new ItemPosition({ x: targetPosition.x + RoadDirection.BOTTOM.x, y: targetPosition.y + RoadDirection.BOTTOM.y }));
+			const roadLeft = this.getRoadByPosition(new ItemPosition({ x: targetPosition.x + RoadDirection.LEFT.x, y: targetPosition.y + RoadDirection.LEFT.y }));
+			if (roadTop && !(direction === RoadDirection.BOTTOM)) {
+				legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0);
+			}
+			if (roadRight && !(direction === RoadDirection.LEFT)) {
+				legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0);
+			}
+			if (roadBottom && !(direction === RoadDirection.TOP)) {
+				legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0);
+			}
+			if (roadLeft && !(direction === RoadDirection.RIGHT)) {
+				legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0);
+			}
+			//
+			// level 2 checks
+			//
+			if (!roadTop) {
+				const x = targetPosition.x + RoadDirection.TOP.x;
+				const y = targetPosition.y + RoadDirection.TOP.y;
+				const roadTopTop = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.TOP.x, y: y + RoadDirection.TOP.y }));
+				const roadTopRight = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.RIGHT.x, y: y + RoadDirection.RIGHT.y }));
+				const roadTopLeft = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.LEFT.x, y: y + RoadDirection.LEFT.y }));
+				if (roadTopTop && (roadTopTop.value & RoadDirection.BOTTOM.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0);
+				}
+				if (roadTopRight && (roadTopRight.value & RoadDirection.LEFT.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0);
+				}
+				if (roadTopLeft && (roadTopLeft.value & RoadDirection.RIGHT.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0);
+				}
+			}
+			if (!roadRight) {
+				const x = targetPosition.x + RoadDirection.RIGHT.x;
+				const y = targetPosition.y + RoadDirection.RIGHT.y;
+				const roadRightTop = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.TOP.x, y: y + RoadDirection.TOP.y }));
+				const roadRightRight = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.RIGHT.x, y: y + RoadDirection.RIGHT.y }));
+				const roadRightBottom = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.BOTTOM.x, y: y + RoadDirection.BOTTOM.y }));
+				if (roadRightTop && (roadRightTop.value & RoadDirection.BOTTOM.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0);
+				}
+				if (roadRightRight && (roadRightRight.value & RoadDirection.LEFT.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0);
+				}
+				if (roadRightBottom && (roadRightBottom.value & RoadDirection.TOP.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0);
+				}
+			}
+			if (!roadBottom) {
+				const x = targetPosition.x + RoadDirection.BOTTOM.x;
+				const y = targetPosition.y + RoadDirection.BOTTOM.y;
+				const roadBottomRight = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.RIGHT.x, y: y + RoadDirection.RIGHT.y }));
+				const roadBottomBottom = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.BOTTOM.x, y: y + RoadDirection.BOTTOM.y }));
+				const roadBottomLeft = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.LEFT.x, y: y + RoadDirection.LEFT.y }));
+				if (roadBottomRight && (roadBottomRight.value & RoadDirection.LEFT.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0);
+				}
+				if (roadBottomBottom && (roadBottomBottom.value & RoadDirection.TOP.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0);
+				}
+				if (roadBottomLeft && (roadBottomLeft.value & RoadDirection.RIGHT.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0);
+				}
+			}
+			if (!roadLeft) {
+				const x = targetPosition.x + RoadDirection.LEFT.x;
+				const y = targetPosition.y + RoadDirection.LEFT.y;
+				const roadLeftTop = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.TOP.x, y: y + RoadDirection.TOP.y }));
+				const roadLeftBottom = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.BOTTOM.x, y: y + RoadDirection.BOTTOM.y }));
+				const roadLeftLeft = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.LEFT.x, y: y + RoadDirection.LEFT.y }));
+				if (roadLeftTop && (roadLeftTop.value & RoadDirection.BOTTOM.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0);
+				}
+				if (roadLeftBottom && (roadLeftBottom.value & RoadDirection.TOP.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0);
+				}
+				if (roadLeftLeft && (roadLeftLeft.value & RoadDirection.RIGHT.value) !== 0) {
+					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0);
+				}
+			}
+
+			return legalRoadTypes;
+		} else {
+			// there is a road
+			return [];
+		}
 	};
 }

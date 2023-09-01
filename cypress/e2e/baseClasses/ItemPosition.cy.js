@@ -57,4 +57,11 @@ describe('ItemPosition', () => {
 			expect(clone.y).to.equal(itemPosition.y);
 		});
 	});
+
+	describe('toKey', () => {
+		it('should return the correct key', () => {
+			const itemPosition = new ItemPosition({ x: 1, y: 2 });
+			expect(itemPosition.toKey()).to.equal('1,2');
+		});
+	});
 });
