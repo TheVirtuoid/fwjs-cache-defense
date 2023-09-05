@@ -1,5 +1,6 @@
 import Road from "../../../src/classes/Road.js";
 import RoadType from "../../../src/classes/types/RoadType.js";
+import RoadDirection from "../../../src/classes/types/RoadDirection.js";
 
 describe('road', () => {
 

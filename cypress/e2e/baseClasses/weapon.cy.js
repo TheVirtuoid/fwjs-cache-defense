@@ -37,6 +37,7 @@ describe('weapon', () => {
 			expect(weaponObject.type).to.equal(WeaponType.SHOOTER);
 			expect(weaponObject.id).not.to.be.undefined;
 			expect(weaponObject.position).not.to.be.undefined;
+			expect(weaponObject.name).not.to.be.undefined;
 		});
 	});
 });

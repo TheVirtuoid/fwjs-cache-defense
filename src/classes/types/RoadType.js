@@ -7,8 +7,7 @@ export default class RoadType {
 	static CORNER_TOP_RIGHT = Symbol();
 	static CORNER_BOTTOM_RIGHT = Symbol();
 
-	static STRAIGHT_LEFT_RIGHT = Symbol();
-	static STRAIGHT_TOP_BOTTOM = Symbol();
+	// static CROSS = { directions: [ true, true, true, true ], value: 15 };
 
 	static T_TOP_DOWN_RIGHT = Symbol();
 	static T_TOP_DOWN_LEFT = Symbol();

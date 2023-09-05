@@ -1,4 +1,5 @@
 import ItemPosition from "../../../src/classes/ItemPosition.js";
+import RoadDirection from "../../../src/classes/types/RoadDirection.js";
 
 describe('ItemPosition', () => {
 	describe('creation', () => {

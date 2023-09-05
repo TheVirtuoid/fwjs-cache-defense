@@ -1,7 +1,13 @@
+import RoadDirection from "./types/RoadDirection.js";
+
 export default class ItemPosition {
 
 	static ERROR_X_NOT_NUMBER = new TypeError(`"x" parameter must be a number.`);
 	static ERROR_Y_NOT_NUMBER = new TypeError(`"y" parameter must be a number.`);
+	static ERROR_INVALID_DIRECTION = new TypeError(`"direction" parameter must be a valid RoadDirection.`);
+
+	static DEFAULT_X = Number.POSITIVE_INFINITY;
+	static DEFAULT_Y = Number.POSITIVE_INFINITY;
 
 	static DEFAULT_X = Number.POSITIVE_INFINITY;
 	static DEFAULT_Y = Number.POSITIVE_INFINITY;
@@ -27,6 +33,13 @@ export default class ItemPosition {
 	get y() {
 		return this.#y;
 	}
+
+	getAdjacentPosition(direction) {
+		if (!RoadDirection.isDirection(direction)) {
+			throw ItemPosition.ERROR_INVALID_DIRECTION;
+		}
+		return new ItemPosition({ x: this.#x + direction.x, y: this.#y + direction.y });
+	};
 
 	toObject() {
 		return { x: this.#x, y: this.#y };

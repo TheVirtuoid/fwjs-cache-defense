@@ -26,7 +26,7 @@ export default class Weapon extends BaseGameItem {
 
 	toObject() {
 		const base = super.toObject();
-		return { type: this.#type, ...base };
+		return { type: this.#type, name: this.name, ...base };
 	}
 
 	toJSON() {
