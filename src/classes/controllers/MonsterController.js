@@ -1,6 +1,6 @@
 import Monster from "../Monster.js";
 
-export default class ArsenalController {
+export default class MonsterController {
 
 	#monsters = new Map();
 	constructor() {

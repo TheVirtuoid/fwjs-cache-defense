@@ -34,27 +34,35 @@ describe('ItemPosition', () => {
 		});
 	});
 
-	describe('toString', () => {
-		it('should return the correct string (default)', () => {
+	describe('isDefault', () => {
+		it('should return true if x and y are not specified', () => {
 			const itemPosition = new ItemPosition();
-			expect(itemPosition.toString()).to.equal(`{"x":Infinity,"y":Infinity}`);
+			expect(itemPosition.isDefault()).to.be.true;
 		});
-		it('should return the correct string', () => {
-			const itemPosition = new ItemPosition({ x: 1, y: 2 });
-			expect(itemPosition.toString()).to.equal(`{"x":1,"y":2}`);
+		it('should return false if x and y are specified', () => {
+			const itemPosition = new ItemPosition({ x: 1, y: 1 });
+			expect(itemPosition.isDefault()).to.be.false;
 		});
 	});
 
-	describe('getAdjacentPosition', () => {
-		it('should throw error is direction is invalid', () => {
-			const itemPosition = new ItemPosition({x: 0, y: 0 });
-			expect(() => itemPosition.getAdjacentPosition('bad')).to.throw(ItemPosition.ERROR_INVALID_DIRECTION.message);
+	describe('clone', () => {
+		it('should return a new ItemPosition', () => {
+			const itemPosition = new ItemPosition();
+			const clone = itemPosition.clone();
+			expect(clone instanceof ItemPosition).to.be.true;
 		});
-		it('should return the correct position (TOP)', () => {
-			const itemPosition = new ItemPosition({x: 0, y: 0 });
-			const adjacentPosition = itemPosition.getAdjacentPosition(RoadDirection.TOP);
-			expect(adjacentPosition.x).to.equal(0);
-			expect(adjacentPosition.y).to.equal(-1);
+		it('should return a new ItemPosition with the same x and y', () => {
+			const itemPosition = new ItemPosition({ x: 1, y: 2 });
+			const clone = itemPosition.clone();
+			expect(clone.x).to.equal(itemPosition.x);
+			expect(clone.y).to.equal(itemPosition.y);
+		});
+	});
+
+	describe('toKey', () => {
+		it('should return the correct key', () => {
+			const itemPosition = new ItemPosition({ x: 1, y: 2 });
+			expect(itemPosition.toKey()).to.equal('1,2');
 		});
 	});
 });

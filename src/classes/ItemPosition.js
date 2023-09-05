@@ -9,6 +9,9 @@ export default class ItemPosition {
 	static DEFAULT_X = Number.POSITIVE_INFINITY;
 	static DEFAULT_Y = Number.POSITIVE_INFINITY;
 
+	static DEFAULT_X = Number.POSITIVE_INFINITY;
+	static DEFAULT_Y = Number.POSITIVE_INFINITY;
+
 	#x;
 	#y;
 	constructor(args = {}) {
@@ -42,7 +45,15 @@ export default class ItemPosition {
 		return { x: this.#x, y: this.#y };
 	}
 
-	toString() {
-		return `{"x":${this.#x},"y":${this.#y}}`;
+	isDefault() {
+		return this.#x === ItemPosition.DEFAULT_X && this.#y === ItemPosition.DEFAULT_Y;
+	}
+
+	clone() {
+		return new ItemPosition({ x: this.#x, y: this.#y });
+	}
+
+	toKey() {
+		return `${this.#x},${this.#y}`;
 	}
 }
