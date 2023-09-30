@@ -1,6 +1,11 @@
 import MonsterController from "../../../src/classes/controllers/MonsterController.js";
 import Monster from "../../../src/classes/Monster.js";
 import MonsterType from "../../../src/classes/types/MonsterType.js";
+import RoadType from "../../../src/classes/types/RoadType.js";
+import Road from "../../../src/classes/Road.js";
+import ItemPosition from "../../../src/classes/ItemPosition.js";
+import RoadStartLocation from "../../../src/classes/types/RoadStartLocation.js";
+import MonsterSpeed from "../../../src/classes/MonsterSpeed.js";
 
 describe('monsterController', () => {
 
@@ -84,4 +89,69 @@ describe('monsterController', () => {
 		});
 
 	});
+
+	/**
+	 * arguments: id, road, startingLocation, speed, health
+	 */
+	describe('placeMonster', () => {
+		let monsterController;
+		let monster;
+		let road;
+		let startingLocation;
+		let speed;
+		let health;
+		let subPosition;
+		let position;
+		beforeEach(() => {
+			monsterController = new MonsterController();
+			monster = monsterController.createMonster({ type: MonsterType.ALIEN });
+			position = new ItemPosition({ x: 0, y: 0 });
+			road = new Road({ type: RoadType.CORNER_BOTTOM_LEFT, position });
+			startingLocation = RoadStartLocation.LEFT;
+			speed = new MonsterSpeed({ x: startingLocation.speed.x * .01, y: startingLocation.speed.y * .01 });
+			subPosition = new ItemPosition({ x: startingLocation.subPosition.x, y: startingLocation.subPosition.y });
+			health = 10;
+		});
+
+		it('should throw error if monster is not a Monster', () => {
+			expect(() => monsterController.placeMonster({ monster: 'bad', position, speed, subPosition, health }))
+					.to.throw(MonsterController.ERROR_PLACEMONSTER_INVALID_MONSTER.message);
+		});
+		it('should throw error if position is not an ItemPosition', () => {
+			expect(() => monsterController.placeMonster({ monster, position: 'bad', speed, subPosition, health }))
+					.to.throw(MonsterController.ERROR_PLACEMONSTER_INVALID_POSITION.message);
+		});
+		it('should throw error if speed is not an MonsterSpeed object', () => {
+			expect(() => monsterController.placeMonster({ monster, position, speed: 'bad', subPosition, health }))
+					.to.throw(MonsterController.ERROR_PLACEMONSTER_INVALID_SPEED.message);
+		});
+		it('should throw error if subPosition is not an object', () => {
+			expect(() => monsterController.placeMonster({ monster, position, speed, subPosition: 'bad', health }))
+					.to.throw(MonsterController.ERROR_PLACEMONSTER_INVALID_SUBPOSITION.message);
+		});
+		it('should throw error if health is not an integer', () => {
+			expect(() => monsterController.placeMonster({ monster, position, speed, subPosition, health: 'bad' }))
+					.to.throw(MonsterController.ERROR_PLACEMONSTER_INVALID_HEALTH.message);
+		});
+		it('should throw error if health is 0 or less', () => {
+			expect(() => monsterController.placeMonster({ monster, position, speed, subPosition, health: 0 }))
+					.to.throw(MonsterController.ERROR_PLACEMONSTER_HEALTH_ZERO_OR_LESS.message);
+		});
+		it('should throw error if monster has not been added to the controller', () => {
+			const badMonster = new Monster({ type: MonsterType.ALIEN });
+			expect(() => monsterController.placeMonster({ monster: badMonster, position, speed, subPosition, health: 1 }))
+					.to.throw(MonsterController.ERROR_PLACEMONSTER_MONSTER_NOT_IN_CONTROLLER.message);
+		});
+		it('should place the monster', () => {
+			const returnedMonster = monsterController.placeMonster({ monster, position, speed, subPosition, health });
+			expect(returnedMonster.position.x).to.equal(position.x);
+			expect(returnedMonster.position.y).to.equal(position.y);
+			expect(returnedMonster.speed.x).to.equal(speed.x);
+			expect(returnedMonster.speed.y).to.equal(speed.y);
+			expect(returnedMonster.health).to.equal(health);
+			expect(returnedMonster.subPosition.x).to.equal(subPosition.x);
+			expect(returnedMonster.subPosition.y).to.equal(subPosition.y);
+		});
+	});
+	xdescribe('moveMonster', () => {});
 });
