@@ -54,10 +54,7 @@ export default class Monster extends BaseGameItem {
 	};
 
 	getSubPosition() {
-		return {
-			x: this.#subPosition.x,
-			y: this.#subPosition.y
-		}
+		return new ItemPosition({ x: this.#subPosition.x, y: this.#subPosition.y });
 	}
 
 	hasSubPositionBeenSet() {
@@ -69,10 +66,10 @@ export default class Monster extends BaseGameItem {
 			throw Monster.ERROR_SUBPOSITION_NOT_ITEMPOSITION;
 		}
 		const { x, y } = subPosition;
-		if (x < 0 || x >= 1) {
+		if (x < 0 || x > 1) {
 			throw Monster.ERROR_SUBPOSITION_X_OUT_OF_RANGE;
 		}
-		if (y < 0 || y >= 1) {
+		if (y < 0 || y > 1) {
 			throw Monster.ERROR_SUBPOSITION_Y_OUT_OF_RANGE;
 		}
 		if (this.#path.length) {
@@ -95,8 +92,16 @@ export default class Monster extends BaseGameItem {
 						}
 						break;
 					case RoadDirection.BOTTOM:
+						if (y <= stopPointY) {
+							this.#pathIndex++;
+							subPosition = new ItemPosition({ x: stopPointX, y: stopPointY });
+						}
 						break;
 					case RoadDirection.LEFT:
+						if (x <= stopPointX) {
+							this.#pathIndex++;
+							subPosition = new ItemPosition({ x: stopPointX, y: stopPointY });
+						}
 						break;
 				}
 			}

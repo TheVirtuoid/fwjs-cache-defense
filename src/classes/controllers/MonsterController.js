@@ -88,8 +88,15 @@ export default class MonsterController {
 		const { x: speedX, y: speedY } = speed;
 		const { direction } = monster.getCurrentSubPath();
 		const { x: speedMultiplierX, y: speedMultiplierY } = direction.speed;
-		const newSubPosition = new ItemPosition({ x: subPosX + speedX * speedMultiplierX, y: subPosY + speedY * speedMultiplierY });
+		const newSubPosition = new ItemPosition({
+			x: this.#threeDigit(subPosX + speedX * speedMultiplierX),
+			y: this.#threeDigit(subPosY + speedY * speedMultiplierY)
+		});
 		monster.setSubPosition(newSubPosition);
 		return monster;
+	}
+
+	#threeDigit(number) {
+		return parseFloat(number.toFixed(3));
 	}
 }

@@ -46,6 +46,18 @@ describe('monster', () => {
 		});
 	});
 
+	describe('getSubPosition', () => {
+		let monster;
+		beforeEach(() => {
+			monster = new Monster({ type: MonsterType.ALIEN });
+		});
+		it('should return the subPosition as an ItemPosition', () => {
+			const subPosition = monster.getSubPosition();
+			expect(subPosition instanceof ItemPosition).to.be.true;
+		});
+
+	});
+
 	describe('setSubPosition', () => {
 		let monster;
 		beforeEach(() => {
@@ -62,12 +74,12 @@ describe('monster', () => {
 			const subPosition = new ItemPosition({ x: .1, y: -2 });
 			expect(() => monster.setSubPosition(subPosition)).to.throw(Monster.ERROR_SUBPOSITION_Y_OUT_OF_RANGE.message);
 		});
-		it('should throw error if x is 1 or greater', () => {
-			const subPosition = new ItemPosition({ x: 1, y: .1 });
+		it('should throw error if x is greater than 1', () => {
+			const subPosition = new ItemPosition({ x: 2, y: .1 });
 			expect(() => monster.setSubPosition(subPosition)).to.throw(Monster.ERROR_SUBPOSITION_X_OUT_OF_RANGE.message);
 		});
-		it('should throw error if y is 1 or greater', () => {
-			const subPosition = new ItemPosition({ x: .1, y: 1 });
+		it('should throw error if y is greater than 1', () => {
+			const subPosition = new ItemPosition({ x: .1, y: 2 });
 			expect(() => monster.setSubPosition(subPosition)).to.throw(Monster.ERROR_SUBPOSITION_Y_OUT_OF_RANGE.message);
 		});
 		it('should set the sub-position', () => {

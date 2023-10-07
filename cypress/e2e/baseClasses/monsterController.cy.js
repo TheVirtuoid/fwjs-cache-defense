@@ -210,59 +210,90 @@ describe('monsterController', () => {
 		let monsterController;
 		let monster;
 		let position;
+		let health;
 		beforeEach(() => {
 			monsterController = new MonsterController();
 			monster = monsterController.createMonster({type: MonsterType.ALIEN});
-			position = new ItemPosition({ x: 0, y: 0 })
+			position = new ItemPosition({ x: 0, y: 0 });
+			health = 10;
 		});
+
+		const moveTheMonster = (path) => {
+			const speed = new MonsterSpeed({x: .1, y: .1});
+			const subPosition = new ItemPosition({x: path[0].x, y: path[0].y});
+			monsterController.placeMonster({ monster, position, speed, subPosition, health, path });
+			monsterController.moveMonster(monster);	// .1
+			monsterController.moveMonster(monster);	// .2
+			monsterController.moveMonster(monster);	// .3
+			monsterController.moveMonster(monster);	// .4
+			monsterController.moveMonster(monster);	// .5 - make the turn
+			monsterController.moveMonster(monster);	// should be on the next road
+			return subPosition;
+		};
 
 		describe('corner_bottom_left', () => {
 			let road;
-			let health;
 			beforeEach(() => {
 				road = new Road({type: RoadType.CORNER_BOTTOM_LEFT, position});
-				health = 10;
 			});
 			it('should change direction to BOTTOM on a CORNER_BOTTOM_LEFT road', () => {
 				const path = RoadType.CORNER_BOTTOM_LEFT.path.get(RoadStartLocation.LEFT);
-				const speed = new MonsterSpeed({x: .1, y: .1});
-				const subPosition = new ItemPosition({x: path[0].x, y: path[0].y});
-				monsterController.placeMonster({ monster, position, speed, subPosition, health, path });
-				monsterController.moveMonster(monster);	// .1
-				monsterController.moveMonster(monster);	// .2
-				monsterController.moveMonster(monster);	// .3
-				monsterController.moveMonster(monster);	// .4
-				monsterController.moveMonster(monster);	// .5
-				monsterController.moveMonster(monster);	// turn to the bottom
+				const subPosition = moveTheMonster(path);
 				expect(monster.subPosition.x).to.equal(subPosition.x + .5);
 				expect(monster.subPosition.y).to.equal(subPosition.y - .1);
 			});
 			it('should change direction to LEFT on a CORNER_BOTTOM_LEFT road', () => {
 				const path = RoadType.CORNER_BOTTOM_LEFT.path.get(RoadStartLocation.BOTTOM);
-				const speed = new MonsterSpeed({x: .1, y: .1});
-				const subPosition = new ItemPosition({x: path[0].x, y: path[0].y});
-				monsterController.placeMonster({ monster, position, speed, subPosition, health, path });
-				monsterController.moveMonster(monster);	// .1
-				monsterController.moveMonster(monster);	// .2
-				monsterController.moveMonster(monster);	// .3
-				monsterController.moveMonster(monster);	// .4
-				monsterController.moveMonster(monster);	// .5
-				monsterController.moveMonster(monster);	// turn to the left
+				const subPosition = moveTheMonster(path);
 				expect(monster.subPosition.x).to.equal(subPosition.x - .1);
 				expect(monster.subPosition.y).to.equal(subPosition.y + .5);
 			});
 		});
 		describe('corner_bottom_right', () => {
-			it('should change direction to BOTTOM on a CORNER_BOTTOM_RIGHT road', () => {});
-			it('should change direction to RIGHT on a CORNER_BOTTOM_RIGHT road', () => {});
+			let road;
+			beforeEach(() => {
+				road = new Road({type: RoadType.CORNER_BOTTOM_RIGHT, position});
+			});
+			it('should change direction to BOTTOM on a CORNER_BOTTOM_RIGHT road', () => {
+				const path = RoadType.CORNER_BOTTOM_RIGHT.path.get(RoadStartLocation.RIGHT);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x - .5);
+				expect(monster.subPosition.y).to.equal(subPosition.y - .1);
+			});
+			it('should change direction to RIGHT on a CORNER_BOTTOM_RIGHT road', () => {
+				const path = RoadType.CORNER_BOTTOM_RIGHT.path.get(RoadStartLocation.BOTTOM);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x + .1);
+				expect(monster.subPosition.y).to.equal(subPosition.y + .5);
+			});
 		});
 		describe('corner_top_left', () => {
-			it('should change direction to TOP on a CORNER_TOP_LEFT road', () => {});
-			it('should change direction to LEFT on a CORNER_TOP_LEFT road', () => {});
+			it('should change direction to TOP on a CORNER_TOP_LEFT road', () => {
+				const path = RoadType.CORNER_TOP_LEFT.path.get(RoadStartLocation.LEFT);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x + .5);
+				expect(monster.subPosition.y).to.equal(subPosition.y + .1);
+			});
+			it('should change direction to LEFT on a CORNER_TOP_LEFT road', () => {
+				const path = RoadType.CORNER_TOP_LEFT.path.get(RoadStartLocation.TOP);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x - .1);
+				expect(monster.subPosition.y).to.equal(subPosition.y - .5);
+			});
 		});
 		describe('corner_top_right', () => {
-			it('should change direction to TOP on a CORNER_TOP_RIGHT road', () => {});
-			it('should change direction to RIGHT on a CORNER_TOP_RIGHT road', () => {});
+			it('should change direction to TOP on a CORNER_TOP_RIGHT road', () => {
+				const path = RoadType.CORNER_TOP_RIGHT.path.get(RoadStartLocation.RIGHT);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x - .5);
+				expect(monster.subPosition.y).to.equal(subPosition.y + .1);
+			});
+			it('should change direction to RIGHT on a CORNER_TOP_RIGHT road', () => {
+				const path = RoadType.CORNER_TOP_RIGHT.path.get(RoadStartLocation.TOP);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x + .1);
+				expect(monster.subPosition.y).to.equal(subPosition.y - .5);
+			});
 		});
 		describe('half_bottom', () => {
 			it('should stop on a HALF_BOTTOM road', () => {});
