@@ -11,6 +11,10 @@ export default class MonsterController {
 	static ERROR_PLACEMONSTER_INVALID_HEALTH = new TypeError(`"health" argument is not a number`);
 	static ERROR_PLACEMONSTER_HEALTH_ZERO_OR_LESS = new RangeError(`"health" argument must be greater than 0`);
 	static ERROR_PLACEMONSTER_MONSTER_NOT_IN_CONTROLLER = new Error(`"monster" argument is not part of the Controller`);
+	static ERROR_MOVEMONSTER_INVALID_MONSTER = new TypeError(`"monster" argument is not a type Monster`);
+	static ERROR_MOVEMONSTER_MONSTER_NOT_PART_OF_CONTROLLER = new Error(`"monster" argument is not part of the Controller`);
+	static ERROR_MOVEMONSTER_MONSTER_NOT_PLACED = new Error(`"monster" has not been placed`);
+	static ERROR_PLACEMONSTER_INVALID_PATH = new TypeError(`"path" argument is not a type Array`);
 
 	#monsters = new Map();
 	constructor() {
@@ -36,7 +40,7 @@ export default class MonsterController {
 	}
 
 	placeMonster(args = {}) {
-		const { monster, position, speed, subPosition, health } = args;
+		const { monster, position, speed, subPosition, health, path } = args;
 		if (!(monster instanceof Monster)) {
 			throw MonsterController.ERROR_PLACEMONSTER_INVALID_MONSTER;
 		}
@@ -58,10 +62,34 @@ export default class MonsterController {
 		if (!this.#monsters.has(monster.id)) {
 			throw MonsterController.ERROR_PLACEMONSTER_MONSTER_NOT_IN_CONTROLLER;
 		}
+		if(!(path instanceof Array)) {
+			throw MonsterController.ERROR_PLACEMONSTER_INVALID_PATH;
+		}
 		monster.setPosition(position);
-		monster.setSpeed(speed);
 		monster.setSubPosition(subPosition);
+		monster.setSpeed(speed);
 		monster.setHealth(health);
+		monster.setPath(path);
+		return monster;
+	}
+
+	moveMonster(monster) {
+		if (!(monster instanceof Monster)) {
+			throw MonsterController.ERROR_MOVEMONSTER_INVALID_MONSTER;
+		}
+		if (!this.#monsters.has(monster.id)) {
+			throw MonsterController.ERROR_MOVEMONSTER_MONSTER_NOT_PART_OF_CONTROLLER;
+		}
+		if (!monster.hasSubPositionBeenSet()) {
+			throw MonsterController.ERROR_MOVEMONSTER_MONSTER_NOT_PLACED;
+		}
+		const { speed, subPosition } = monster;
+		const { x: subPosX, y: subPosY } = subPosition;
+		const { x: speedX, y: speedY } = speed;
+		const { direction } = monster.getCurrentSubPath();
+		const { x: speedMultiplierX, y: speedMultiplierY } = direction.speed;
+		const newSubPosition = new ItemPosition({ x: subPosX + speedX * speedMultiplierX, y: subPosY + speedY * speedMultiplierY });
+		monster.setSubPosition(newSubPosition);
 		return monster;
 	}
 }

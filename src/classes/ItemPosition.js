@@ -5,9 +5,8 @@ export default class ItemPosition {
 	static ERROR_X_NOT_NUMBER = new TypeError(`"x" parameter must be a number.`);
 	static ERROR_Y_NOT_NUMBER = new TypeError(`"y" parameter must be a number.`);
 	static ERROR_INVALID_DIRECTION = new TypeError(`"direction" parameter must be a valid RoadDirection.`);
-
-	static DEFAULT_X = Number.POSITIVE_INFINITY;
-	static DEFAULT_Y = Number.POSITIVE_INFINITY;
+	static ERROR_COMPARETO_POSITION_NOT_ITEMPOSITION = new TypeError(`"position" parameter must be an ItemPosition.`);
+	static ERROR_COMPARETO_DIRECTION_NOT_ROADDIRECTION = new TypeError(`"direction" parameter must be a valid RoadDirection.`);
 
 	static DEFAULT_X = Number.POSITIVE_INFINITY;
 	static DEFAULT_Y = Number.POSITIVE_INFINITY;
@@ -55,5 +54,25 @@ export default class ItemPosition {
 
 	toKey() {
 		return `${this.#x},${this.#y}`;
+	}
+
+	compareTo(args = {}) {
+		const { position, direction } = args;
+		if (!(position instanceof ItemPosition)) {
+			throw ItemPosition.ERROR_COMPARETO_POSITION_NOT_ITEMPOSITION;
+		}
+		if(!RoadDirection.isDirection(direction)) {
+			throw ItemPosition.ERROR_COMPARETO_DIRECTION_NOT_ROADDIRECTION;
+		}
+		switch(direction) {
+			case RoadDirection.TOP:
+				return this.#y - position.y;
+			case RoadDirection.LEFT:
+				return position.x - this.#x;
+			case RoadDirection.BOTTOM:
+				return position.y - this.#y;
+			case RoadDirection.RIGHT:
+				return this.#x - position.x;
+		}
 	}
 }

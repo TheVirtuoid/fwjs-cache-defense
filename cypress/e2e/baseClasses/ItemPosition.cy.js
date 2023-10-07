@@ -65,4 +65,73 @@ describe('ItemPosition', () => {
 			expect(itemPosition.toKey()).to.equal('1,2');
 		});
 	});
+
+	describe('compareTo', () => {
+		let itemPosition;
+		beforeEach(() => {
+			itemPosition = new ItemPosition({ x: 1, y: 2 });
+		});
+		it('should throw error if position argument is not an ItemPosition', () => {
+			expect(() => itemPosition.compareTo({ position: 'bad', direction: RoadDirection.TOP })).to.throw(ItemPosition.ERROR_COMPARETO_POSITION_NOT_ITEMPOSITION.message);
+		});
+		it('should throw error if direction argument is not a RoadDirection', () => {
+			expect(() => itemPosition.compareTo({ position: new ItemPosition(), direction: 'bad' })).to.throw(ItemPosition.ERROR_COMPARETO_DIRECTION_NOT_ROADDIRECTION.message);
+		});
+		describe('roadDirection = TOP', () => {
+			it('should return -1 if if comparison object < position', () => {
+				const position = new ItemPosition({ x: 1, y: 3 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.TOP })).to.equal(-1);
+			});
+			it('should return 0 if positions are the same', () => {
+				const position = new ItemPosition({ x: 1, y: 2 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.TOP })).to.equal(0);
+			});
+			it('should return 1 if comparison object > position', () => {
+				const position = new ItemPosition({ x: 1, y: 1 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.TOP })).to.equal(1);
+			});
+		});
+		describe('roadDirection = RIGHT', () => {
+			it('should return -1 if if comparison object < position', () => {
+				const position = new ItemPosition({ x: 2, y: 2 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.RIGHT })).to.equal(-1);
+			});
+			it('should return 0 if positions are the same', () => {
+				const position = new ItemPosition({ x: 1, y: 2 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.RIGHT })).to.equal(0);
+			});
+			it('should return 1 if comparison object > position', () => {
+				const position = new ItemPosition({ x: 0, y: 2 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.RIGHT })).to.equal(1);
+			});
+		});
+		describe('roadDirection = BOTTOM', () => {
+			it('should return -1 if if comparison object < position', () => {
+				const position = new ItemPosition({ x: 1, y: 1 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.BOTTOM })).to.equal(-1);
+			});
+			it('should return 0 if positions are the same', () => {
+				const position = new ItemPosition({ x: 1, y: 2 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.BOTTOM })).to.equal(0);
+			});
+			it('should return 1 if comparison object > position', () => {
+				const position = new ItemPosition({ x: 1, y: 3 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.BOTTOM })).to.equal(1);
+			});
+		});
+		describe('roadDirection = LEFT', () => {
+			it('should return -1 if if comparison object < position', () => {
+				const position = new ItemPosition({ x: 0, y: 2 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.LEFT })).to.equal(-1);
+			});
+			it('should return 0 if positions are the same', () => {
+				const position = new ItemPosition({ x: 1, y: 2 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.LEFT })).to.equal(0);
+			});
+			it('should return 1 if comparison object > position', () => {
+				const position = new ItemPosition({ x: 2, y: 2 });
+				expect(itemPosition.compareTo({ position, direction: RoadDirection.LEFT })).to.equal(1);
+			});
+		});
+	});
 });

@@ -2,6 +2,8 @@ import MonsterType from "../../../src/classes/types/MonsterType.js";
 import Monster from "../../../src/classes/Monster.js";
 import ItemPosition from "../../../src/classes/ItemPosition.js";
 import MonsterSpeed from "../../../src/classes/MonsterSpeed.js";
+import RoadStartLocation from "../../../src/classes/types/RoadStartLocation.js";
+import PathType from "../../../src/classes/types/PathType.js";
 
 describe('monster', () => {
 
@@ -38,6 +40,10 @@ describe('monster', () => {
 			const monster = new Monster({ type: MonsterType.ALIEN });
 			expect(monster.health).to.equal(Monster.DEFAULT_HEALTH);
 		});
+		it('should set the path to default', () => {
+			const monster = new Monster({ type: MonsterType.ALIEN });
+			expect(monster.path.length).to.equal(0);
+		});
 	});
 
 	describe('setSubPosition', () => {
@@ -65,7 +71,6 @@ describe('monster', () => {
 			expect(() => monster.setSubPosition(subPosition)).to.throw(Monster.ERROR_SUBPOSITION_Y_OUT_OF_RANGE.message);
 		});
 		it('should set the sub-position', () => {
-			const monster = new Monster({ type: MonsterType.ALIEN });
 			const subPosition = new ItemPosition({ x: .1, y: .2 });
 			monster.setSubPosition(subPosition);
 			const returnedSubPosition = monster.getSubPosition();
@@ -113,6 +118,50 @@ describe('monster', () => {
 		it('should set the health', () => {
 			monster.setHealth(2);
 			expect(monster.health).to.equal(2);
+		});
+	});
+
+	describe('setPath', () => {
+		let monster;
+		beforeEach(() => {
+			monster = new Monster({ type: MonsterType.ALIEN });
+		});
+		it('should throw error if argument is not am Array', () => {
+			expect(() => monster.setPath('bad')).to.throw(Monster.ERROR_SETPATH_NOT_ARRAY.message);
+		});
+		it('should throw error if at least one pathType is not a PathType', () => {
+			const path = [
+					new PathType({ position: new ItemPosition({ x: 0, y: 0 }), direction: null }),
+					'bad'
+			]
+			expect(() => monster.setPath(path)).to.throw(Monster.ERROR_SETPATH_NOT_PATHTYPE.message);
+		});
+		it('should return a correct path', () => {
+			const path = [
+					new PathType({ position: new ItemPosition( { x: 0, y: 0 }), direction: null }),
+			];
+			monster.setPath(path);
+			expect(monster.path.length).to.equal(1);
+			expect(monster.path[0].x).to.equal(0);
+			expect(monster.path[0].y).to.equal(0);
+			expect(monster.path[0].direction).to.be.null;
+		});
+	});
+
+	describe('getCurrentSubPath', () => {
+		let monster;
+		beforeEach(() => {
+			monster = new Monster({ type: MonsterType.ALIEN });
+		});
+		it('should return null if no path has been set', () => {
+			expect(monster.getCurrentSubPath()).to.be.null;
+		});
+		it('should return the current path', () => {
+			const path = [
+					new PathType({ position: new ItemPosition( { x: 0, y: 0 }), direction: null }),
+			];
+			monster.setPath(path);
+			expect(monster.getCurrentSubPath()).to.equal(path[0]);
 		});
 	});
 });

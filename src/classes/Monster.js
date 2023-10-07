@@ -2,6 +2,8 @@ import BaseGameItem from "./BaseGameItem.js";
 import MonsterType from "./types/MonsterType.js";
 import ItemPosition from "./ItemPosition.js";
 import MonsterSpeed from "./MonsterSpeed.js";
+import PathType from "./types/PathType.js";
+import RoadDirection from "./types/RoadDirection.js";
 
 export default class Monster extends BaseGameItem {
 
@@ -16,12 +18,15 @@ export default class Monster extends BaseGameItem {
 	static ERROR_SETHEALTH_NOT_NUMBER = new TypeError(`"health" property is not a number`);
 	static ERROR_SETHEALTH_GREATER_THAN_0 = new RangeError(`"health" property must be greater than 0`);
 	static ERROR_SUBPOSITION_NOT_ITEMPOSITION = new TypeError(`"subPosition" parameter must be an ItemPosition`);
+	static ERROR_SETPATH_NOT_ARRAY = new TypeError(`"path" parameter must be an Array`);
+	static ERROR_SETPATH_NOT_PATHTYPE = new TypeError(`"path" parameter must be an Array of PathType`);
 
 	#type;
 	#health;
 	#subPosition;
 	#speed;
-
+	#path;
+	#pathIndex;
 	constructor(args = {}) {
 		const { type } = args;
 		if (!(MonsterType.MONSTER_TYPES.has(type))) {
@@ -32,6 +37,8 @@ export default class Monster extends BaseGameItem {
 		this.#subPosition = Monster.DEFAULT_SUBPOSITION;
 		this.#health = Monster.DEFAULT_HEALTH;
 		this.#speed = Monster.DEFAULT_SPEED;
+		this.#path = [];
+		this.#pathIndex = -1;
 	}
 
 	get health() {
@@ -68,6 +75,32 @@ export default class Monster extends BaseGameItem {
 		if (y < 0 || y >= 1) {
 			throw Monster.ERROR_SUBPOSITION_Y_OUT_OF_RANGE;
 		}
+		if (this.#path.length) {
+			const { direction } = this.#path[this.#pathIndex];
+			const { x: stopPointX, y: stopPointY } = this.#path[this.#pathIndex + 1];
+			if (subPosition.compareTo({ position: this.#subPosition, direction }) !== 0) {
+				switch(direction) {
+					case null:
+						break;
+					case RoadDirection.TOP:
+						if (y >= stopPointY) {
+							this.#pathIndex++;
+							subPosition = new ItemPosition({ x: stopPointX, y: stopPointY });
+						}
+						break;
+					case RoadDirection.RIGHT:
+						if (x >= stopPointX) {
+							this.#pathIndex++;
+							subPosition = new ItemPosition({ x: stopPointX, y: stopPointY });
+						}
+						break;
+					case RoadDirection.BOTTOM:
+						break;
+					case RoadDirection.LEFT:
+						break;
+				}
+			}
+		}
 		this.#subPosition = subPosition;
 	}
 
@@ -93,5 +126,30 @@ export default class Monster extends BaseGameItem {
 			throw Monster.ERROR_SETHEALTH_GREATER_THAN_0;
 		}
 		this.#health = health;
+	}
+
+	get path() {
+		const paths = [];
+		this.#path.forEach((path) => {
+			paths.push(path.getObject());
+		});
+		return paths;
+	}
+
+	setPath(path) {
+		if (!(path instanceof Array)) {
+			throw Monster.ERROR_SETPATH_NOT_ARRAY;
+		}
+		path.forEach((pathType) => {
+			if (!(pathType instanceof PathType)) {
+				throw Monster.ERROR_SETPATH_NOT_PATHTYPE;
+			}
+		});
+		this.#path = path;
+		this.#pathIndex = 0;
+	}
+
+	getCurrentSubPath() {
+		return this.#path.length === 0 ? null : this.#path[this.#pathIndex];
 	}
 }

@@ -1,29 +1,26 @@
 import RoadDirection from "./RoadDirection.js";
+import RoadStartLocation from "./RoadStartLocation.js";
+import PathType from "./PathType.js";
+import ItemPosition from "../ItemPosition.js";
 
 export default class RoadType {
-/*
-	static CORNER_TOP_LEFT = Symbol();
-	static CORNER_BOTTOM_LEFT = Symbol();
-	static CORNER_TOP_RIGHT = Symbol();
-	static CORNER_BOTTOM_RIGHT = Symbol();
-
-	// static CROSS = { directions: [ true, true, true, true ], value: 15 };
-
-	static T_TOP_DOWN_RIGHT = Symbol();
-	static T_TOP_DOWN_LEFT = Symbol();
-	static T_LEFT_RIGHT_TOP = Symbol();
-	static T_LEFT_RIGHT_DOWN = Symbol();
-
-	static HALF_RIGHT = Symbol();
-	static HALF_BOTTOM = Symbol();
-	static HALF_LEFT = Symbol();
-	static HALF_TOP = Symbol();
-
-	static CROSS = Symbol();
-*/
 
 	static CORNER_TOP_LEFT = { value: RoadDirection.TOP.value + RoadDirection.LEFT.value };
-	static CORNER_BOTTOM_LEFT = { value: RoadDirection.BOTTOM.value + RoadDirection.LEFT.value };
+	static CORNER_BOTTOM_LEFT = {
+		value: RoadDirection.BOTTOM.value + RoadDirection.LEFT.value,
+		path: new Map([
+			[RoadStartLocation.LEFT, [
+				new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: RoadDirection.RIGHT }),
+				new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.BOTTOM }),
+				new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: null })
+			]],
+			[RoadStartLocation.BOTTOM, [
+				new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: RoadDirection.TOP }),
+				new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.LEFT }),
+				new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: null })
+			]],
+		])
+	};
 	static CORNER_TOP_RIGHT = { value: RoadDirection.TOP.value + RoadDirection.RIGHT.value };
 	static CORNER_BOTTOM_RIGHT = { value: RoadDirection.BOTTOM.value + RoadDirection.RIGHT.value };
 
