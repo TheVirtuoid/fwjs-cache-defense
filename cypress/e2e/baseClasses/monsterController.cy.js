@@ -211,31 +211,41 @@ describe('monsterController', () => {
 		let monster;
 		let position;
 		let health;
+		let speed;
 		beforeEach(() => {
 			monsterController = new MonsterController();
 			monster = monsterController.createMonster({type: MonsterType.ALIEN});
 			position = new ItemPosition({ x: 0, y: 0 });
+			speed = new MonsterSpeed({x: .1, y: .1});
 			health = 10;
 		});
 
 		const moveTheMonster = (path) => {
-			const speed = new MonsterSpeed({x: .1, y: .1});
 			const subPosition = new ItemPosition({x: path[0].x, y: path[0].y});
 			monsterController.placeMonster({ monster, position, speed, subPosition, health, path });
+			// console.log('start: ', monster.subPosition);
 			monsterController.moveMonster(monster);	// .1
+			// console.log('1: ', monster.subPosition);
 			monsterController.moveMonster(monster);	// .2
+			// console.log('2: ', monster.subPosition);
 			monsterController.moveMonster(monster);	// .3
+			// console.log('3: ', monster.subPosition);
 			monsterController.moveMonster(monster);	// .4
-			monsterController.moveMonster(monster);	// .5 - make the turn
-			monsterController.moveMonster(monster);	// should be on the next road
+			// console.log('4: ', monster.subPosition);
+			// CORNER: make the turn
+			// HALF: hit the wall
+			// STRAIGHT: continue on
+			// T-CORNER: either make the turn or continue on
+			monsterController.moveMonster(monster);	// .5
+			// console.log('5: ', monster.subPosition);
+			// HALF: Did not move
+			// ALL OTHERS: Move either straight or turn
+			monsterController.moveMonster(monster);	// .6
+			// console.log('6: ', monster.subPosition);
 			return subPosition;
 		};
 
 		describe('corner_bottom_left', () => {
-			let road;
-			beforeEach(() => {
-				road = new Road({type: RoadType.CORNER_BOTTOM_LEFT, position});
-			});
 			it('should change direction to BOTTOM on a CORNER_BOTTOM_LEFT road', () => {
 				const path = RoadType.CORNER_BOTTOM_LEFT.path.get(RoadStartLocation.LEFT);
 				const subPosition = moveTheMonster(path);
@@ -250,10 +260,6 @@ describe('monsterController', () => {
 			});
 		});
 		describe('corner_bottom_right', () => {
-			let road;
-			beforeEach(() => {
-				road = new Road({type: RoadType.CORNER_BOTTOM_RIGHT, position});
-			});
 			it('should change direction to BOTTOM on a CORNER_BOTTOM_RIGHT road', () => {
 				const path = RoadType.CORNER_BOTTOM_RIGHT.path.get(RoadStartLocation.RIGHT);
 				const subPosition = moveTheMonster(path);
@@ -296,16 +302,36 @@ describe('monsterController', () => {
 			});
 		});
 		describe('half_bottom', () => {
-			it('should stop on a HALF_BOTTOM road', () => {});
+			it('should stop on a HALF_BOTTOM road', () => {
+				const path = RoadType.HALF_BOTTOM.path.get(RoadStartLocation.BOTTOM);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x);
+				expect(monster.subPosition.y).to.equal(subPosition.y + .5);
+			});
 		});
 		describe('half_left', () => {
-			it('should stop on a HALF_LEFT road', () => {});
+			it('should stop on a HALF_LEFT road', () => {
+				const path = RoadType.HALF_LEFT.path.get(RoadStartLocation.LEFT);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x + .5);
+				expect(monster.subPosition.y).to.equal(subPosition.y);
+			});
 		});
 		describe('half_right', () => {
-			it('should stop on a HALF_RIGHT road', () => {});
+			it('should stop on a HALF_RIGHT road', () => {
+				const path = RoadType.HALF_RIGHT.path.get(RoadStartLocation.RIGHT);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x - .5);
+				expect(monster.subPosition.y).to.equal(subPosition.y);
+			});
 		});
 		describe('half_top', () => {
-			it('should stop on a HALF_TOP road', () => {});
+			it('should stop on a HALF_TOP road', () => {
+				const path = RoadType.HALF_TOP.path.get(RoadStartLocation.TOP);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x);
+				expect(monster.subPosition.y).to.equal(subPosition.y - .5);
+			});
 		});
 		describe('straight_left_right', () => {
 			it('should keep going LEFT on a STRAIGHT_LEFT_RIGHT road', () => {});

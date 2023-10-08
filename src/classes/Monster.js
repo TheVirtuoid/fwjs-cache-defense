@@ -74,7 +74,7 @@ export default class Monster extends BaseGameItem {
 		}
 		if (this.#path.length) {
 			const { direction } = this.#path[this.#pathIndex];
-			const { x: stopPointX, y: stopPointY } = this.#path[this.#pathIndex + 1];
+			const { x: stopPointX, y: stopPointY, direction: nextDirection } = this.#path[this.#pathIndex + 1];
 			if (subPosition.compareTo({ position: this.#subPosition, direction }) !== 0) {
 				switch(direction) {
 					case null:
