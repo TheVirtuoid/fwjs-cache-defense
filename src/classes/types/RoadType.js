@@ -93,10 +93,168 @@ export default class RoadType {
 		])
 	};
 
-	static T_TOP_BOTTOM_RIGHT = { value: RoadDirection.TOP.value + RoadDirection.RIGHT.value + RoadDirection.BOTTOM.value };
-	static T_TOP_BOTTOM_LEFT = { value: RoadDirection.TOP.value + RoadDirection.LEFT.value + RoadDirection.BOTTOM.value };
-	static T_LEFT_RIGHT_TOP = { value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value + RoadDirection.TOP.value };
-	static T_LEFT_RIGHT_BOTTOM = { value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value + RoadDirection.BOTTOM.value };
+	static T_TOP_BOTTOM_RIGHT = {
+		value: RoadDirection.TOP.value + RoadDirection.RIGHT.value + RoadDirection.BOTTOM.value,
+		path: new Map([
+			[RoadStartLocation.TOP, new Map([
+					[RoadDirection.BOTTOM, [
+						new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: RoadDirection.BOTTOM }),
+						new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: null })
+					]],
+					[RoadDirection.RIGHT, [
+						new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: RoadDirection.BOTTOM }),
+						new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.RIGHT }),
+						new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: null })
+					]]
+			])],
+			[RoadStartLocation.BOTTOM, new Map([
+					[RoadDirection.TOP, [
+						new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: RoadDirection.TOP }),
+						new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: null })
+					]],
+					[RoadDirection.RIGHT, [
+						new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: RoadDirection.TOP }),
+						new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.RIGHT }),
+						new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: null })
+					]]
+			])],
+			[RoadStartLocation.RIGHT, new Map([
+					[RoadDirection.TOP, [
+						new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: RoadDirection.LEFT }),
+						new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.TOP }),
+						new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: null })
+					]],
+					[RoadDirection.BOTTOM, [
+						new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: RoadDirection.LEFT }),
+						new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.BOTTOM }),
+						new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: null })
+					]]
+			])],
+		])
+	};
+
+	static T_TOP_BOTTOM_LEFT = {
+		value: RoadDirection.TOP.value + RoadDirection.LEFT.value + RoadDirection.BOTTOM.value,
+		path: new Map([
+			[RoadStartLocation.LEFT, new Map([
+				[RoadDirection.TOP, [
+					new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: RoadDirection.RIGHT }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.TOP }),
+					new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: null })
+				]],
+				[RoadDirection.BOTTOM, [
+					new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: RoadDirection.RIGHT }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.BOTTOM }),
+					new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: null })
+				]],
+			])],
+			[RoadStartLocation.TOP, new Map([
+				[RoadDirection.LEFT, [
+					new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: RoadDirection.BOTTOM }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.LEFT }),
+					new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: null })
+				]],
+				[RoadDirection.BOTTOM, [
+					new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: RoadDirection.BOTTOM }),
+					new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: null })
+				]],
+			])],
+			[RoadStartLocation.BOTTOM, new Map([
+				[RoadDirection.TOP, [
+					new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: RoadDirection.TOP }),
+					new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: null })
+				]],
+				[RoadDirection.LEFT, [
+					new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: RoadDirection.TOP }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.LEFT }),
+					new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: null })
+				]],
+			])]
+		])
+	};
+
+	static T_LEFT_RIGHT_TOP = {
+		value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value + RoadDirection.TOP.value,
+		path: new Map([
+			[RoadStartLocation.RIGHT, new Map([
+				[RoadDirection.TOP, [
+					new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: RoadDirection.LEFT }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.TOP }),
+					new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: null })
+				]],
+				[RoadDirection.LEFT, [
+					new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: RoadDirection.LEFT }),
+					new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: null })
+				]],
+			])],
+			[RoadStartLocation.LEFT, new Map([
+				[RoadDirection.TOP, [
+					new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: RoadDirection.RIGHT }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.TOP }),
+					new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: null })
+				]],
+				[RoadDirection.RIGHT, [
+					new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: RoadDirection.RIGHT }),
+					new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: null })
+				]],
+			])],
+			[RoadStartLocation.TOP, new Map([
+				[RoadDirection.LEFT, [
+					new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: RoadDirection.BOTTOM }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.LEFT }),
+					new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: null })
+				]],
+				[RoadDirection.RIGHT, [
+					new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: RoadDirection.BOTTOM }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.RIGHT }),
+					new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: null })
+				]],
+			])]
+		])
+	};
+	static T_LEFT_RIGHT_BOTTOM = {
+		value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value + RoadDirection.BOTTOM.value,
+		path: new Map([
+			[RoadStartLocation.RIGHT,
+					new Map([
+							[RoadDirection.BOTTOM, [
+									new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: RoadDirection.LEFT }),
+									new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.BOTTOM }),
+									new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: null })
+							]],
+							[RoadDirection.LEFT, [
+									new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: RoadDirection.LEFT }),
+									new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: null })
+							]],
+					])
+			],
+			[RoadStartLocation.LEFT,
+				new Map([
+					[RoadDirection.BOTTOM, [
+						new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: RoadDirection.RIGHT }),
+						new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.BOTTOM }),
+						new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: null })
+					]],
+					[RoadDirection.RIGHT, [
+						new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: RoadDirection.RIGHT }),
+						new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: null })
+					]],
+				])
+			],
+			[RoadStartLocation.BOTTOM, new Map([
+				[RoadDirection.LEFT, [
+					new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: RoadDirection.TOP }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.LEFT }),
+					new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: null })
+				]],
+				[RoadDirection.RIGHT, [
+					new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: RoadDirection.TOP }),
+					new PathType({ position: new ItemPosition({ x: .5, y: .5 }), direction: RoadDirection.RIGHT }),
+					new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: null })
+				]],
+			])]
+		])
+	};
 
 	static HALF_RIGHT = {
 		value: RoadDirection.RIGHT.value,
