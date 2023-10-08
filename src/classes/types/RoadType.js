@@ -66,8 +66,32 @@ export default class RoadType {
 		])
 	};
 
-	static STRAIGHT_LEFT_RIGHT = { value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value };
-	static STRAIGHT_TOP_BOTTOM = { value: RoadDirection.TOP.value + RoadDirection.BOTTOM.value };
+	static STRAIGHT_LEFT_RIGHT = {
+		value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value,
+		path: new Map([
+			[RoadStartLocation.RIGHT, [
+				new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: RoadDirection.LEFT }),
+				new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: null })
+			]],
+			[RoadStartLocation.LEFT, [
+				new PathType({ position: new ItemPosition({ x: 0, y: .5 }), direction: RoadDirection.RIGHT }),
+				new PathType({ position: new ItemPosition({ x: 1, y: .5 }), direction: null })
+			]],
+		])
+	};
+	static STRAIGHT_TOP_BOTTOM = {
+		value: RoadDirection.TOP.value + RoadDirection.BOTTOM.value,
+		path: new Map([
+			[RoadStartLocation.TOP, [
+				new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: RoadDirection.BOTTOM }),
+				new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: null })
+			]],
+			[RoadStartLocation.BOTTOM, [
+				new PathType({ position: new ItemPosition({ x: .5, y: 0 }), direction: RoadDirection.TOP }),
+				new PathType({ position: new ItemPosition({ x: .5, y: 1 }), direction: null })
+			]],
+		])
+	};
 
 	static T_TOP_BOTTOM_RIGHT = { value: RoadDirection.TOP.value + RoadDirection.RIGHT.value + RoadDirection.BOTTOM.value };
 	static T_TOP_BOTTOM_LEFT = { value: RoadDirection.TOP.value + RoadDirection.LEFT.value + RoadDirection.BOTTOM.value };

@@ -334,12 +334,32 @@ describe('monsterController', () => {
 			});
 		});
 		describe('straight_left_right', () => {
-			it('should keep going LEFT on a STRAIGHT_LEFT_RIGHT road', () => {});
-			it('should keep going RIGHT on a STRAIGHT_LEFT_RIGHT road', () => {});
+			it('should keep going LEFT on a STRAIGHT_LEFT_RIGHT road', () => {
+				const path = RoadType.STRAIGHT_LEFT_RIGHT.path.get(RoadStartLocation.RIGHT);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x - .6);
+				expect(monster.subPosition.y).to.equal(subPosition.y);
+			});
+			it('should keep going RIGHT on a STRAIGHT_LEFT_RIGHT road', () => {
+				const path = RoadType.STRAIGHT_LEFT_RIGHT.path.get(RoadStartLocation.LEFT);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x + .6);
+				expect(monster.subPosition.y).to.equal(subPosition.y);
+			});
 		});
 		describe('straight_top_bottom', () => {
-			it('should keep going BOTTOM on a STRAIGHT_TOP_BOTTOM road', () => {});
-			it('should keep going TOP on a STRAIGHT_TOP_BOTTOM road', () => {});
+			it('should keep going BOTTOM on a STRAIGHT_TOP_BOTTOM road', () => {
+				const path = RoadType.STRAIGHT_TOP_BOTTOM.path.get(RoadStartLocation.TOP);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x);
+				expect(monster.subPosition.y).to.equal(subPosition.y - .6);
+			});
+			it('should keep going TOP on a STRAIGHT_TOP_BOTTOM road', () => {
+				const path = RoadType.STRAIGHT_TOP_BOTTOM.path.get(RoadStartLocation.BOTTOM);
+				const subPosition = moveTheMonster(path);
+				expect(monster.subPosition.x).to.equal(subPosition.x);
+				expect(monster.subPosition.y).to.equal(subPosition.y + .6);
+			});
 		});
 		describe('t_left_right_bottom', () => {
 			it('should change direction to BOTTOM from LEFT on a T_LEFT_RIGHT_BOTTOM road', () => {});
