@@ -94,6 +94,9 @@ export default class MonsterController {
 				y: this.#threeDigit(subPosY + speedY * speedMultiplierY)
 			});
 			monster.setSubPosition(newSubPosition);
+		} else {
+			// the last valid direction was the direction we are going in. Move to the next road
+
 		}
 		return monster;
 	}

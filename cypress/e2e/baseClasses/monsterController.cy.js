@@ -8,6 +8,7 @@ import ItemPosition from "../../../src/classes/ItemPosition.js";
 import RoadStartLocation from "../../../src/classes/types/RoadStartLocation.js";
 import MonsterSpeed from "../../../src/classes/MonsterSpeed.js";
 import RoadDirection from "../../../src/classes/types/RoadDirection.js";
+import Field from "../../../src/classes/Field.js";
 
 describe('monsterController', () => {
 
@@ -224,25 +225,12 @@ describe('monsterController', () => {
 		const moveTheMonster = (path) => {
 			const subPosition = new ItemPosition({x: path[0].x, y: path[0].y});
 			monsterController.placeMonster({ monster, position, speed, subPosition, health, path });
-			// console.log('start: ', monster.subPosition);
 			monsterController.moveMonster(monster);	// .1
-			// console.log('1: ', monster.subPosition);
 			monsterController.moveMonster(monster);	// .2
-			// console.log('2: ', monster.subPosition);
 			monsterController.moveMonster(monster);	// .3
-			// console.log('3: ', monster.subPosition);
 			monsterController.moveMonster(monster);	// .4
-			// console.log('4: ', monster.subPosition);
-			// CORNER: make the turn
-			// HALF: hit the wall
-			// STRAIGHT: continue on
-			// T-CORNER: either make the turn or continue on
 			monsterController.moveMonster(monster);	// .5
-			// console.log('5: ', monster.subPosition);
-			// HALF: Did not move
-			// ALL OTHERS: Move either straight or turn
 			monsterController.moveMonster(monster);	// .6
-			// console.log('6: ', monster.subPosition);
 			return subPosition;
 		};
 
@@ -545,10 +533,46 @@ describe('monsterController', () => {
 	});
 
 	describe('going to another road', () => {
-		let secondRoad;
+		let monsterController;
+		let monster;
+		let speed;
+		let health;
+		let position;
 		beforeEach(() => {
-			secondRoad = new Road({ type: RoadType.STRAIGHT_TOP_BOTTOM, position: new ItemPosition({ x: 0, y: -1 }) });
+			monsterController = new MonsterController();
+			monster = monsterController.createMonster({type: MonsterType.ALIEN});
+			position = new ItemPosition({x: 0, y: 0});
+			speed = new MonsterSpeed({x: .1, y: .1});
+			health = 10;
 		});
-		it('should move to the next road', () => {});
+		it('should move to the next road when going TOP', () => {
+			const field = new Field();
+			field.addRoad({
+				road: new Road({ type: RoadType.STRAIGHT_TOP_BOTTOM, position: new ItemPosition({ x: 0, y: 0 }) })
+			});
+			field.addRoad({
+				road: new Road({ type: RoadType.STRAIGHT_TOP_BOTTOM, position: new ItemPosition({ x: 0, y: 1 }) })
+			});
+			const path = RoadType.STRAIGHT_TOP_BOTTOM.path.get(RoadStartLocation.BOTTOM);
+			const subPosition = new ItemPosition({x: path[0].x, y: path[0].y});
+			monsterController.placeMonster({ monster, position, speed, subPosition, health, path });
+			monsterController.moveMonster(monster); // .1
+			monsterController.moveMonster(monster); // .2
+			monsterController.moveMonster(monster); // .3
+			monsterController.moveMonster(monster); // .4
+			monsterController.moveMonster(monster); // .5
+			monsterController.moveMonster(monster); // .6
+			monsterController.moveMonster(monster); // .7
+			monsterController.moveMonster(monster); // .8
+			monsterController.moveMonster(monster); // .9
+			monsterController.moveMonster(monster); // 1 - should switch to another road at this point
+			expect(monster.subPosition.x).to.equal(.5);
+			expect(monster.subPosition.y).to.equal(0);
+			expect(monster.position.x).to.equal(0);
+			expect(monster.position.y).to.equal(1);
+		});
+		it('should move to the next road when going RIGHT', () => {});
+		it('should move to the next road when going BOTTOM', () => {});
+		it('should move to the next road when going LEFT', () => {});
 	});
 });
