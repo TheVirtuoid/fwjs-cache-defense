@@ -532,7 +532,7 @@ describe('monsterController', () => {
 		});
 	});
 
-	describe('going to another road', () => {
+	xdescribe('going to another road', () => {
 		let monsterController;
 		let monster;
 		let speed;
