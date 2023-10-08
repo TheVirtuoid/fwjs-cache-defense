@@ -1,5 +1,6 @@
 import "./css/cacheDefense.pcss";
 import Game from "./classes/Game.js";
+import cacheDefenseConfig from "./cache-defense-config.js";
 
 const newGameButton = document.getElementById('new-game-button');
 const gameReady = document.getElementById('game-ready');
@@ -12,13 +13,17 @@ const weaponsSelectionDom = document.getElementById('weapons-selection');
 const roundNumberDom = document.getElementById('round-number');
 const healthDom = document.getElementById('health');
 
+const playingField = document.getElementById('playing-field');
+
 const game = new Game({
+	config: cacheDefenseConfig,
 	dom: {
 		newGameButton,
 		gameReady,
 		gameBoard,
 		loading,
 		controlPanel,
+		playingField,
 		controlPanelDoms: {
 			coinsDom, weaponsSelectionDom, roundNumberDom, healthDom
 		}

@@ -1,6 +1,9 @@
 import ControlPanel from "./inGame/ControlPanel.js";
 import WeaponType from "./types/WeaponType.js";
 import Weapon from "./Weapon.js";
+import GraphicsEngine from "./inGame/GraphicsEngine.js";
+import PhaserGraphicsEngine from "./inGame/graphicEngines/phaser.js";
+import cacheDefenseConfig from "../cache-defense-config.js";
 
 
 
@@ -23,7 +26,10 @@ export default class Game {
 	#round;
 
 	#dom;
+	#config;
 	#controlPanel;
+
+	#graphicsEngine;
 
 	#readyFlag = {
 		'arsenal': false,
@@ -39,8 +45,9 @@ export default class Game {
 
 	constructor(args = {}) {
 
-		const {dom = {}} = args;
+		const {dom = {}, config = {}} = args;
 		this.#dom = dom;
+		this.#config = config;
 
 		this.#gameInProgress = false;
 		this.#arsenalController = new Worker('/src/classes/workers/arsenalController.js');
@@ -63,6 +70,9 @@ export default class Game {
 		this.#roadController.postMessage('initialize');
 
 		this.#controlPanel = new ControlPanel({ dom: this.#dom?.controlPanelDoms });
+
+		this.#graphicsEngine = new GraphicsEngine(new PhaserGraphicsEngine(cacheDefenseConfig));
+
 
 		this.#readyHandle = setInterval(this.#readyChecker.bind(this), this.#readyInterval);
 	}
@@ -105,6 +115,9 @@ export default class Game {
 		this.#controlPanel.setHealth(Game.DEFAULT_HEALTH);
 		this.#controlPanel.setWeapons(Game.DEFAULT_WEAPON);
 		this.#show(this.#dom.controlPanel);
+
+		this.#graphicsEngine.init();
+		this.#graphicsEngine.buildGameBoard();
 	}
 
 	sendMessage(worker, message) {
