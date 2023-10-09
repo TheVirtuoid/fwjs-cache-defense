@@ -1,5 +1,6 @@
 import BaseGameItem from "../BaseGameItem.js";
 import ItemPosition from "../ItemPosition.js";
+import Field from "../Field.js";
 
 export default class BoardController {
 
@@ -12,8 +13,11 @@ export default class BoardController {
 	#items = new Map();
 
 	#field;
-	constructor() {
+	#graphicsEngine;
+	constructor(args = {}) {
+		const { graphicsEngine = null } = args;
 		this.#field = null;
+		this.#graphicsEngine = graphicsEngine;
 	}
 
 	get field() {
@@ -22,7 +26,7 @@ export default class BoardController {
 
 
 	newBoard() {
-		this.#field = 'TODO: create field';
+		this.#field = new Field();
 	}
 
 	get lastError() {

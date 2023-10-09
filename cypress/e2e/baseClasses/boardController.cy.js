@@ -1,6 +1,7 @@
 import BoardController from "../../../src/classes/controllers/BoardController.js";
 import BaseGameItem from "../../../src/classes/BaseGameItem.js";
 import ItemPosition from "../../../src/classes/ItemPosition.js";
+import Field from "../../../src/classes/Field.js";
 
 /*
 
@@ -19,6 +20,7 @@ describe('BoardController object', () => {
 		it('should initialize the variables', () => {
 			const boardController = new BoardController();
 			expect(boardController.field).to.be.null;
+			expect(boardController.graphicsEngine).to.not.be.null;
 		});
 	});
 
@@ -30,7 +32,7 @@ describe('BoardController object', () => {
 		});
 
 		it('should create a field', () => {
-			expect(!!boardController.field).to.be.true;
+			expect(boardController.field).to.be.instanceof(Field);
 		});
 	});
 
