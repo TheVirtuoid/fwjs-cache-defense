@@ -5,10 +5,13 @@ import GraphicsEngine from "./inGame/GraphicsEngine.js";
 import PhaserGraphicsEngine from "./inGame/graphicEngines/phaser.js";
 import cacheDefenseConfig from "../cache-defense-config.js";
 
-
+import ArsenalController from "./controllers/ArsenalController.js";
+import BoardController from "./controllers/BoardController.js";
+import CacheTowerController from "./controllers/CacheTowerController.js";
+import MonsterController from "./controllers/MonsterController.js";
+import RoadController from "./controllers/RoadController.js";
 
 export default class Game {
-
 
 	static DEFAULT_COINS = 100;
 	static INITIAL_ROUND_NUMBER = 1;
@@ -50,7 +53,7 @@ export default class Game {
 		this.#config = config;
 
 		this.#gameInProgress = false;
-		this.#arsenalController = new Worker('/src/classes/workers/arsenalController.js');
+		/*this.#arsenalController = new Worker('/src/classes/workers/arsenalController.js');
 		this.#boardController = new Worker('/src/classes/workers/boardController.js');
 		this.#cacheTowerController = new Worker('/src/classes/workers/cacheTowerController.js');
 		this.#monsterController = new Worker('/src/classes/workers/monsterController.js');
@@ -63,16 +66,22 @@ export default class Game {
 		this.#monsterController.onmessage = this.#monsterMessage.bind(this);
 		this.#roadController.onmessage = this.#roadMessage.bind(this);
 
-		this.#arsenalController.postMessage('initialize');
+		this.#arsenalController.postMessage({ message: 'construct', data: ArsenalController });
 		this.#boardController.postMessage('initialize');
 		this.#cacheTowerController.postMessage('initialize');
 		this.#monsterController.postMessage('initialize');
-		this.#roadController.postMessage('initialize');
+		this.#roadController.postMessage('initialize');*/
+
+		this.#arsenalController = new ArsenalController();
+		this.#boardController = new BoardController();
+		this.#cacheTowerController = new CacheTowerController();
+		this.#monsterController = new MonsterController();
+		this.#roadController = new RoadController();
+
 
 		this.#controlPanel = new ControlPanel({ dom: this.#dom?.controlPanelDoms });
 
 		this.#graphicsEngine = new GraphicsEngine(new PhaserGraphicsEngine(cacheDefenseConfig));
-
 
 		this.#readyHandle = setInterval(this.#readyChecker.bind(this), this.#readyInterval);
 	}

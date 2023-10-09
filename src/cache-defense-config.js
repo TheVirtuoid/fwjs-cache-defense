@@ -12,6 +12,7 @@ const config = {
 				width: 800,
 				height: 600,
 				parent: null,
+				backgroundColor: '#444444',
 				scene: {}
 			}
 		}

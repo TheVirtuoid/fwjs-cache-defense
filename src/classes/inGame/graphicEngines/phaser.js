@@ -16,7 +16,7 @@ export default class PhaserGraphicsEngine {
 
 	init() {
 		// this.#game = new Phaser.Game(this.#config);
-		this.#scene = new GameScene(this.#config.scene);
+		this.#scene = new GameScene();
 		this.#config.scene = this.#scene;
 	}
 
