@@ -29,11 +29,18 @@ export default class Field {
 		[RoadDirection.RIGHT, RoadDirection.LEFT]
 	]);
 
-	static ROAD_CONNECTIONS = new Map([
+	/*static ROAD_CONNECTIONS = new Map([
 		[RoadDirection.TOP, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.TOP.value) === 0)],
 		[RoadDirection.RIGHT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.RIGHT.value) === 0)],
 		[RoadDirection.BOTTOM, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.BOTTOM.value) === 0)],
 		[RoadDirection.LEFT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.LEFT.value) === 0)]
+	]);*/
+
+	static ROAD_CONNECTIONS = new Map([
+		[RoadDirection.TOP, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.BOTTOM.value) === 1)],
+		[RoadDirection.RIGHT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.LEFT.value) === 1)],
+		[RoadDirection.BOTTOM, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.TOP.value) === 1)],
+		[RoadDirection.LEFT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.RIGHT.value) === 1)]
 	]);
 
 	static getOppositeRoadConnections(direction) {
@@ -152,7 +159,9 @@ export default class Field {
 		}
 		const targetPosition = new ItemPosition({ x: position.x + direction.x, y: position.y + direction.y });
 		const targetRoad = this.getRoadByPosition(targetPosition);
+		console.log(anchorRoad, legalDirection, targetPosition, targetRoad);
 		let legalRoadTypes = Field.ROAD_CONNECTIONS.get(direction);
+		console.log(legalRoadTypes);
 		if (!targetRoad) {
 			// there is no road. Now we check for Level 1 roads
 			const roadTop = this.getRoadByPosition(new ItemPosition({ x: targetPosition.x + RoadDirection.TOP.x, y: targetPosition.y + RoadDirection.TOP.y }));

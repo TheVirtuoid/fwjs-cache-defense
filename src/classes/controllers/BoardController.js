@@ -1,6 +1,7 @@
 import BaseGameItem from "../BaseGameItem.js";
 import ItemPosition from "../ItemPosition.js";
 import Field from "../Field.js";
+import Road from "../Road.js";
 
 export default class BoardController {
 
@@ -9,19 +10,26 @@ export default class BoardController {
 	static ERROR_INSERTITEM_DUPLICATEID = new TypeError(`"item" has duplicate id with item already inserted.`);
 	static ERROR_GETITEM_UNDEFINED_ID = new TypeError(`"item" is undefined.`);
 	static ERROR_REMOVEITEM_INVALID_ARG = new TypeError(`"item" argument must be a BaseGameItem object.`);
+	static ERROR_GETITEMSBYPOSITION_ARGUMENT_NOT_POSITION = new TypeError(`"position" argument must be an ItemPosition object.`);
 
 	#items = new Map();
 
 	#field;
 	#graphicsEngine;
+	#itemPositions;
 	constructor(args = {}) {
 		const { graphicsEngine = null } = args;
 		this.#field = null;
 		this.#graphicsEngine = graphicsEngine;
+		this.#itemPositions = new Map();
 	}
 
 	get field() {
 		return this.#field;
+	}
+
+	get graphicsEngine() {
+		return this.#graphicsEngine;
 	}
 
 
@@ -44,7 +52,16 @@ export default class BoardController {
 			throw BoardController.ERROR_INSERTITEM_DUPLICATEID;
 		}
 		item.setPosition(position);
+		const positionKey = position.toKey();
+		const itemsAtPosition = this.#itemPositions.get(positionKey) || [];
+		itemsAtPosition.push(item);
+		this.#itemPositions.set(positionKey, itemsAtPosition);
 		this.#items.set(item.id, item);
+		if (item instanceof Road) {
+			this.#field.addRoad({ road: item });
+		} else {
+			this.#field.placeItem({ item });
+		}
 	}
 
 	getItem(id) {
@@ -58,7 +75,26 @@ export default class BoardController {
 		if (!(item instanceof BaseGameItem)) {
 			throw BoardController.ERROR_REMOVEITEM_INVALID_ARG;
 		}
-		return this.#items.delete(item.id);
+		const positionKey = item.position.toKey();
+		const itemsAtPosition = this.#itemPositions.get(positionKey) || [];
+		this.#itemPositions.set(positionKey, itemsAtPosition.filter((i) => i.id !== item.id));
+		const didRemove = this.#items.delete(item.id);
+		if (didRemove) {
+			this.#field.removeItem({ item });
+		}
+		return didRemove;
+	}
+
+	getItemsByPosition(position) {
+		if (!(position instanceof ItemPosition)) {
+			throw BoardController.ERROR_GETITEMSBYPOSITION_ARGUMENT_NOT_POSITION;
+		}
+		const positionKey = position.toKey();
+		return this.#itemPositions.get(positionKey) || [];
+	}
+
+	getRoadsToExpand(args = {}) {
+		return this.#field.legalRoadsToPlace(args);
 	}
 
 

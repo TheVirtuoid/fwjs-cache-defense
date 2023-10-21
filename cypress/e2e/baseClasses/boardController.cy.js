@@ -18,7 +18,7 @@ describe('BoardController object', () => {
 			expect(boardController instanceof BoardController).to.be.true;
 		});
 		it('should initialize the variables', () => {
-			const boardController = new BoardController();
+			const boardController = new BoardController({ graphicsEngine: 'test'});
 			expect(boardController.field).to.be.null;
 			expect(boardController.graphicsEngine).to.not.be.null;
 		});
@@ -44,9 +44,6 @@ describe('BoardController object', () => {
 		});
 
 		it('should throw error is item is not a BaseGameItem', () => {
-			/*const err = new TypeError('tester');
-			const baddie = function () { throw err };
-			expect(baddie).to.throw(err);*/
 			expect( () => boardController.insertItem()).to.throw(BoardController.ERROR_INSERTITEM_WRONGITEM.message);
 		});
 
@@ -57,7 +54,7 @@ describe('BoardController object', () => {
 
 		it('should throw error if duplicate id', () => {
 			const item = new BaseGameItem({ id: 'test' });
-			const position = new ItemPosition();
+			const position = new ItemPosition({ x: 0, y: 0 });
 			boardController.insertItem(item, position);
 			const badItem = new BaseGameItem({ id: 'test' });
 			expect(() => boardController.insertItem(badItem, position)).to.throw(BoardController.ERROR_INSERTITEM_DUPLICATEID.message);
@@ -65,7 +62,7 @@ describe('BoardController object', () => {
 
 		it('should insert an item on the field', () => {
 			const item = new BaseGameItem();
-			const itemPosition = new ItemPosition();
+			const itemPosition = new ItemPosition({ x: 0, y: 0 });
 			boardController.insertItem(item, itemPosition);
 			const returnedItem = boardController.getItem(item.id);
 			expect(returnedItem.position.x).to.equal(itemPosition.x);
@@ -80,7 +77,7 @@ describe('BoardController object', () => {
 			boardController = new BoardController();
 			boardController.newBoard();
 			item = new BaseGameItem();
-			boardController.insertItem(item, new ItemPosition());
+			boardController.insertItem(item, new ItemPosition({ x: 0, y: 0 }));
 		});
 
 		it('should throw error if argument is not defined', () => {
@@ -106,7 +103,7 @@ describe('BoardController object', () => {
 			boardController = new BoardController();
 			boardController.newBoard();
 			item = new BaseGameItem();
-			position = new ItemPosition();
+			position = new ItemPosition({ x: 0, y: 0 });
 			boardController.insertItem(item, position);
 		});
 
@@ -121,6 +118,34 @@ describe('BoardController object', () => {
 
 		it('should remove an item from the field', () => {
 			expect(boardController.removeItem(item)).to.be.true;
+		});
+	});
+
+	describe('getItemsByPosition', () => {
+		let boardController;
+		beforeEach(() => {
+			boardController = new BoardController();
+			boardController.newBoard();
+		});
+		it('should throw error if position is not ItemPosition', () => {
+			expect( () => boardController.getItemsByPosition()).to.throw(BoardController.ERROR_GETITEMSBYPOSITION_ARGUMENT_NOT_POSITION.message);
+		});
+		it('should return an empty array if no items are found', () => {
+			const position = new ItemPosition();
+			expect(boardController.getItemsByPosition(position)).to.be.an('array').that.is.empty;
+		});
+		it('should return an array of items', () => {
+			boardController.insertItem(new BaseGameItem(), new ItemPosition({ x: 0, y: 0 }));
+			boardController.insertItem(new BaseGameItem(), new ItemPosition({ x: 0, y: 0 }));
+			boardController.insertItem(new BaseGameItem(), new ItemPosition({ x: 0, y: 1 }));
+			expect(boardController.getItemsByPosition(new ItemPosition({ x: 0, y: 0 }))).to.be.an('array').that.has.lengthOf(2);
+			expect(boardController.getItemsByPosition(new ItemPosition({ x: 0, y: 1 }))).to.be.an('array').that.has.lengthOf(1);
+		});
+		it('should return an updated array after removal', () => {
+			const item = new BaseGameItem()
+			boardController.insertItem(item, new ItemPosition({ x: 0, y: 0 }));
+			boardController.removeItem(item)
+			expect(boardController.getItemsByPosition(new ItemPosition({ x: 0, y: 0 }))).to.be.an('array').that.has.lengthOf(0);
 		});
 	});
 
