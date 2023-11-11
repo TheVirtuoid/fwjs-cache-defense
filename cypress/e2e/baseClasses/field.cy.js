@@ -175,7 +175,7 @@ describe('field', () => {
 					testMsg: '...No Road, No Road LEFT, Road LEFT BOTTOM, Connection',
 					roads: [
 							{ x: -1, y: 0, type: RoadType.HALF_TOP }
-					]
+					],
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.TOP) },
 					testMsg: '...No Road, No Road LEFT, Road LEFT BOTTOM, No Connection',
@@ -268,13 +268,13 @@ describe('field', () => {
 				// level 2, right (1, 1) , right-top
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.TOP).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT TOP, Connection',
+					testMsg: '...No Road, No Road RIGHT, Check TOP, Connection',
 					roads: [
 						{ x: 1, y: 2, type: RoadType.HALF_BOTTOM }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.TOP) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT TOP, No Connection',
+					testMsg: '...No Road, No Road RIGHT, Check TOP, No Connection',
 					roads: [
 						{ x: 1, y: 2, type: RoadType.HALF_TOP }
 					]
@@ -283,13 +283,13 @@ describe('field', () => {
 				// level 2, right (1, 1), right-right
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.TOP).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT RIGHT, Connection',
+					testMsg: '...No Road, No Road RIGHT, Check RIGHT, Connection',
 					roads: [
 						{ x: 2, y: 1, type: RoadType.HALF_LEFT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.TOP) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT RIGHT, No Connection',
+					testMsg: '...No Road, No Road RIGHT, Check RIGHT, No Connection',
 					roads: [
 						{ x: 2, y: 1, type: RoadType.HALF_TOP }
 					]
@@ -298,20 +298,20 @@ describe('field', () => {
 				// level 2, right (1, 1), right-bottom
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.TOP).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT BOTTOM, Connection',
+					testMsg: '...No Road, No Road RIGHT, Check BOTTOM, Connection',
 					roads: [
 						{ x: 1, y: 0, type: RoadType.HALF_TOP }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.TOP) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT BOTTOM, No Connection',
+					testMsg: '...No Road, No Road RIGHT, Check BOTTOM, No Connection',
 					roads: [
-						{ x: 1, y: 0, type: RoadType.HALF_LEFT }
+						{ x: 1, y: 0, type: RoadType.HALF_RIGHT }
 					]
 				},
+			]
+		},
 
-
-			] },
 		{ msg: 'RIGHT', type: RoadType.HALF_RIGHT, direction: RoadDirection.RIGHT, tests: [
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) }, testMsg: '...No Road', roads: [] },
 				{ results: { legalRoads: [] }, testMsg: '...Any Road', roads: [{ x: 1, y: 0, type: RoadType.HALF_TOP }] },
@@ -320,21 +320,21 @@ describe('field', () => {
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0) },
 					testMsg: '...No Road, Road TOP',
-					roads: [{ x: 1, y: 1, type: RoadType.HALF_RIGHT }]
+					roads: [{ x: 1, y: 1, type: RoadType.HALF_BOTTOM }]
 				},
 				//
 				// level 1, right right
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
 					testMsg: '...No Road, Road RIGHT',
-					roads: [{ x: 2, y: 0, type: RoadType.HALF_BOTTOM }]
+					roads: [{ x: 2, y: 0, type: RoadType.HALF_LEFT }]
 				},
 				//
 				// level 1, right bottom
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
 					testMsg: '...No Road, Road BOTTOM',
-					roads: [{ x: 1, y: -1, type: RoadType.HALF_LEFT }]
+					roads: [{ x: 1, y: -1, type: RoadType.HALF_TOP }]
 				},
 
 
@@ -342,13 +342,13 @@ describe('field', () => {
 				// level 2, right (1, 1), top-top
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0) },
-					testMsg: '...No Road, No Road TOP, Road TOP TOP, Connection',
+					testMsg: '...No Road, No Road TOP, Check TOP, Connection',
 					roads: [
 						{ x: 1, y: 2, type: RoadType.HALF_BOTTOM }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) },
-					testMsg: '...No Road, No Road TOP, Road TOP TOP, No Connection',
+					testMsg: '...No Road, No Road TOP, Check TOP, No Connection',
 					roads: [
 						{ x: 1, y: 2, type: RoadType.HALF_TOP }
 					]
@@ -357,13 +357,13 @@ describe('field', () => {
 				// level 2, right (1, 1), top-right
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0) },
-					testMsg: '...No Road, No Road TOP, Road TOP RIGHT, Connection',
+					testMsg: '...No Road, No Road TOP, Check RIGHT, Connection',
 					roads: [
 						{ x: 2, y: 1, type: RoadType.HALF_LEFT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) },
-					testMsg: '...No Road, No Road TOP, Road TOP RIGHT, No Connection',
+					testMsg: '...No Road, No Road TOP, Check RIGHT, No Connection',
 					roads: [
 						{ x: 2, y: 1, type: RoadType.HALF_TOP }
 					]
@@ -372,13 +372,13 @@ describe('field', () => {
 				// level 2, right (1, 1) , top-left
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0) },
-					testMsg: '...No Road, No Road TOP, Road TOP LEFT, Connection',
+					testMsg: '...No Road, No Road TOP, Check LEFT, Connection',
 					roads: [
 						{ x: 0, y: 1, type: RoadType.HALF_RIGHT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) },
-					testMsg: '...No Road, No Road TOP, Road TOP LEFT, No Connection',
+					testMsg: '...No Road, No Road TOP, Check LEFT, No Connection',
 					roads: [
 						{ x: 0, y: 1, type: RoadType.HALF_TOP }
 					]
@@ -390,13 +390,13 @@ describe('field', () => {
 				// level 2, right (2, 0), right-top
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT TOP, Connection',
+					testMsg: '...No Road, No Road RIGHT, Check TOP, Connection',
 					roads: [
 						{ x: 2, y: 1, type: RoadType.HALF_BOTTOM }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT TOP, No Connection',
+					testMsg: '...No Road, No Road RIGHT, Check TOP, No Connection',
 					roads: [
 						{ x: 2, y: 1, type: RoadType.HALF_RIGHT }
 					]
@@ -405,13 +405,13 @@ describe('field', () => {
 				// level 2, right (2, 0), right-right
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT RIGHT, Connection',
+					testMsg: '...No Road, No Road RIGHT, Check RIGHT, Connection',
 					roads: [
 						{ x: 3, y: 0, type: RoadType.HALF_LEFT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT RIGHT, No Connection',
+					testMsg: '...No Road, No Road RIGHT, Check RIGHT, No Connection',
 					roads: [
 						{ x: 3, y: 0, type: RoadType.HALF_TOP }
 					]
@@ -420,13 +420,13 @@ describe('field', () => {
 				// level 2, right (2, 0) , right-bottom
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT BOTTOM, Connection',
+					testMsg: '...No Road, No Road RIGHT, Check BOTTOM, Connection',
 					roads: [
 						{ x: 2, y: -1, type: RoadType.HALF_TOP }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) },
-					testMsg: '...No Road, No Road RIGHT, Road RIGHT BOTTOM, No Connection',
+					testMsg: '...No Road, No Road RIGHT, Check BOTTOM, No Connection',
 					roads: [
 						{ x: 2, y: -1, type: RoadType.HALF_RIGHT }
 					]
@@ -437,13 +437,13 @@ describe('field', () => {
 				// level 2, right (1, -1), bottom-right
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
-					testMsg: '...No Road, No Road RIGHT, Road BOTTOM RIGHT, Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check RIGHT, Connection',
 					roads: [
 						{ x: 2, y: -1, type: RoadType.HALF_LEFT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) },
-					testMsg: '...No Road, No Road RIGHT, Road BOTTOM RIGHT, No Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check RIGHT, No Connection',
 					roads: [
 						{ x: 2, y: -1, type: RoadType.HALF_RIGHT }
 					]
@@ -452,13 +452,13 @@ describe('field', () => {
 				// level 2, right (1, -1), bottom-bottom
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
-					testMsg: '...No Road, No Road RIGHT, Road BOTTOM BOTTOM, Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check BOTTOM, Connection',
 					roads: [
 						{ x: 1, y: -2, type: RoadType.HALF_TOP }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) },
-					testMsg: '...No Road, No Road RIGHT, Road BOTTOM BOTTOM, No Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check BOTTOM, No Connection',
 					roads: [
 						{ x: 1, y: -2, type: RoadType.HALF_BOTTOM }
 					]
@@ -467,23 +467,20 @@ describe('field', () => {
 				// level 2, right (-1, -1) , bottom-left
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
-					testMsg: '...No Road, No Road RIGHT, Road BOTTOM LEFT, Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check LEFT, Connection',
 					roads: [
 						{ x: 0, y: -1, type: RoadType.HALF_RIGHT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.RIGHT) },
-					testMsg: '...No Road, No Road RIGHT, Road BOTTOM RIGHT, No Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check RIGHT, No Connection',
 					roads: [
 						{ x: 0, y: -1, type: RoadType.HALF_LEFT }
 					]
 				},
+			]
+		},
 
-
-
-
-
-			] },
 		{ msg: 'BOTTOM', type: RoadType.HALF_BOTTOM, direction: RoadDirection.BOTTOM, tests: [
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) }, testMsg: '...No Road', roads: [] },
 				{ results: { legalRoads: [] }, testMsg: '...Any Road', roads: [{ x: 0, y: -1, type: RoadType.HALF_TOP }] },
@@ -516,13 +513,13 @@ describe('field', () => {
 				// level 2, bottom (1, -1), right-top
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
-					testMsg: '...No Road, No Road BOTTOM, Road RIGHT TOP, Connection',
+					testMsg: '...No Road, No Road RIGHT, Check TOP, Connection',
 					roads: [
 						{ x: 1, y: 0, type: RoadType.HALF_BOTTOM }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) },
-					testMsg: '...No Road, No Road BOTTOM, Road RIGHT TOP, No Connection',
+					testMsg: '...No Road, No Road RIGHT, Check TOP, No Connection',
 					roads: [
 						{ x: 1, y: 0, type: RoadType.HALF_TOP }
 					]
@@ -531,13 +528,13 @@ describe('field', () => {
 				// level 2, bottom (1, -1), right-right
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
-					testMsg: '...No Road, No Road BOTTOM, Road RIGHT RIGHT, Connection',
+					testMsg: '...No Road, No Road RIGHT, Check RIGHT, Connection',
 					roads: [
 						{ x: 2, y: -1, type: RoadType.HALF_LEFT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) },
-					testMsg: '...No Road, No Road BOTTOM, Road RIGHT RIGHT, No Connection',
+					testMsg: '...No Road, No Road RIGHT, Check RIGHT, No Connection',
 					roads: [
 						{ x: 2, y: -1, type: RoadType.HALF_TOP }
 					]
@@ -546,32 +543,29 @@ describe('field', () => {
 				// level 2, bottom (1, -1) , right-bottom
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM).filter((legalRoadType) => (legalRoadType.value & RoadDirection.RIGHT.value) === 0) },
-					testMsg: '...No Road, No Road BOTTOM, Road RIGHT BOTTOM, Connection',
+					testMsg: '...No Road, No Road RIGHT, Check BOTTOM, Connection',
 					roads: [
 						{ x: 1, y: -2, type: RoadType.HALF_TOP }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) },
-					testMsg: '...No Road, No Road BOTTOM, Road RIGHT BOTTOM, No Connection',
+					testMsg: '...No Road, No Road RIGHT, Check BOTTOM, No Connection',
 					roads: [
-						{ x: 1, y: -2, type: RoadType.HALF_LEFT }
-					]
+						{ x: 1, y: -2, type: RoadType.HALF_RIGHT }
+					],
 				},
-
-
-
 
 				//
 				// level 2, bottom (0, -2), bottom-right
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
-					testMsg: '...No Road, No Road BOTTOM, Road BOTTOM RIGHT, Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check RIGHT, Connection',
 					roads: [
 						{ x: 1, y: -2, type: RoadType.HALF_LEFT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) },
-					testMsg: '...No Road, No Road BOTTOM, Road BOTTOM RIGHT, No Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check RIGHT, No Connection',
 					roads: [
 						{ x: 1, y: -2, type: RoadType.HALF_RIGHT }
 					]
@@ -580,13 +574,13 @@ describe('field', () => {
 				// level 2, bottom (0, -2), bottom-bottom
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
-					testMsg: '...No Road, No Road BOTTOM, Road BOTTOM BOTTOM, Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check BOTTOM, Connection',
 					roads: [
 						{ x: 0, y: -3, type: RoadType.HALF_TOP }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) },
-					testMsg: '...No Road, No Road BOTTOM, Road BOTTOM BOTTOM, No Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check BOTTOM, No Connection',
 					roads: [
 						{ x: 0, y: -3, type: RoadType.HALF_LEFT }
 					]
@@ -595,13 +589,13 @@ describe('field', () => {
 				// level 2, bottom (0, -2) , bottom-left
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
-					testMsg: '...No Road, No Road BOTTOM, Road BOTTOM LEFT, Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check LEFT, Connection',
 					roads: [
 						{ x: -1, y: -2, type: RoadType.HALF_RIGHT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) },
-					testMsg: '...No Road, No Road BOTTOM, Road BOTTOM LEFT, No Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check LEFT, No Connection',
 					roads: [
 						{ x: -1, y: -2, type: RoadType.HALF_LEFT }
 					]
@@ -612,28 +606,28 @@ describe('field', () => {
 				// level 2, bottom (-1, -1), left-top
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM).filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0) },
-					testMsg: '...No Road, No Road BOTTOM, Road LEFT TOP, Connection',
+					testMsg: '...No Road, No Road LEFT, Check TOP, Connection',
 					roads: [
 						{ x: -1, y: 0, type: RoadType.HALF_BOTTOM }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) },
-					testMsg: '...No Road, No Road BOTTOM, Road LEFT TOP, No Connection',
+					testMsg: '...No Road, No Road LEFT, Check TOP, No Connection',
 					roads: [
-						{ x: -1, y: 0, type: RoadType.HALF_RIGHT }
+						{ x: -1, y: 0, type: RoadType.HALF_LEFT }
 					]
 				},
 				//
 				// level 2, bottom (-1, -1), left-bottom
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM).filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0) },
-					testMsg: '...No Road, No Road BOTTOM, Road LEFT BOTTOM, Connection',
+					testMsg: '...No Road, No Road LEFT, Check BOTTOM, Connection',
 					roads: [
 						{ x: -1, y: -2, type: RoadType.HALF_TOP }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) },
-					testMsg: '...No Road, No Road BOTTOM, Road LEFT BOTTOM, No Connection',
+					testMsg: '...No Road, No Road LEFT, Check BOTTOM, No Connection',
 					roads: [
 						{ x: -1, y: -2, type: RoadType.HALF_LEFT }
 					]
@@ -642,20 +636,22 @@ describe('field', () => {
 				// level 2, bottom (-1, -1) , left-left
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM).filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0) },
-					testMsg: '...No Road, No Road BOTTOM, Road LEFT LEFT, Connection',
+					testMsg: '...No Road, No Road LEFT, Check LEFT, Connection',
 					roads: [
 						{ x: -2, y: -1, type: RoadType.HALF_RIGHT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.BOTTOM) },
-					testMsg: '...No Road, No Road BOTTOM, Road LEFT LEFT, No Connection',
+					testMsg: '...No Road, No Road LEFT, Check LEFT, No Connection',
 					roads: [
 						{ x: -2, y: -1, type: RoadType.HALF_BOTTOM }
 					]
 				},
-			] },
+			]
+		},
+
 		{ msg: 'LEFT', type: RoadType.HALF_LEFT, direction: RoadDirection.LEFT, tests: [
-				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) }, testMsg: '...No Road', roads: [] },
+				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) }, testMsg: '...No Road', roads: [], debug: false },
 				{ results: { legalRoads: [] }, testMsg: '...Any Road', roads: [{ x: -1, y: 0, type: RoadType.HALF_TOP }] },
 
 				//
@@ -680,18 +676,17 @@ describe('field', () => {
 					roads: [{ x: -2, y: 0, type: RoadType.HALF_RIGHT }]
 				},
 
-
 				//
 				// level 2, left (-1, 1), top-top
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0) },
-					testMsg: '...No Road, No Road LEFT, Road TOP TOP, Connection',
+					testMsg: '...No Road, No Road TOP, Check TOP, Connection',
 					roads: [
 						{ x: -1, y: 2, type: RoadType.HALF_BOTTOM }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) },
-					testMsg: '...No Road, No Road LEFT, Road TOP TOP, No Connection',
+					testMsg: '...No Road, No Road TOP, Check TOP, No Connection',
 					roads: [
 						{ x: -1, y: 2, type: RoadType.HALF_RIGHT }
 					]
@@ -700,13 +695,13 @@ describe('field', () => {
 				// level 2, left (-1, 1), top-right
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0) },
-					testMsg: '...No Road, No Road LEFT, Road TOP RIGHT, Connection',
+					testMsg: '...No Road, No Road TOP, Check RIGHT, Connection',
 					roads: [
 						{ x: 0, y: 1, type: RoadType.HALF_LEFT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) },
-					testMsg: '...No Road, No Road LEFT, Road LEFT BOTTOM, No Connection',
+					testMsg: '...No Road, No Road TOP, Check RIGHT, No Connection',
 					roads: [
 						{ x: 0, y: 1, type: RoadType.HALF_TOP }
 					]
@@ -715,31 +710,29 @@ describe('field', () => {
 				// level 2, left (-1, 1) , top-left
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.TOP.value) === 0) },
-					testMsg: '...No Road, No Road LEFT, Road TOP LEFT, Connection',
+					testMsg: '...No Road, No Road TOP, Check LEFT, Connection',
 					roads: [
 						{ x: -2, y: 1, type: RoadType.HALF_RIGHT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) },
-					testMsg: '...No Road, No Road LEFT, Road TOP LEFT, No Connection',
+					testMsg: '...No Road, No Road TOP, Check LEFT, No Connection',
 					roads: [
-						{ x: -2, y: 1, type: RoadType.HALF_BOTTOM }
+						{ x: -2, y: 1, type: RoadType.HALF_TOP }
 					]
 				},
-
-
 
 				//
 				// level 2, left (-1, -1), bottom-right
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
-					testMsg: '...No Road, No Road LEFT, Road BOTTOM RIGHT, Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check RIGHT, Connection',
 					roads: [
 						{ x: 0, y: -1, type: RoadType.HALF_LEFT}
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) },
-					testMsg: '...No Road, No Road LEFT, Road BOTTOM RIGHT, No Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check RIGHT, No Connection',
 					roads: [
 						{ x: 0, y: -1, type: RoadType.HALF_RIGHT }
 					]
@@ -748,13 +741,13 @@ describe('field', () => {
 				// level 2, left (-1, -1), bottom-bottom
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
-					testMsg: '...No Road, No Road LEFT, Road BOTTOM BOTTOM, Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check BOTTOM, Connection',
 					roads: [
 						{ x: -1, y: -2, type: RoadType.HALF_TOP }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) },
-					testMsg: '...No Road, No Road LEFT, Road BOTTOM BOTTOM, No Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check BOTTOM, No Connection',
 					roads: [
 						{ x: -1, y: -2, type: RoadType.HALF_BOTTOM }
 					]
@@ -763,32 +756,29 @@ describe('field', () => {
 				// level 2, left (-1, -1) , bottom-left
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0) },
-					testMsg: '...No Road, No Road LEFT, Road BOTTOM LEFT, Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check LEFT, Connection',
 					roads: [
 						{ x: -2, y: -1, type: RoadType.HALF_RIGHT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) },
-					testMsg: '...No Road, No Road LEFT, Road BOTTOM LEFT, No Connection',
+					testMsg: '...No Road, No Road BOTTOM, Check LEFT, No Connection',
 					roads: [
 						{ x: -2, y: -1, type: RoadType.HALF_BOTTOM }
 					]
 				},
 
-
-
-
 				//
 				// level 2, left (-2, 0), left-top
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0) },
-					testMsg: '...No Road, No Road LEFT, Road LEFT TOP, Connection',
+					testMsg: '...No Road, No Road LEFT, Check TOP, Connection',
 					roads: [
 						{ x: -2, y: 1, type: RoadType.HALF_BOTTOM}
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) },
-					testMsg: '...No Road, No Road LEFT, Road LEFT TOP, No Connection',
+					testMsg: '...No Road, No Road LEFT, Check TOP, No Connection',
 					roads: [
 						{ x: -2, y: 1, type: RoadType.HALF_TOP }
 					]
@@ -797,13 +787,13 @@ describe('field', () => {
 				// level 2, left (-2, 0), left-bottom
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0) },
-					testMsg: '...No Road, No Road LEFT, Road LEFT BOTTOM, Connection',
+					testMsg: '...No Road, No Road LEFT, Check BOTTOM, Connection',
 					roads: [
 						{ x: -2, y: -1, type: RoadType.HALF_TOP }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) },
-					testMsg: '...No Road, No Road LEFT, Road LEFT BOTTOM, No Connection',
+					testMsg: '...No Road, No Road LEFT, Check BOTTOM, No Connection',
 					roads: [
 						{ x: -2, y: -1, type: RoadType.HALF_BOTTOM }
 					]
@@ -812,20 +802,19 @@ describe('field', () => {
 				// level 2, left (-2, 0) , left-left
 				//
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT).filter((legalRoadType) => (legalRoadType.value & RoadDirection.LEFT.value) === 0) },
-					testMsg: '...No Road, No Road LEFT, Road LEFT LEFT, Connection',
+					testMsg: '...No Road, No Road LEFT, Check LEFT, Connection',
 					roads: [
 						{ x: -3, y: 0, type: RoadType.HALF_RIGHT }
 					]
 				},
 				{ results: { legalRoads: Field.ROAD_CONNECTIONS.get(RoadDirection.LEFT) },
-					testMsg: '...No Road, No Road LEFT, Road LEFT LEFT, No Connection',
+					testMsg: '...No Road, No Road LEFT, Check LEFT, No Connection',
 					roads: [
 						{ x: -3, y: 0, type: RoadType.HALF_BOTTOM }
 					]
 				},
-
-
-			] },
+			]
+		},
 	];
 
 	describe('legalRoadsToPlace - errors', () => {
@@ -862,13 +851,15 @@ describe('field', () => {
 						const {x, y, type: roadType} = road;
 						field.addRoad({road: new Road({type: roadType, position: new ItemPosition({x, y})})});
 					});
-					const legalRoadTypes = field.legalRoadsToPlace({ position: new ItemPosition({ x: 0, y: 0 }), direction });
 					if (debug) {
 						console.log(`---${msg}: ${testMsg}`);
-						console.log('--------------returned from routine');
-						console.log(legalRoadTypes);
 						console.log('------------what i expect');
 						console.log(results.legalRoads);
+					}
+					const legalRoadTypes = field.legalRoadsToPlace({ position: new ItemPosition({ x: 0, y: 0 }), direction });
+					if (debug) {
+						console.log('--------------returned from routine');
+						console.log(legalRoadTypes);
 					}
 					expect(legalRoadTypes.length).to.equal(results.legalRoads.length);
 					const legalRoadsResult = results.legalRoads.every((resultLegalRoad) => {
