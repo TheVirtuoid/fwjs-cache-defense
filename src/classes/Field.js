@@ -29,11 +29,17 @@ export default class Field {
 		[RoadDirection.RIGHT, RoadDirection.LEFT]
 	]);
 
+	/**
+	 * RoadConnections includes all the roads that CONNECT to the road in the specified direction.
+	 * 		For example, a direction of TOP will return all the roads that connect to the BOTTOM of the road begin checked.
+	 * @type {Map<unknown, unknown>}
+	 */
+
 	static ROAD_CONNECTIONS = new Map([
-		[RoadDirection.TOP, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.TOP.value) === 0)],
-		[RoadDirection.RIGHT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.RIGHT.value) === 0)],
-		[RoadDirection.BOTTOM, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.BOTTOM.value) === 0)],
-		[RoadDirection.LEFT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.LEFT.value) === 0)]
+		[RoadDirection.TOP, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.BOTTOM.value) !== 0)],
+		[RoadDirection.RIGHT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.LEFT.value) !== 0)],
+		[RoadDirection.BOTTOM, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.TOP.value) !== 0)],
+		[RoadDirection.LEFT, [...RoadType.ROAD_TYPES].filter((roadType) => (roadType.value & RoadDirection.RIGHT.value) !== 0)]
 	]);
 
 	static getOppositeRoadConnections(direction) {
@@ -213,12 +219,17 @@ export default class Field {
 				const roadBottomBottom = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.BOTTOM.x, y: y + RoadDirection.BOTTOM.y }));
 				const roadBottomLeft = this.getRoadByPosition(new ItemPosition({ x: x + RoadDirection.LEFT.x, y: y + RoadDirection.LEFT.y }));
 				if (roadBottomRight && (roadBottomRight.value & RoadDirection.LEFT.value) !== 0) {
+					console.log('----------------------------', targetPosition,x,y);
+					console.log('-------position: ', position);
+					console.log('BOTTOMRIGHT, LEFT.VAlUE', roadBottomRight.value, RoadDirection.LEFT.value);
 					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0);
 				}
 				if (roadBottomBottom && (roadBottomBottom.value & RoadDirection.TOP.value) !== 0) {
+					console.log('BOTTOMBOTTOM, TOP.VAlUE')
 					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0);
 				}
 				if (roadBottomLeft && (roadBottomLeft.value & RoadDirection.RIGHT.value) !== 0) {
+					console.log('BOTTOMLEFT, RIGHT.VAlUE')
 					legalRoadTypes = legalRoadTypes.filter((legalRoadType) => (legalRoadType.value & RoadDirection.BOTTOM.value) === 0);
 				}
 			}
