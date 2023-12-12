@@ -3,7 +3,12 @@ import Phaser from 'phaser';
 
 const config = {
 	board: {
-		parentDom: 'playing-field'
+		parentDom: 'playing-field',
+		cacheDefenseDom: 'cache-defense-dom'
+	},
+	boardDom: {
+		parentDom: null,
+		cacheDefenseDom: null
 	},
 	graphics: {
 		engineSettings: {

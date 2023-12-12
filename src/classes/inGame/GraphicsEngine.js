@@ -19,15 +19,26 @@ export default class GraphicsEngine {
 	}
 
 	init() {
-		if (this.#engine) {
-			this.#engine.init();
-			this.#ready = true;
-		}
+		return new Promise((resolve, reject) => {
+			if (this.#engine) {
+				this.#engine.init()
+						.then((data) => {
+							this.#ready = true;
+							resolve(data);
+						})
+			} else {
+				reject('No graphics engine');
+			}
+		});
 	}
 
 	buildGameBoard() {
+		return this.#engine.buildGameBoard();
+	}
+
+	addImage(args) {
 		if (this.#engine) {
-			this.#engine.buildGameBoard();
+			this.#engine.addImage(args);
 		}
 	}
 }

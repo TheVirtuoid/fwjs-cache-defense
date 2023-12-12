@@ -1,4 +1,3 @@
-import "./css/cacheDefense.pcss";
 import Game from "./classes/Game.js";
 import cacheDefenseConfig from "./cache-defense-config.js";
 
@@ -15,6 +14,8 @@ const healthDom = document.getElementById('health');
 
 const playingField = document.getElementById('playing-field');
 
+const cacheDefenseDom = document.getElementById('cache-defense-dom');
+
 const game = new Game({
 	config: cacheDefenseConfig,
 	dom: {
@@ -24,6 +25,7 @@ const game = new Game({
 		loading,
 		controlPanel,
 		playingField,
+		cacheDefenseDom,
 		controlPanelDoms: {
 			coinsDom, weaponsSelectionDom, roundNumberDom, healthDom
 		}

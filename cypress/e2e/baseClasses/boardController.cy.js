@@ -117,6 +117,7 @@ describe('BoardController object', () => {
 		});
 
 		it('should remove an item from the field', () => {
+			console.log(item);
 			expect(boardController.removeItem(item)).to.be.true;
 		});
 	});

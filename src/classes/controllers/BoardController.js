@@ -35,6 +35,7 @@ export default class BoardController {
 
 	newBoard() {
 		this.#field = new Field();
+		return this.#graphicsEngine.buildGameBoard();
 	}
 
 	get lastError() {
@@ -97,6 +98,9 @@ export default class BoardController {
 		return this.#field.legalRoadsToPlace(args);
 	}
 
-
-
+	addImage(args) {
+		if (this.#graphicsEngine) {
+			this.#graphicsEngine.addImage(args);
+		}
+	}
 }

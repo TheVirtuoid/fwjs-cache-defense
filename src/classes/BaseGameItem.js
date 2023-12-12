@@ -7,13 +7,15 @@ export default class BaseGameItem {
 
 	#id;
 	#position;
+	#imageKey;
 	constructor(args = {}) {
-		const { id = uuidv4(), position = new ItemPosition() } = args;
+		const { id = uuidv4(), position = new ItemPosition(), imageKey = '' } = args;
 		this.#id = id;
 		if (!(position instanceof ItemPosition)) {
 			throw BaseGameItem.ERROR_ARG_NOT_ITEMPOSITION;
 		}
 		this.#position = position;
+		this.#imageKey = imageKey;
 	}
 
 	get id() {
@@ -22,6 +24,10 @@ export default class BaseGameItem {
 
 	get position() {
 		return this.#position;
+	}
+
+	get imageKey() {
+		return this.#imageKey;
 	}
 
 	setPosition(position) {
