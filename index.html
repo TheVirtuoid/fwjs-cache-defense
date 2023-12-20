@@ -7,33 +7,28 @@
     <link rel="stylesheet" href="src/css/cacheDefense.pcss" />
   </head>
   <body id="cache-defense-dom">
-    <section data-cy="game-ready" id="game-ready" class="hidden">
       <h1>Welcome to Cache Defense!</h1>
-      <p><button data-cy="new-game-button" id="new-game-button">New Game</button></p>
-      <section data-cy="game-board" id="game-board" class="hidden">
-        <div data-cy="control-panel" id="control-panel">
+      <section id="game-board">
+        <div id="control-panel">
           <section>
             <span>Coins</span>
-            <span data-cy="coins" id="coins"></span>
+            <span id="coins"></span>
           </section>
           <section>
             <span>Weapons <button id="add-weapon">add</button></span>
-            <div data-cy="weapons-selection" id="weapons-selection"></div>
+            <div id="weapons-selection"></div>
           </section>
           <section>
             <span>Round</span>
-            <span data-cy="round-number" id="round-number"></span>
+            <span id="round-number"></span>
           </section>
           <section>
             <span>Health</span>
-            <span data-cy="health" id="health"></span>
+            <span id="health"></span>
           </section>
         </div>
-        <div data-cy="playing-field" id="playing-field"></div>
-        <canvas id="test"></canvas>
+        <div id="playing-field"></div>
       </section>
-    </section>
-    <section data-cy="loading" id="loading">Loading...</section>
     <script type="module" src="/src/cache-defense.js"></script>
   </body>
 </html>

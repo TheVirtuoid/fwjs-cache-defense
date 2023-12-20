@@ -1,13 +1,11 @@
 import imgCache from '/src/img/cache.png';
 import imgGround from '/src/img/ground.jpg';
 import imgMonsterAlienSprite from '/src/img/monster-alien-sprite.png';
-import imgRoadCorner from '/src/img/road-corner.jpg';
-import imgRoadHalf from '/src/img/road-half.jpg';
-import imgRoadStraight from '/src/img/road-straight.jpg';
-import imgRoadT from '/src/img/road-t.jpg';
 import imgWeaponShooter from '/src/img/weapon-shooter.png';
 
 import RoadType from "../../../types/RoadType.js";
+import Field from "../../../Field.js";
+import Dim from "../../../Dim.js";
 
 const degToRad = (degrees) => degrees * Math.PI / 180;
 
@@ -37,53 +35,48 @@ export default class GameScene extends Phaser.Scene {
 
 		['weapon-shooter', { image: imgWeaponShooter, rotation: 0 }]
 	]);
-	static SCALE = .4;
-
-	static EVENT_PRELOAD = 'preload';
-	static EVENT_CREATE = 'create';
-	static EVENT_UPDATE	= 'update';
-
-	#preloadEvent = new CustomEvent(GameScene.EVENT_PRELOAD, { detail: { scene: this } });
-	#createEvent = new CustomEvent(GameScene.EVENT_CREATE, { detail: { scene: this } });
-	#updateEvent = new CustomEvent(GameScene.EVENT_UPDATE, { detail: { scene: this } });
+	static SCALE = .25;
+	static FIELD_SIZE = 384;
 
 	#config = null;
 	#cacheDefenseDom = null;
 
-	constructor(config) {
+	#field = null;
+	#size = GameScene.FIELD_SIZE * GameScene.SCALE;
+
+	constructor() {
 		super();
-		this.#config = config;
-		this.#cacheDefenseDom = document.getElementById(this.#config.board.cacheDefenseDom);
+		const boardSize = new Dim({ width: 800, height: 600 });
+		const tileSize	= new Dim({ width: this.#size, height: this.#size });
+		this.#field = new Field({ boardSize, tileSize });
 	}
 
 	preload() {
 		GameScene.IMAGES.forEach((value, key) => {
 			const image = this.load.image(key, value.image);
 		});
-		this.#cacheDefenseDom.dispatchEvent(this.#preloadEvent);
 	}
 
 	create() {
-		this.#cacheDefenseDom.dispatchEvent(this.#createEvent);
-		/*console.log('erwrew');
-		console.log(this.add);
-		const imgRoadHalf = this.add.image(400, 300, 'road-half');
-		const imgCache = this.add.image(400, 300, 'cache');
-		imgCache.setScale(GameScene.SCALE);
-		imgRoadHalf.setScale(GameScene.SCALE);*/
+		const road = this.addImage(RoadType.HALF_LEFT.graphics.key, 400, 300);
+		const cache = this.addImage('cache', 400, 300);
+		const weaponShooter = this.addImage('weapon-shooter', 100, 100);
+		const monsterAlienSprite = this.addImage('monster-alien-sprite', 400, 250);
 	}
 
 	update() {}
 
-	addImage(args) {
-		const { imageKey, x, y } = args;
-		const { rotation = 0 } = GameScene.IMAGES.get(imageKey);
-		const img = this.add.image(x, y, imageKey);
-		if (rotation !== 0) {
-			img.setRotation(degToRad(rotation));
+	addImage(key, x, y) {
+		let image = null;
+		const targetImage = GameScene.IMAGES.get(key);
+		if (targetImage) {
+			const image = this.add.image(x, y, key);
+			image.setScale(GameScene.SCALE);
+			image.setAngle(targetImage.rotation || 0);
+			return image;
+
 		}
-		img.setScale(GameScene.SCALE);
-		return img;
 	}
+
 
 }
