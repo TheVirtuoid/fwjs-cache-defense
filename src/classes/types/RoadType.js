@@ -51,7 +51,7 @@ export default class RoadType {
 		value: RoadDirection.TOP.value + RoadDirection.BOTTOM.value,
 		graphics: {
 			image: imgRoadStraight,
-			rotation: 180,
+			rotation: 90,
 			key: 'road-straight-top-bottom'
 		}
 	};

@@ -26,4 +26,20 @@ export default class Field {
 		if (!(value instanceof Dim)) throw new Error(`'tileSize' must be a Dim class.`);
 		this.#tileSize = value;
 	}
+
+	getXY(args = {}) {
+		const { x, y } = args;
+		if (x === undefined) throw new Error(`'x' must be a property.`);
+		if (y === undefined) throw new Error(`'y' must be a property.`);
+		if (!Number.isInteger(x)) throw new Error(`'x' must be an integer.`);
+		if (!Number.isInteger(y)) throw new Error(`'y' must be an integer.`);
+
+		const graphicX = this.#halfSize + this.#tileSize.width * x;
+		const graphicY = this.#halfSize + this.#tileSize.height * y;
+
+		if (graphicX < 0 || graphicX >= this.#boardSize.width) throw new Error(`'x' is out of range.`);
+		if (graphicY < 0 || graphicY >= this.#boardSize.height) throw new Error(`'y' is out of range.`);
+
+		return { x: graphicX, y: graphicY };
+	}
 }
