@@ -48,7 +48,6 @@ export default class GameScene extends Phaser.Scene {
 		super();
 		const boardSize = new Dim({ width: 800, height: 600 });
 		const tileSize	= new Dim({ width: this.#size, height: this.#size });
-		console.log(this.#size);
 		this.#field = new Field({ boardSize, tileSize });
 	}
 
@@ -61,31 +60,39 @@ export default class GameScene extends Phaser.Scene {
 	create() {
 		const road = this.addImage(RoadType.HALF_LEFT.graphics.key, 3, 2);
 		const cache = this.addImage('cache', 3, 2);
-		const weaponShooter = this.addImage('weapon-shooter', 0, 0);
+		// const weaponShooter = this.addImage('weapon-shooter', 0, 0);
+		const weaponShooter = this.addImage('weapon-shooter', 3, 2, 0, 0);
 		const monsterAlienSprite = this.addImage('monster-alien-sprite', 1, 1);
 
 		this.addImage(RoadType.CORNER_TOP_RIGHT.graphics.key, 2, 2);
 		this.addImage(RoadType.STRAIGHT_TOP_BOTTOM.graphics.key, 2, 1);
-/*
-		const road = this.addImage(RoadType.HALF_LEFT.graphics.key, 400, 300);
-		const cache = this.addImage('cache', 400, 300);
-		const weaponShooter = this.addImage('weapon-shooter', 100, 100);
-		const monsterAlienSprite = this.addImage('monster-alien-sprite', 400, 250);
-*/
+		this.addImage('weapon-shooter', 3, 2, 1, 0);
+		this.addImage('weapon-shooter', 3, 2, 2, 0);
+		this.addImage('weapon-shooter', 3, 2, 0, 1);
+		this.addImage('weapon-shooter', 3, 2, 1, 1);
+		this.addImage('weapon-shooter', 3, 2, 2, 1);
+		this.addImage('weapon-shooter', 3, 2, 0, 2);
+		this.addImage('weapon-shooter', 3, 2, 1, 2);
+		this.addImage('weapon-shooter', 3, 2, 2, 2);
 	}
 
 	update() {}
 
-	addImage(key, x, y) {
+	addImage(key, x, y, subX, subY) {
 		let image = null;
+		let graphicX;
+		let graphicY;
 		const targetImage = GameScene.IMAGES.get(key);
-		const { x: graphicX, y: graphicY } = this.#field.getXY({ x, y });
+		if (!(subX === undefined || subY === undefined)) {
+			({ x: graphicX, y: graphicY } = this.#field.getSubXY({ x, y, subX, subY }));
+		} else {
+			({ x: graphicX, y: graphicY } = this.#field.getXY({ x, y }));
+		}
 		if (targetImage) {
 			const image = this.add.image(graphicX, graphicY, key);
 			image.setScale(GameScene.SCALE);
 			image.setAngle(targetImage.rotation || 0);
 			return image;
-
 		}
 	}
 
