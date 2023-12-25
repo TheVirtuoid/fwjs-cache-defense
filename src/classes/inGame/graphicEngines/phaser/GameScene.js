@@ -49,25 +49,32 @@ export default class GameScene extends Phaser.Scene {
 	#size = GameScene.FIELD_SIZE * GameScene.SCALE;
 	#tiles = new Map();
 
+	#readyFlags = {
+		constructor: false,
+		preLoad: false,
+		create: false
+	}
+
 	constructor() {
 		super();
 		const boardSize = new Dim({ width: 800, height: 600 });
 		const tileSize	= new Dim({ width: this.#size, height: this.#size });
 		this.#field = new Field({ boardSize, tileSize });
+		this.#readyFlags.constructor = true;
 	}
 
 	preload() {
 		GameScene.IMAGES.forEach((value, key) => {
 			const image = this.load.image(key, value.image);
 		});
-		console.log('done preload');
+		this.#readyFlags.preLoad = true;
 	}
 
 	create() {
-		const centerTile = new Tile({ id: '3-2', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 3, y: 2 }) });
+		/*const centerTile = new Tile({ id: '3-2', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 3, y: 2 }) });
 		this.addTile(centerTile);
 		const cache = new Item({ id: 'cache', type: ItemType.CACHE.BASE });
-		this.addItem(cache, centerTile, new Pos({ x: 1, y: 1 }));
+		this.addItem(cache, centerTile, new Pos({ x: 1, y: 1 }));*/
 
 		/*const road = this.addImage(RoadType.HALF_LEFT.graphics.key, 3, 2);
 		const cache = this.addImage('cache', 3, 2);
@@ -85,10 +92,14 @@ export default class GameScene extends Phaser.Scene {
 		this.addImage('weapon-shooter', 3, 2, 0, 2);
 		this.addImage('weapon-shooter', 3, 2, 1, 2);
 		this.addImage('weapon-shooter', 3, 2, 2, 2);*/
-		console.log('done create');
+		this.#readyFlags.create = true;
 	}
 
 	update() {}
+
+	get ready () {
+		return this.#readyFlags.constructor && this.#readyFlags.preLoad && this.#readyFlags.create;
+	}
 
 	addTile(tile) {
 		const { roadType, position } = tile;
