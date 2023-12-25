@@ -1,9 +1,18 @@
+import RoadDirection from "./RoadDirection.js";
+import imgCacheBase from "../../img/cache.png";
+
+
 export default class ItemType {
 	static MONSTER = {
 		ALIEN: 1
 	};
 	static CACHE = {
-		BASE: 1
+		BASE: {
+			graphics: {
+				image: imgCacheBase,
+				key: 'cache'
+			}
+		}
 	};
 	static WEAPON = {
 		SHOOTER: 1

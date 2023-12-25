@@ -5,3 +5,4 @@ const phaserConfig = cacheDefenseConfig.graphics.engineSettings.phaser;
 phaserConfig.scene = GameScene;
 
 const game = new Phaser.Game(phaserConfig);
+console.log('----all done');

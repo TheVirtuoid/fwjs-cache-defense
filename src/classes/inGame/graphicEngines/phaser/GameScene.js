@@ -6,6 +6,10 @@ import imgWeaponShooter from '/src/img/weapon-shooter.png';
 import RoadType from "../../../types/RoadType.js";
 import Field from "../../../Field.js";
 import Dim from "../../../Dim.js";
+import Pos from "../../../Pos.js";
+import Tile from "../../../Tile.js";
+import ItemType from "../../../types/ItemType.js";
+import Item from "../../../Item.js";
 
 const degToRad = (degrees) => degrees * Math.PI / 180;
 
@@ -43,6 +47,7 @@ export default class GameScene extends Phaser.Scene {
 
 	#field = null;
 	#size = GameScene.FIELD_SIZE * GameScene.SCALE;
+	#tiles = new Map();
 
 	constructor() {
 		super();
@@ -55,10 +60,16 @@ export default class GameScene extends Phaser.Scene {
 		GameScene.IMAGES.forEach((value, key) => {
 			const image = this.load.image(key, value.image);
 		});
+		console.log('done preload');
 	}
 
 	create() {
-		const road = this.addImage(RoadType.HALF_LEFT.graphics.key, 3, 2);
+		const centerTile = new Tile({ id: '3-2', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 3, y: 2 }) });
+		this.addTile(centerTile);
+		const cache = new Item({ id: 'cache', type: ItemType.CACHE.BASE });
+		this.addItem(cache, centerTile, new Pos({ x: 1, y: 1 }));
+
+		/*const road = this.addImage(RoadType.HALF_LEFT.graphics.key, 3, 2);
 		const cache = this.addImage('cache', 3, 2);
 		// const weaponShooter = this.addImage('weapon-shooter', 0, 0);
 		const weaponShooter = this.addImage('weapon-shooter', 3, 2, 0, 0);
@@ -73,10 +84,22 @@ export default class GameScene extends Phaser.Scene {
 		this.addImage('weapon-shooter', 3, 2, 2, 1);
 		this.addImage('weapon-shooter', 3, 2, 0, 2);
 		this.addImage('weapon-shooter', 3, 2, 1, 2);
-		this.addImage('weapon-shooter', 3, 2, 2, 2);
+		this.addImage('weapon-shooter', 3, 2, 2, 2);*/
+		console.log('done create');
 	}
 
 	update() {}
+
+	addTile(tile) {
+		const { roadType, position } = tile;
+		this.#tiles.set(position, tile);
+		const road = this.addImage(roadType.graphics.key, position.x, position.y);
+	}
+
+	addItem(item, tile, subPosition) {
+		tile.addItem({ item, subPosition });
+		this.addImage(item.type.graphics.key, tile.position.x, tile.position.y, subPosition.x, subPosition.y);
+	}
 
 	addImage(key, x, y, subX, subY) {
 		let image = null;
