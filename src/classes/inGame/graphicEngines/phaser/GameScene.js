@@ -18,7 +18,6 @@ export default class GameScene extends Phaser.Scene {
 	static IMAGES = new Map([
 		['cache', { image: imgCache, rotation: 0 }],
 		['ground', { image: imgGround, rotation: 0 }],
-		['monster-alien-sprite', { image: imgMonsterAlienSprite, rotation: 0 }],
 		[RoadType.CORNER_TOP_LEFT.graphics.key, { image: RoadType.CORNER_TOP_LEFT.graphics.image, rotation: RoadType.CORNER_TOP_LEFT.graphics.rotation }],
 		[RoadType.CORNER_TOP_RIGHT.graphics.key, { image: RoadType.CORNER_TOP_RIGHT.graphics.image, rotation: RoadType.CORNER_TOP_RIGHT.graphics.rotation }],
 		[RoadType.CORNER_BOTTOM_LEFT.graphics.key, { image: RoadType.CORNER_BOTTOM_LEFT.graphics.image, rotation: RoadType.CORNER_BOTTOM_LEFT.graphics.rotation }],
@@ -38,6 +37,10 @@ export default class GameScene extends Phaser.Scene {
 		[RoadType.T_TOP_BOTTOM_LEFT.graphics.key, { image: RoadType.T_TOP_BOTTOM_LEFT.graphics.image, rotation: RoadType.T_TOP_BOTTOM_LEFT.graphics.rotation }],
 
 		['weapon-shooter', { image: imgWeaponShooter, rotation: 0 }]
+	]);
+
+	static SPRITES = new Map([
+		['monster-alien', { image: imgMonsterAlienSprite, frameWidth: 20, height: 20 }]
 	]);
 	static SCALE = .25;
 	static FIELD_SIZE = 384;
@@ -67,10 +70,15 @@ export default class GameScene extends Phaser.Scene {
 		GameScene.IMAGES.forEach((value, key) => {
 			const image = this.load.image(key, value.image);
 		});
+		GameScene.SPRITES.forEach((value, key) => {
+			const sprite = this.load.spritesheet(key, value.image, { frameWidth: value.frameWidth, frameHeight: value.frameHeight });
+		});
 		this.#readyFlags.preLoad = true;
 	}
 
 	create() {
+		this.alien001 = this.physics.add.sprite(100, 100, "monster-alien-sprite", 0);
+		this.alien001.setScale(GameScene.SCALE);
 		/*const centerTile = new Tile({ id: '3-2', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 3, y: 2 }) });
 		this.addTile(centerTile);
 		const cache = new Item({ id: 'cache', type: ItemType.CACHE.BASE });

@@ -1,8 +1,8 @@
 import RoadDirection from "./RoadDirection.js";
-import imgRoadCorner from '/src/img/road-corner.jpg';
-import imgRoadHalf from '/src/img/road-half.jpg';
-import imgRoadStraight from '/src/img/road-straight.jpg';
-import imgRoadT from '/src/img/road-t.jpg';
+import imgRoadCorner from '/src/img/roads/road-corner.png';
+import imgRoadHalf from '/src/img/roads/road-half.png';
+import imgRoadStraight from '/src/img/roads/road-straight.png';
+import imgRoadT from '/src/img/roads/road-t.png';
 
 export default class RoadType {
 

@@ -11,6 +11,12 @@ const config = {
 				height: 600,
 				parent: 'playing-field',
 				backgroundColor: '#222222',
+				physics: {
+					default: 'arcade',
+					arcade: {
+						debug: false
+					}
+				},
 				scene: {}
 			}
 		}
