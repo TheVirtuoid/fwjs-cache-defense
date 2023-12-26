@@ -1,10 +1,20 @@
 import RoadDirection from "./RoadDirection.js";
-import imgCacheBase from "../../img/cache.png";
+import imgCacheBase from "../../img/assets/cache-base.png";
+import imgMonsterAlien from "../../img/sprites/monster-alien.png";
+import imgWeaponShooter from "../../img/assets/weapon-shooter.png";
 
 
 export default class ItemType {
 	static MONSTER = {
-		ALIEN: 1
+		ALIEN: {
+			graphics: {
+				image: imgMonsterAlien,
+				key: 'monster-alien',
+				frameWidth: 20,
+				frameHeight: 20,
+				type: 'sprite'
+			}
+		}
 	};
 	static CACHE = {
 		BASE: {
@@ -15,7 +25,12 @@ export default class ItemType {
 		}
 	};
 	static WEAPON = {
-		SHOOTER: 1
+		SHOOTER: {
+			graphics: {
+				image: imgWeaponShooter,
+				key: 'weapon-shooter'
+			}
+		}
 	};
 
 	static ITEM_TYPES = new Set([

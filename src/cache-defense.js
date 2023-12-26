@@ -34,26 +34,53 @@ const waitForGameReady = (game) => {
 const continueGame = (game) => {
 	console.log('continuing Game');
 	const scene = game.scene.getScenes()[0];
-	const centerTile = new Tile({ id: '3-2', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 3, y: 2 }) });
+	const centerTile = new Tile({ id: '5-5', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 5, y: 5 }) });
 	scene.addTile(centerTile);
 	const cache = new Item({ id: 'cache', type: ItemType.CACHE.BASE });
 	scene.addItem(cache, centerTile, new Pos({ x: 1, y: 1 }));
 
-	const tile2_2 = new Tile({ id: '2-2', roadType: RoadType.CORNER_TOP_RIGHT, position: new Pos({ x: 2, y: 2 }) });
-	const tile2_1 = new Tile({ id: '2-1', roadType: RoadType.CORNER_BOTTOM_RIGHT, position: new Pos({ x: 2, y: 1 }) });
-	const tile3_1 = new Tile({ id: '3-1', roadType: RoadType.STRAIGHT_LEFT_RIGHT, position: new Pos({ x: 3, y: 1 }) });
-	const tile4_1 = new Tile({ id: '4-1', roadType: RoadType.STRAIGHT_LEFT_RIGHT, position: new Pos({ x: 4, y: 1 }) });
+	const tile4_5 = new Tile({ id: '4-5', roadType: RoadType.CORNER_TOP_RIGHT, position: new Pos({ x: 4, y: 5 }) });
+	const tile4_4 = new Tile({ id: '4-4', roadType: RoadType.CORNER_BOTTOM_RIGHT, position: new Pos({ x: 4, y: 4 }) });
+	const tile5_4 = new Tile({ id: '5-4', roadType: RoadType.STRAIGHT_LEFT_RIGHT, position: new Pos({ x: 5, y: 4 }) });
+	const tile6_4 = new Tile({ id: '6-4', roadType: RoadType.STRAIGHT_LEFT_RIGHT, position: new Pos({ x: 6, y: 4 }) });
 
 
-	scene.addTile(tile2_2);
-	scene.addTile(tile2_1);
-	scene.addTile(tile3_1);
-	scene.addTile(tile4_1);
+	scene.addTile(tile4_5);
+	scene.addTile(tile4_4);
+	scene.addTile(tile5_4);
+	scene.addTile(tile6_4);
 
-	// monster animation
-	// scene.physics.add.sprite(100,100,'monster-alien-sprite', 0);
+	scene.addItem(
+			new Item({ id: 'ws1', type: ItemType.WEAPON.SHOOTER }),
+			centerTile,
+			new Pos({ x: 0, y: 0 })
+	);
+	scene.addItem(
+			new Item({ id: 'ws2', type: ItemType.WEAPON.SHOOTER }),
+			tile4_4,
+			new Pos({ x: 2, y: 2 })
+	);
+	try {
+		// const alien = scene.physics.add.sprite(100,100, 'monster-alien', 0);
+		const alien = scene.addItem(
+				new Item({ id: 'alien', type: ItemType.MONSTER.ALIEN }),
+				tile6_4,
+				new Pos({ x: 2, y: 1 })
+		);
+		console.log(alien);
+		scene.anims.create({
+			key: 'alien-walk',
+			frames: scene.anims.generateFrameNumbers(alien.type.graphics.key, { frames: [0, 1, 2, 1] }),
+			frameRate: 4,
+			repeat: -1
+		});
 
-	return Promise.resolve();
+		alien.anims.play('alien-walk', true);
+		return Promise.resolve();
+	} catch (e) {
+		console.log(e);
+		return Promise.reject(e);
+	}
 };
 
 const errorGame = (error) => {

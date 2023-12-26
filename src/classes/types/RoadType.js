@@ -10,7 +10,7 @@ export default class RoadType {
 		value: RoadDirection.TOP.value + RoadDirection.LEFT.value,
 		graphics: {
 			image: imgRoadCorner,
-			rotation: 270,
+			rotation: 180,
 			key: 'road-corner-top-left'
 		}
 	};
@@ -18,7 +18,7 @@ export default class RoadType {
 		value: RoadDirection.BOTTOM.value + RoadDirection.LEFT.value,
 		graphics: {
 			image: imgRoadCorner,
-			rotation: 180,
+			rotation: 90,
 			key: 'road-corner-bottom-left'
 		}
 	};
@@ -26,7 +26,7 @@ export default class RoadType {
 		value: RoadDirection.TOP.value + RoadDirection.RIGHT.value,
 		graphics: {
 			image: imgRoadCorner,
-			rotation: 0,
+			rotation: 270,
 			key: 'road-corner-top-right'
 		}
 	};
@@ -34,7 +34,7 @@ export default class RoadType {
 		value: RoadDirection.BOTTOM.value + RoadDirection.RIGHT.value,
 		graphics: {
 			image: imgRoadCorner,
-			rotation: 90,
+			rotation: 0,
 			key: 'road-corner-bottom-right'
 		}
 	};
@@ -43,7 +43,7 @@ export default class RoadType {
 		value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value,
 		graphics: {
 			image: imgRoadStraight,
-			rotation: 0,
+			rotation: 90,
 			key: 'road-straight-left-right'
 		}
 	};
@@ -51,7 +51,7 @@ export default class RoadType {
 		value: RoadDirection.TOP.value + RoadDirection.BOTTOM.value,
 		graphics: {
 			image: imgRoadStraight,
-			rotation: 90,
+			rotation: 0,
 			key: 'road-straight-top-bottom'
 		}
 	};
@@ -60,7 +60,7 @@ export default class RoadType {
 		value: RoadDirection.TOP.value + RoadDirection.RIGHT.value + RoadDirection.BOTTOM.value,
 		graphics: {
 			image: imgRoadT,
-			rotation: 0,
+			rotation: 180,
 			key: 'road-top-bottom-right'
 		}
 	};
@@ -69,7 +69,7 @@ export default class RoadType {
 		value: RoadDirection.TOP.value + RoadDirection.LEFT.value + RoadDirection.BOTTOM.value,
 		graphics: {
 			image: imgRoadT,
-			rotation: 180,
+			rotation: 0,
 			key: 'road-top-bottom-left'
 		}
 	};
@@ -78,7 +78,7 @@ export default class RoadType {
 		value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value + RoadDirection.TOP.value,
 		graphics: {
 			image: imgRoadT,
-			rotation: 270,
+			rotation: 90,
 			key: 'road-left-right-top'
 		}
 	};
@@ -86,7 +86,7 @@ export default class RoadType {
 		value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value + RoadDirection.BOTTOM.value,
 		graphics: {
 			image: imgRoadT,
-			rotation: 90,
+			rotation: 270,
 			key: 'road-left-right-bottom'
 		}
 	};

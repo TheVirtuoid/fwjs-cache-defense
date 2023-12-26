@@ -16,7 +16,7 @@ const degToRad = (degrees) => degrees * Math.PI / 180;
 export default class GameScene extends Phaser.Scene {
 
 	static IMAGES = new Map([
-		['cache', { image: imgCache, rotation: 0 }],
+		[ItemType.CACHE.BASE.graphics.key, { image: ItemType.CACHE.BASE.graphics.image, rotation: ItemType.CACHE.BASE.graphics.rotation }],
 		['ground', { image: imgGround, rotation: 0 }],
 		[RoadType.CORNER_TOP_LEFT.graphics.key, { image: RoadType.CORNER_TOP_LEFT.graphics.image, rotation: RoadType.CORNER_TOP_LEFT.graphics.rotation }],
 		[RoadType.CORNER_TOP_RIGHT.graphics.key, { image: RoadType.CORNER_TOP_RIGHT.graphics.image, rotation: RoadType.CORNER_TOP_RIGHT.graphics.rotation }],
@@ -36,20 +36,22 @@ export default class GameScene extends Phaser.Scene {
 		[RoadType.T_LEFT_RIGHT_BOTTOM.graphics.key, { image: RoadType.T_LEFT_RIGHT_BOTTOM.graphics.image, rotation: RoadType.T_LEFT_RIGHT_BOTTOM.graphics.rotation }],
 		[RoadType.T_TOP_BOTTOM_LEFT.graphics.key, { image: RoadType.T_TOP_BOTTOM_LEFT.graphics.image, rotation: RoadType.T_TOP_BOTTOM_LEFT.graphics.rotation }],
 
-		['weapon-shooter', { image: imgWeaponShooter, rotation: 0 }]
+		[ItemType.WEAPON.SHOOTER.graphics.key, { image: ItemType.WEAPON.SHOOTER.graphics.image, rotation: ItemType.WEAPON.SHOOTER.graphics.rotation }]
 	]);
 
 	static SPRITES = new Map([
-		['monster-alien', { image: imgMonsterAlienSprite, frameWidth: 20, height: 20 }]
+		[ItemType.MONSTER.ALIEN.graphics.key, {
+			image: ItemType.MONSTER.ALIEN.graphics.image,
+			frameWidth: ItemType.MONSTER.ALIEN.graphics.frameWidth,
+			frameHeight: ItemType.MONSTER.ALIEN.graphics.frameHeight }]
 	]);
-	static SCALE = .25;
-	static FIELD_SIZE = 384;
+	static SCALE = 1;
 
 	#config = null;
 	#cacheDefenseDom = null;
 
 	#field = null;
-	#size = GameScene.FIELD_SIZE * GameScene.SCALE;
+	#size = 60 * GameScene.SCALE;
 	#tiles = new Map();
 
 	#readyFlags = {
@@ -60,7 +62,7 @@ export default class GameScene extends Phaser.Scene {
 
 	constructor() {
 		super();
-		const boardSize = new Dim({ width: 800, height: 600 });
+		const boardSize = new Dim({ width: 600, height: 600 });
 		const tileSize	= new Dim({ width: this.#size, height: this.#size });
 		this.#field = new Field({ boardSize, tileSize });
 		this.#readyFlags.constructor = true;
@@ -77,29 +79,7 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	create() {
-		this.alien001 = this.physics.add.sprite(100, 100, "monster-alien-sprite", 0);
-		this.alien001.setScale(GameScene.SCALE);
-		/*const centerTile = new Tile({ id: '3-2', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 3, y: 2 }) });
-		this.addTile(centerTile);
-		const cache = new Item({ id: 'cache', type: ItemType.CACHE.BASE });
-		this.addItem(cache, centerTile, new Pos({ x: 1, y: 1 }));*/
 
-		/*const road = this.addImage(RoadType.HALF_LEFT.graphics.key, 3, 2);
-		const cache = this.addImage('cache', 3, 2);
-		// const weaponShooter = this.addImage('weapon-shooter', 0, 0);
-		const weaponShooter = this.addImage('weapon-shooter', 3, 2, 0, 0);
-		const monsterAlienSprite = this.addImage('monster-alien-sprite', 1, 1);
-
-		this.addImage(RoadType.CORNER_TOP_RIGHT.graphics.key, 2, 2);
-		this.addImage(RoadType.STRAIGHT_TOP_BOTTOM.graphics.key, 2, 1);
-		this.addImage('weapon-shooter', 3, 2, 1, 0);
-		this.addImage('weapon-shooter', 3, 2, 2, 0);
-		this.addImage('weapon-shooter', 3, 2, 0, 1);
-		this.addImage('weapon-shooter', 3, 2, 1, 1);
-		this.addImage('weapon-shooter', 3, 2, 2, 1);
-		this.addImage('weapon-shooter', 3, 2, 0, 2);
-		this.addImage('weapon-shooter', 3, 2, 1, 2);
-		this.addImage('weapon-shooter', 3, 2, 2, 2);*/
 		this.#readyFlags.create = true;
 	}
 
@@ -112,26 +92,32 @@ export default class GameScene extends Phaser.Scene {
 	addTile(tile) {
 		const { roadType, position } = tile;
 		this.#tiles.set(position, tile);
-		const road = this.addImage(roadType.graphics.key, position.x, position.y);
+		const road = this.addImage(roadType.graphics, position.x, position.y);
 	}
 
 	addItem(item, tile, subPosition) {
 		tile.addItem({ item, subPosition });
-		this.addImage(item.type.graphics.key, tile.position.x, tile.position.y, subPosition.x, subPosition.y);
+		this.addImage(item.type.graphics, tile.position.x, tile.position.y, subPosition.x, subPosition.y);
 	}
 
-	addImage(key, x, y, subX, subY) {
-		let image = null;
+	addImage(graphics, x, y, subX, subY) {
+		const key = graphics.key;
+		const graphicsType = graphics.type;
+		let image;
 		let graphicX;
 		let graphicY;
-		const targetImage = GameScene.IMAGES.get(key);
+		const targetImage = graphicsType === 'sprite' ? GameScene.SPRITES.get(key) : GameScene.IMAGES.get(key);
 		if (!(subX === undefined || subY === undefined)) {
 			({ x: graphicX, y: graphicY } = this.#field.getSubXY({ x, y, subX, subY }));
 		} else {
 			({ x: graphicX, y: graphicY } = this.#field.getXY({ x, y }));
 		}
 		if (targetImage) {
-			const image = this.add.image(graphicX, graphicY, key);
+			if (graphicsType === 'sprite') {
+				image = this.physics.add.sprite(graphicX, graphicY, key, 0);
+			} else {
+				image = this.add.image(graphicX, graphicY, key);
+			}
 			image.setScale(GameScene.SCALE);
 			image.setAngle(targetImage.rotation || 0);
 			return image;
