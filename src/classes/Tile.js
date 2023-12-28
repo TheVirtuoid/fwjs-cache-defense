@@ -7,6 +7,7 @@ export default class Tile {
 	#position;
 	#roadType;
 	#id;
+	#image;
 	#subPositions = new Map();
 	constructor(args = {}) {
 		const { position, roadType, id } = args;
@@ -42,6 +43,15 @@ export default class Tile {
 		if (value === undefined) throw new Error(`'roadType' must be a property.`);
 		if (!RoadType.ROAD_TYPES.has(value)) throw new Error(`'roadType' must be a valid type.`);
 		this.#roadType = value;
+	}
+
+	get image() {
+		return this.#image;
+	}
+
+	set image(value) {
+		if (!(value instanceof Object)) throw new Error(`'image' must be one of the legal objects.`);
+		this.#image = value;
 	}
 
 	addItem(args = {}) {

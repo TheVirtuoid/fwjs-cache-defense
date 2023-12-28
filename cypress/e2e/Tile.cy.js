@@ -134,4 +134,11 @@ describe('Tile', () => {
 			expect(tile.getItems()).to.include(item3);
 		});
 	});
+
+	describe('image processing', () => {
+		it('should throw error if image is not an object', () => {
+			const tile = new Tile({ id, roadType, position });
+			expect(() => tile.image = '').to.throw(`'image' must be one of the legal objects.`);
+		});
+	});
 });

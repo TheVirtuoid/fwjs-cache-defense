@@ -1,13 +1,17 @@
 import ItemType from "./types/ItemType.js";
+import RoadDirection from "./types/RoadDirection.js";
 
 export default class Item {
 	#id;
 	#type;
+	#image;
+	#direction;
 
 	constructor(args = {}) {
 		const { id, type } = args;
 		this.id = id;
 		this.type = type;
+		this.#direction = null;
 	}
 
 	get id() {
@@ -25,6 +29,24 @@ export default class Item {
 		if (value === undefined) throw new Error(`'type' must be a property.`);
 		if (!ItemType.ITEM_TYPES.has(value)) throw new Error(`'type' must be a valid type.`);
 		this.#type = value;
+	}
+
+	get image() {
+		return this.#image;
+	}
+
+	set image(value) {
+		if (!(value instanceof Object)) throw new Error(`'image' must be one of the legal image types`);
+		this.#image = value;
+	}
+
+	get direction() {
+		return this.#direction;
+	}
+
+	set direction(value) {
+		if (!RoadDirection.isDirection(value)) throw new Error(`'direction' must be a valid direction.`);
+		this.#direction = value;
 	}
 
 }

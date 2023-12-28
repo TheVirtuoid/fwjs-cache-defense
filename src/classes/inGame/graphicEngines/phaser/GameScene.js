@@ -60,7 +60,9 @@ export default class GameScene extends Phaser.Scene {
 		create: false
 	}
 
-	constructor() {
+	#updateCallback = () => {};
+
+	constructor(args = {}) {
 		super();
 		const boardSize = new Dim({ width: 600, height: 600 });
 		const tileSize	= new Dim({ width: this.#size, height: this.#size });
@@ -79,31 +81,50 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	create() {
-
 		this.#readyFlags.create = true;
 	}
 
-	update() {}
+	update(time, delta) {
+		this.#updateCallback();
+	}
 
 	get ready () {
 		return this.#readyFlags.constructor && this.#readyFlags.preLoad && this.#readyFlags.create;
 	}
 
+	set updateCallback(value) {
+		this.#updateCallback = value;
+	}
+
 	addTile(tile) {
 		const { roadType, position } = tile;
 		this.#tiles.set(position, tile);
-		const road = this.addImage(roadType.graphics, position.x, position.y);
+		tile.image = this.addImage(roadType.graphics, position.x, position.y);
+		return tile;
 	}
 
 	addItem(item, tile, subPosition) {
 		tile.addItem({ item, subPosition });
-		this.addImage(item.type.graphics, tile.position.x, tile.position.y, subPosition.x, subPosition.y);
+		item.image = this.addImage(item.type.graphics, tile.position.x, tile.position.y, subPosition.x, subPosition.y);
+		return item;
+	}
+
+	moveItem(item) {
+		const { position, subPosition } = item;
+		const { x, y } = position;
+		const { x: subX, y: subY } = subPosition;
+		item.image.x = this.#field.getSubXY({ x, y, subX, subY }).x;
+		item.image.y = this.#field.getSubXY({ x, y, subX, subY }).y;
+	}
+
+	getSubXY(args = {}) {
+		return this.#field.getSubXY({ x: args.x, y: args.y, subX: args.subX, subY: args.subY });
 	}
 
 	addImage(graphics, x, y, subX, subY) {
 		const key = graphics.key;
 		const graphicsType = graphics.type;
-		let image;
+		let image = 1;
 		let graphicX;
 		let graphicY;
 		const targetImage = graphicsType === 'sprite' ? GameScene.SPRITES.get(key) : GameScene.IMAGES.get(key);
@@ -120,8 +141,8 @@ export default class GameScene extends Phaser.Scene {
 			}
 			image.setScale(GameScene.SCALE);
 			image.setAngle(targetImage.rotation || 0);
-			return image;
 		}
+		return image;
 	}
 
 
