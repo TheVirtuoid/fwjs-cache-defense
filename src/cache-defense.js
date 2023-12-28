@@ -43,6 +43,8 @@ const updateCallback = () => {
 
 const processMonsterMovement = (monster) => {
 	if (monster.finished) {
+		console.log('done');
+		monster.image.destroy();
 		return;
 	}
 	let nextPoint = false;
