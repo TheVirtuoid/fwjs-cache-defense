@@ -51,4 +51,11 @@ describe('pos', () => {
 			expect(pos.y).to.equal(1);
 		});
 	});
+
+	describe('toString', () => {
+		it('should return a string of "5-5"', () => {
+			const pos = new Pos({ x: 5, y: 5 });
+			expect(pos.toString()).to.equal('5-5');
+		});
+	});
 });

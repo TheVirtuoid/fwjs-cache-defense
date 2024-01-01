@@ -52,7 +52,6 @@ export default class GameScene extends Phaser.Scene {
 
 	#field = null;
 	#size = 60 * GameScene.SCALE;
-	#tiles = new Map();
 
 	#readyFlags = {
 		constructor: false,
@@ -95,20 +94,6 @@ export default class GameScene extends Phaser.Scene {
 	set updateCallback(value) {
 		this.#updateCallback = value;
 	}
-
-	addTile(tile) {
-		const { roadType, position } = tile;
-		this.#tiles.set(position, tile);
-		tile.image = this.addImage(roadType.graphics, position.x, position.y);
-		return tile;
-	}
-
-	addItem(item, tile, subPosition) {
-		tile.addItem({ item, subPosition });
-		item.image = this.addImage(item.type.graphics, tile.position.x, tile.position.y, subPosition.x, subPosition.y);
-		return item;
-	}
-
 	moveItem(item) {
 		const { position, subPosition } = item;
 		const { x, y } = position;

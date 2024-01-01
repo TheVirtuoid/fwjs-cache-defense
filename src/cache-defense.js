@@ -6,14 +6,64 @@ import Pos from "./classes/Pos.js";
 import Item from "./classes/Item.js";
 import ItemType from "./classes/types/ItemType.js";
 import RoadDirection from "./classes/types/RoadDirection.js";
+import Tiles from "./classes/Tiles.js";
 
 const phaserConfig = cacheDefenseConfig.graphics.engineSettings.phaser;
 phaserConfig.scene = GameScene;
 
+
+const startingPosition = new Pos({ x: 5, y: 5 });
+const startingTile = new Tile({ id: 'start', roadType: RoadType.HALF_LEFT, position: startingPosition });
+
 let alien;
 let scene;
 const speed = .5;
-let stoppingPoint = null;
+
+const tiles = new Tiles();
+
+/*const tiles = new Map();
+const tilesById = new Map();*/
+let openTiles = [];
+
+openTiles.push(startingTile);
+
+let openTilePosition = new Pos({ x: 5, y: 5 });
+let openTileDirection = RoadDirection.LEFT;
+
+document.getElementById('next-tile').addEventListener('click', () => {
+	const addedTiles = [];
+	while (openTiles.length) {
+		const tile = openTiles.shift();
+		const openDirections = [];
+		if (tile.roadType.value & RoadDirection.TOP.value) openDirections.push(RoadDirection.TOP);
+		if (tile.roadType.value & RoadDirection.RIGHT.value) openDirections.push(RoadDirection.RIGHT);
+		if (tile.roadType.value & RoadDirection.BOTTOM.value) openDirections.push(RoadDirection.BOTTOM);
+		if (tile.roadType.value & RoadDirection.LEFT.value) openDirections.push(RoadDirection.LEFT);
+		openDirections.forEach((direction) => {
+			const nextPosition = tile.getNextPosition(direction);
+			if (!tiles.get(nextPosition.toString())) {
+				addedTiles.push(addNextTile(tile.position, direction));
+			}
+		});
+	}
+	openTiles = addedTiles;
+});
+
+const addNextTile = (tilePosition, tileDirection) => {
+	const openTile = tiles.get(tilePosition.toString());
+	const openDirection = tileDirection;
+
+	const nextPosition = openTile.getNextPosition(openDirection);
+
+	// determine which road types are legal. These road types must have the opposite of openDirection as one of their paths
+	const oppositeDirection = RoadDirection.getOpposite(openDirection);
+	const validRoadTypes =
+			[...RoadType.ROAD_TYPES].filter((roadType) => roadType.value & oppositeDirection.value && roadType.value !== oppositeDirection.value);
+	// console.log(validRoadTypes);
+	const whichRoad = Math.floor(Math.random() * validRoadTypes.length);
+	const newRoad = new Tile({ id: 'test', roadType: validRoadTypes[whichRoad], position: nextPosition });
+	return addTile(newRoad);
+}
 
 const waitForGameReady = (game) => {
 	let counter = 500;
@@ -38,7 +88,7 @@ const waitForGameReady = (game) => {
 };
 
 const updateCallback = () => {
-	processMonsterMovement(alien);
+	// processMonsterMovement(alien);
 }
 
 const processMonsterMovement = (monster) => {
@@ -99,10 +149,32 @@ const processMonsterMovement = (monster) => {
 	}
 }
 
+const addTile = (tile) => {
+	const { roadType, position } = tile;
+	tiles.set(position.toString(), tile);
+	tilesById.set(tile.id, tile);
+	tile.image = scene.addImage(roadType.graphics, position.x, position.y);
+	return tile;
+}
+
+const addItem = (item, tile, subPosition) => {
+	tile.addItem({ item, subPosition });
+	item.image = scene.addImage(item.type.graphics, tile.position.x, tile.position.y, subPosition.x, subPosition.y);
+	return item;
+}
+
 const continueGame = (game) => {
 	console.log('continuing Game');
 	try {
 		scene = game.scene.getScenes()[0];
+		addTile(startingTile);
+		const cache = new Item({ id: 'cache', type: ItemType.CACHE.BASE });
+		addItem(cache, startingTile, new Pos({ x: 1, y: 1 }));
+
+
+
+
+		/*scene = game.scene.getScenes()[0];
 		scene.updateCallback = updateCallback;
 
 		const centerTile = new Tile({ id: '5-5', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 5, y: 5 }) });
@@ -151,7 +223,7 @@ const continueGame = (game) => {
 			{ direction: RoadDirection.RIGHT, position: new Pos({ x: 5, y: 4 }), subPosition: new Pos({ x:1, y: 1 })},
 			{ position: null }
 		];
-		alien.movementStep = -1;
+		alien.movementStep = -1;*/
 		return Promise.resolve();
 	} catch (e) {
 		console.log(e);

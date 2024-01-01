@@ -1,6 +1,7 @@
 import Pos from "./Pos.js";
 import RoadType from "./types/RoadType.js";
 import Item from "./Item.js";
+import RoadDirection from "./types/RoadDirection.js";
 
 export default class Tile {
 
@@ -79,5 +80,10 @@ export default class Tile {
 
 	getItems() {
 		return [...this.#subPositions.values()];
+	}
+
+	getNextPosition(direction) {
+		if (!RoadDirection.isDirection(direction)) throw new Error(`'direction' must be a valid RoadDirection.`);
+		return new Pos({ x: this.position.x + direction.x, y: this.position.y + direction.y });
 	}
 }

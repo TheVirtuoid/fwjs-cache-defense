@@ -3,9 +3,10 @@ import Pos from "../../src/classes/Pos.js";
 import Tile from "../../src/classes/Tile.js";
 import Item from "../../src/classes/Item.js";
 import ItemType from "../../src/classes/types/ItemType.js";
+import RoadDirection from "../../src/classes/types/RoadDirection.js";
 
 const id = 'test';
-const position = new Pos({ x: 0, y: 0 });
+const position = new Pos({ x: 5, y: 5 });
 const roadType = RoadType.HALF_RIGHT;
 
 const item1 = new Item({ id: 'test1', type: ItemType.MONSTER.ALIEN });
@@ -47,8 +48,8 @@ describe('Tile', () => {
 		});
 		it('should have the correct position', () => {
 			const tile = new Tile({ id, roadType, position });
-			expect(tile.position.x).to.equal(0);
-			expect(tile.position.y).to.equal(0);
+			expect(tile.position.x).to.equal(5);
+			expect(tile.position.y).to.equal(5);
 		});
 	});
 	describe('addItem', () => {
@@ -139,6 +140,37 @@ describe('Tile', () => {
 		it('should throw error if image is not an object', () => {
 			const tile = new Tile({ id, roadType, position });
 			expect(() => tile.image = '').to.throw(`'image' must be one of the legal objects.`);
+		});
+	});
+
+	describe('getNextPosition', () => {
+		it('should throw error if direction is not a RoadDirection', () => {
+			const tile = new Tile({ id, roadType, position });
+			expect(() => tile.getNextPosition('')).to.throw(`'direction' must be a valid RoadDirection.`);
+		});
+		it('should return x=4, y=5 if direction is RoadDirection.LEFT', () => {
+			const tile = new Tile({ id, roadType, position });
+			const nextPosition = tile.getNextPosition(RoadDirection.LEFT);
+			expect(nextPosition.x).to.equal(4);
+			expect(nextPosition.y).to.equal(5);
+		});
+		it('should return x=6, y=5 if direction is RoadDirection.RIGHT', () => {
+			const tile = new Tile({ id, roadType, position });
+			const nextPosition = tile.getNextPosition(RoadDirection.RIGHT);
+			expect(nextPosition.x).to.equal(6);
+			expect(nextPosition.y).to.equal(5);
+		});
+		it('should return x=5, y=4 if direction is RoadDirection.TOP', () => {
+			const tile = new Tile({ id, roadType, position });
+			const nextPosition = tile.getNextPosition(RoadDirection.TOP);
+			expect(nextPosition.x).to.equal(5);
+			expect(nextPosition.y).to.equal(4);
+		});
+		it('should return x=5, y=6 if direction is RoadDirection.BOTTOM', () => {
+			const tile = new Tile({ id, roadType, position });
+			const nextPosition = tile.getNextPosition(RoadDirection.BOTTOM);
+			expect(nextPosition.x).to.equal(5);
+			expect(nextPosition.y).to.equal(6);
 		});
 	});
 });

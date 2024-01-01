@@ -27,4 +27,8 @@ export default class Pos {
 		if (value < 0) throw new Error(`'y' must be greater than or equal to 0.`);
 		this.#y = value;
 	}
+
+	toString() {
+		return `${this.x}-${this.y}`;
+	}
 }
