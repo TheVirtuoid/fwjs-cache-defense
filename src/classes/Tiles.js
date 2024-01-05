@@ -23,14 +23,15 @@ export default class Tiles {
 	}
 
 	getNextLegalTiles(tile) {
-		const {position, roadType} = tile;
+		const { position, roadType } = tile;
 		const legalTiles = [];
 		[...RoadDirection.ROAD_DIRECTIONS].forEach((direction) => {
 			if ((roadType.value & direction.value) !== 0) {
 				const newPosition = new Pos({ x: position.x + direction.x, y: position.y + direction.y });
-				console.log(`---------getting legal ${roadType.value}, ${direction.value} at ${newPosition.toString()}-------------------`);
-				const legalRoadTypes = this.#processNextLegalTiles(newPosition, roadType, direction);
+				console.log(`---------getting legal ${roadType.value} (${position.toString()}), ${direction.value} at ${newPosition.toString()}-------------------`);
+				const legalRoadTypes = this.#processNextLegalTiles(position, newPosition, roadType, direction);
 				if (legalRoadTypes.length) {
+					console.log(`    length = ${legalRoadTypes.length}`);
 					legalTiles.push({ position: newPosition, direction, legalRoadTypes });
 				}
 			}
@@ -38,30 +39,32 @@ export default class Tiles {
 		return legalTiles;
 	}
 
-	#processNextLegalTiles(newPosition, roadType, direction) {
+	#processNextLegalTiles(currentPosition, newPosition, roadType, direction) {
 		if (this.#tilesByPosition.has(newPosition.toString())) {
 			return [];
 		}
-		console.log('here');
+		// console.log('here');
 		const oppositeDirection = RoadDirection.getOpposite(direction);
 		let roadsFiltered = [...RoadType.ROAD_TYPES].filter((roadType) => roadType.value & oppositeDirection.value && roadType.value !== oppositeDirection.value);
-		console.log('start');
-		console.log([...roadsFiltered]);
+		// console.log('start');
+		// console.log([...roadsFiltered]);
 		// check the four possible positions for a tile
 		[...RoadDirection.ROAD_DIRECTIONS].forEach((checkDirection) => {
 			const checkPosition = new Pos({ x: newPosition.x + checkDirection.x, y: newPosition.y + checkDirection.y });
-			console.log('checking = ', checkDirection.value, checkPosition.toString(), this.#tilesByPosition.has(checkPosition.toString()));
-			if (this.#tilesByPosition.has(checkPosition.toString())) {
-				console.log('before');
-				roadsFiltered = roadsFiltered.filter((roadType) => {
-					console.log(`=======${roadType.value}, ${checkDirection.value}, ${(roadType.value & checkDirection.value)}`)
-					return (roadType.value & checkDirection.value) === 0;
-				});
-				console.log([...roadsFiltered]);
-				console.log('after');
+			// console.log('checking = ', checkDirection.value, checkPosition.toString(), this.#tilesByPosition.has(checkPosition.toString()));
+			if (!checkPosition.is(currentPosition)) {
+				if (this.#tilesByPosition.has(checkPosition.toString())) {
+					// console.log('before');
+					roadsFiltered = roadsFiltered.filter((roadType) => {
+						// console.log(`=======${roadType.value}, ${checkDirection.value}, ${(roadType.value & checkDirection.value)}`)
+						return (roadType.value & checkDirection.value) === 0;
+					});
+					// console.log([...roadsFiltered]);
+					// console.log('after');
+				}
 			}
 		});
-		console.log([...roadsFiltered]);
+		// console.log([...roadsFiltered]);
 		return roadsFiltered;
 	}
 }

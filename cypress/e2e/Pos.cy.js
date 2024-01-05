@@ -58,4 +58,23 @@ describe('pos', () => {
 			expect(pos.toString()).to.equal('5-5');
 		});
 	});
+
+	describe('is',  () => {
+		let pos;
+		beforeEach(() => {
+			pos = new Pos({ x: 0, y: 0 });
+		});
+		it('should throw error if argument is not Pos class', () => {
+			expect(() => pos.is(0)).to.throw(`'pos' must be a Pos class.`);
+		});
+		it('should return false is not equal on X', () => {
+			expect(pos.is(new Pos({ x: 1, y: 0 }))).to.be.false;
+		});
+		it('should return false is not equal on Y', () => {
+			expect(pos.is(new Pos({ x: 0, y: 1 }))).to.be.false;
+		});
+		it('should return true', () => {
+			expect(pos.is(new Pos({ x: 0, y: 0 }))).to.be.true;
+		});
+	});
 });

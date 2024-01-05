@@ -31,4 +31,9 @@ export default class Pos {
 	toString() {
 		return `${this.x}-${this.y}`;
 	}
+
+	is(pos) {
+		if (!(pos instanceof Pos)) throw new Error(`'pos' must be a Pos class.`);
+		return this.x === pos.x && this.y === pos.y;
+	}
 }

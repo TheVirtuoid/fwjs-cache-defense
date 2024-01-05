@@ -65,7 +65,7 @@ describe('tiles', () => {
 				expect(direction).to.equal(RoadDirection.TOP);
 				expect(arrayCompare(legalValues, [5, 6, 7, 12, 13, 14])).to.be.true;
 			});
-			xit('TILE LEFT: returns 3 values', () => {
+			it('TILE LEFT: returns 3 values', () => {
 				tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 4, y: 4 }) }));
 				const legalTiles = tiles.getNextLegalTiles(tile);
 				expect(legalTiles.length).to.equal(1);
@@ -75,7 +75,7 @@ describe('tiles', () => {
 				expect(direction).to.equal(RoadDirection.TOP);
 				expect(arrayCompare(legalValues, [5, 6, 7])).to.be.true;
 			});
-			xit('TILE TOP: returns 3 values', () => {
+			it('TILE TOP: returns 3 values', () => {
 				tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 5, y: 3 }) }));
 				const legalTiles = tiles.getNextLegalTiles(tile);
 				expect(legalTiles.length).to.equal(1);
@@ -85,7 +85,7 @@ describe('tiles', () => {
 				expect(direction).to.equal(RoadDirection.TOP);
 				expect(arrayCompare(legalValues, [6, 12, 14])).to.be.true;
 			});
-			xit('TILE RIGHT: returns 3 values', () => {
+			it('TILE RIGHT: returns 3 values', () => {
 				tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 6, y: 4 }) }));
 				const legalTiles = tiles.getNextLegalTiles(tile);
 				expect(legalTiles.length).to.equal(1);
@@ -97,7 +97,7 @@ describe('tiles', () => {
 			});
 		});
 
-		xdescribe('processing HALF_RIGHT', () => {
+		describe('processing HALF_RIGHT', () => {
 			let tiles;
 			let tile;
 			beforeEach(() => {
@@ -145,7 +145,7 @@ describe('tiles', () => {
 			});
 		});
 
-		xdescribe('processing HALF_BOTTOM', () => {
+		describe('processing HALF_BOTTOM', () => {
 			let tiles;
 			let tile;
 			beforeEach(() => {
@@ -193,7 +193,7 @@ describe('tiles', () => {
 			});
 		});
 
-		xdescribe('processing HALF_LEFT', () => {
+		describe('processing HALF_LEFT', () => {
 			let tiles;
 			let tile;
 			beforeEach(() => {
@@ -242,51 +242,102 @@ describe('tiles', () => {
 		});
 	});
 
-	xdescribe('processing T-LEFT-RIGHT-BOTTOM', () => {
+	describe('processing T-LEFT-RIGHT-BOTTOM', () => {
 		let tiles;
 		let tile;
 		beforeEach(() => {
 			tiles = new Tiles();
 			tile = new Tile({ id: 'test', roadType: RoadType.T_LEFT_RIGHT_BOTTOM, position: new Pos({ x: 5, y: 5 }) });
 		});
-		it('NO TILES: returns 6 values', () => {
+		it('NO TILES: returns 3 entries', () => {
 			const legalTiles = tiles.getNextLegalTiles(tile);
-			expect(legalTiles.length).to.equal(1);
-			const { position, direction, legalRoadTypes } = legalTiles[0];
-			const legalValues = getLegalValues(legalRoadTypes);
-			expect(position).to.deep.equal(new Pos({ x: 4, y: 5 }));
-			expect(direction).to.equal(RoadDirection.LEFT);
-			expect(arrayCompare(legalValues, [3, 6, 7, 10, 11, 14])).to.be.true;
+			expect(legalTiles.length).to.equal(3);
 		});
-		it('TILE TOP: returns 3 values', () => {
-			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 4, y: 4 }) }));
+		it('TILE TOP: returns 3 entries', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 5, y: 4 }) }));
 			const legalTiles = tiles.getNextLegalTiles(tile);
-			expect(legalTiles.length).to.equal(1);
-			const { position, direction, legalRoadTypes } = legalTiles[0];
-			const legalValues = getLegalValues(legalRoadTypes);
-			expect(position).to.deep.equal(new Pos({ x: 4, y: 5 }));
-			expect(direction).to.equal(RoadDirection.LEFT);
-			expect(arrayCompare(legalValues, [6, 10, 14])).to.be.true;
+			expect(legalTiles.length).to.equal(3);
 		});
-		it('TILE BOTTOM: returns 3 values', () => {
-			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 4, y: 6 }) }));
+		it('TILE BOTTOM: returns 2 entries', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 5, y: 6 }) }));
 			const legalTiles = tiles.getNextLegalTiles(tile);
-			expect(legalTiles.length).to.equal(1);
-			const { position, direction, legalRoadTypes } = legalTiles[0];
-			const legalValues = getLegalValues(legalRoadTypes);
-			expect(position).to.deep.equal(new Pos({ x: 4, y: 5 }));
-			expect(direction).to.equal(RoadDirection.LEFT);
-			expect(arrayCompare(legalValues, [3, 10, 11])).to.be.true;
+			expect(legalTiles.length).to.equal(2);
 		});
-		it('TILE LEFT: returns 3 values', () => {
-			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 3, y: 5 }) }));
+		it('TILE LEFT: returns 2 entries', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 4, y: 5 }) }));
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(2);
+		});
+		it('TILE RIGHT: returns 2 entries', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 6, y: 5 }) }));
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(2);
+		});
+	});
+
+	describe('processing STRAIGHT-LEFT-RIGHT', () => {
+		let tiles;
+		let tile;
+		beforeEach(() => {
+			tiles = new Tiles();
+			tile = new Tile({ id: 'test', roadType: RoadType.STRAIGHT_LEFT_RIGHT, position: new Pos({ x: 5, y: 5 }) });
+		});
+		it('NO TILES: returns 2 entries', () => {
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(2);
+		});
+		it('TILE TOP: returns 2 entries', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 5, y: 4 }) }));
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(2);
+		});
+		it('TILE BOTTOM: returns 2 entries', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 5, y: 6 }) }));
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(2);
+		});
+		it('TILE LEFT: returns 1 entry', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 4, y: 5 }) }));
 			const legalTiles = tiles.getNextLegalTiles(tile);
 			expect(legalTiles.length).to.equal(1);
-			const { position, direction, legalRoadTypes } = legalTiles[0];
-			const legalValues = getLegalValues(legalRoadTypes);
-			expect(position).to.deep.equal(new Pos({ x: 4, y: 5 }));
-			expect(direction).to.equal(RoadDirection.LEFT);
-			expect(arrayCompare(legalValues, [3, 6, 7])).to.be.true;
+		});
+		it('TILE RIGHT: returns 1 entry', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 6, y: 5 }) }));
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(1);
+		});
+	});
+
+	describe('processing CORNER_TOP_RIGHT', () => {
+		let tiles;
+		let tile;
+		beforeEach(() => {
+			tiles = new Tiles();
+			tile = new Tile({ id: 'test', roadType: RoadType.CORNER_TOP_RIGHT, position: new Pos({ x: 5, y: 5 }) });
+		});
+		it('NO TILES: returns 2 entries', () => {
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(2);
+		});
+		it('TILE TOP: returns 1 entry', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 5, y: 4 }) }));
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(1);
+		});
+		it('TILE BOTTOM: returns 2 entries', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 5, y: 6 }) }));
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(2);
+		});
+		it('TILE LEFT: returns 2 entries', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 4, y: 5 }) }));
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(2);
+		});
+		it('TILE RIGHT: returns 1 entry', () => {
+			tiles.addTile(new Tile({ id: 'test1', roadType: RoadType.HALF_LEFT, position: new Pos({ x: 6, y: 5 }) }));
+			const legalTiles = tiles.getNextLegalTiles(tile);
+			expect(legalTiles.length).to.equal(1);
 		});
 	});
 
