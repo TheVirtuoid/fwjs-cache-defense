@@ -59,7 +59,7 @@ describe('tiles', () => {
 			it('NO TILES: returns 6 values', () => {
 				const legalTiles = tiles.getNextLegalTiles(tile);
 				expect(legalTiles.length).to.equal(1);
-				const { position, direction, legalRoadTypes } = legalTiles[0];
+				const { position, direction, legalRoadTypes, victoryDirection } = legalTiles[0];
 				const legalValues = getLegalValues(legalRoadTypes);
 				expect(position).to.deep.equal(new Pos({ x: 5, y: 4 }));
 				expect(direction).to.equal(RoadDirection.TOP);

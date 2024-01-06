@@ -13,7 +13,12 @@ phaserConfig.scene = GameScene;
 
 
 const startingPosition = new Pos({ x: 5, y: 5 });
-const startingTile = new Tile({ id: 'start', roadType: RoadType.HALF_LEFT, position: startingPosition });
+const startingTile = new Tile({
+	id: 'start',
+	roadType: RoadType.HALF_LEFT,
+	position: startingPosition,
+	victoryDirection: RoadDirection.LEFT
+});
 const openingVictoryPath = [ new Pos({ x: 0, y:1 }), new Pos({ x: 1, y: 1 }), null];
 
 let alien;
@@ -39,28 +44,67 @@ document.getElementById('next-tile').addEventListener('click', () => {
 		const tile = openTiles.shift();
 		const possibleTiles = tiles.getNextLegalTiles(tile);
 		possibleTiles.forEach((possibleTile) => {
-			const { legalRoadTypes, position } = possibleTile;
+			const { legalRoadTypes, position, direction } = possibleTile;
 			if (legalRoadTypes.length) {
 				const whichRoad = Math.floor(Math.random() * legalRoadTypes.length);
-				const newRoad = new Tile({ id: position.toString(), roadType: legalRoadTypes[whichRoad], position });
+				// console.log(`-----addding tile at position ${position.toString()}`);
+				const newRoad = new Tile({
+					id: position.toString(),
+					roadType: legalRoadTypes[whichRoad],
+					position,
+					victoryDirection: direction
+				});
 				addedTiles.push(addTile(newRoad));
 			}
 		});
 	}
 	openTiles = addedTiles;
 	placeMonsters();
+	//runMonsters();
 });
 
 const placeMonsters = () => {
 	openTiles.forEach((openTile) => {
-		const { position, roadType } = openTile;
+		const { position, roadType, victoryDirection } = openTile;
 		const id = `monster-${monsterCount++}`;
 		const monster = new Item({ id, type: ItemType.MONSTER.ALIEN });
-		// determin victoryPath
+		// determine victoryPath
+		// console.log(victoryDirection.value, roadType.victoryPath)
+		const possibleVictoryPath = roadType.victoryPath[victoryDirection.value];
+		// console.log(possibleVictoryPath);
+		const victoryPath = possibleVictoryPath[Math.floor(Math.random() * possibleVictoryPath.length)];
+		// console.log(victoryPath);
+		// addItem(monster, openTile, new Pos({ x: 1, y: 1 }));
 
-		addItem(monster, openTile, new Pos({ x: 1, y: 1 }));
+		/*alien.victoryPath = [
+			{ direction: RoadDirection.LEFT, position: new Pos({ x: 6, y: 4 }), subPosition: new Pos({ x:2, y: 1 })},
+			{ position: new Pos({ x: 4, y: 4 }), subPosition: new Pos({ x:1, y: 1 })},
+			{ direction: RoadDirection.BOTTOM, position: new Pos({ x: 4, y: 5 }), subPosition: new Pos({ x:1, y: 1 })},
+			{ direction: RoadDirection.RIGHT, position: new Pos({ x: 5, y: 4 }), subPosition: new Pos({ x:1, y: 1 })},
+			{ position: null }
+		];*/
+
+		// build victoryPath
+		const path = [];
+		victoryPath.forEach((entry) => {
+			const { direction, position: subPosition } = entry;
+			path.push({ direction, position, subPosition });
+		});
+		path.push({ position: null });
+		console.log(path);
+
+
+
+		addItem(monster, openTile, victoryPath[0].position);
 		monster.image.anims.play('alien-walk', true);
 		monsters.set(id, monster);
+	});
+};
+
+const runMonsters = () => {
+monsters.forEach((monster) => {
+		monster.finished = false;
+		monster.movementStep = -1;
 	});
 };
 

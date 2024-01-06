@@ -10,7 +10,18 @@ const right = new Pos({ x: 2, y: 1 });
 const bottom = new Pos({ x: 1, y: 2 });
 const left = new Pos({ x: 0, y: 1 });
 const middle = new Pos({ x: 1, y: 1 });
+const pTop = new Pos({ x: 1, y: 0 });
+const pRight = new Pos({ x: 2, y: 1 });
+const pBottom = new Pos({ x: 1, y: 2 });
+const pLeft = new Pos({ x: 0, y: 1 });
+const pMiddle = new Pos({ x: 1, y: 1 });
+const dTop = RoadDirection.TOP;
+const dRight = RoadDirection.RIGHT;
+const dBottom = RoadDirection.BOTTOM;
+const dLeft = RoadDirection.LEFT;
 const stop = null;
+
+const vpLeft = { direction: dRight, position: pLeft };
 
 /*
 		VICTORYPATH
@@ -26,8 +37,16 @@ export default class RoadType {
 	static CORNER_TOP_LEFT = {
 		value: RoadDirection.TOP.value + RoadDirection.LEFT.value,
 		victoryPath: {
-			[RoadDirection.BOTTOM.value]: [ left, middle, top ],
-			[RoadDirection.RIGHT.value]: [ top, middle, left ],
+			[RoadDirection.BOTTOM.value]: [[
+				{ direction: dRight, position: pLeft },
+				{ direction: dTop, position: pMiddle },
+				{ direction: dTop, position: pTop }
+			]],
+			[RoadDirection.RIGHT.value]: [[
+				{ direction: dBottom, position: pTop },
+				{ direction: dLeft, position: pMiddle },
+				{ direction: dLeft, position: pLeft }
+			]]
 		},
 		graphics: {
 			image: imgRoadCorner,
@@ -38,8 +57,16 @@ export default class RoadType {
 	static CORNER_BOTTOM_LEFT = {
 		value: RoadDirection.BOTTOM.value + RoadDirection.LEFT.value,
 		victoryPath: {
-			[RoadDirection.TOP.value]: [ left, middle, bottom ],
-			[RoadDirection.RIGHT.value]: [ bottom, middle, left ],
+			[RoadDirection.TOP.value]: [[
+				{ direction: dRight, position: pLeft },
+				{ direction: dBottom, position: pMiddle },
+				{ direction: dBottom, position: pBottom }
+			]],
+			[RoadDirection.RIGHT.value]: [[
+				{ direction: dTop, position: pBottom },
+				{ direction: dLeft, position: pMiddle },
+				{ direction: dLeft, position: pLeft }
+			]]
 		},
 		graphics: {
 			image: imgRoadCorner,
@@ -50,8 +77,16 @@ export default class RoadType {
 	static CORNER_TOP_RIGHT = {
 		value: RoadDirection.TOP.value + RoadDirection.RIGHT.value,
 		victoryPath: {
-			[RoadDirection.BOTTOM.value]: [ right, middle, top ],
-			[RoadDirection.LEFT.value]: [ top, middle, right ],
+			[RoadDirection.BOTTOM.value]: [[
+				{ direction: dLeft, position: pRight },
+				{ direction: dTop, position: pMiddle },
+				{ direction: dTop, position: pTop }
+			]],
+			[RoadDirection.LEFT.value]: [[
+				{ direction: dBottom, position: pTop },
+				{ direction: dRight, position: pMiddle },
+				{ direction: dRight, position: pRight }
+			]]
 		},
 		graphics: {
 			image: imgRoadCorner,
@@ -62,8 +97,16 @@ export default class RoadType {
 	static CORNER_BOTTOM_RIGHT = {
 		value: RoadDirection.BOTTOM.value + RoadDirection.RIGHT.value,
 		victoryPath: {
-			[RoadDirection.BOTTOM.value]: [ right, middle, bottom ],
-			[RoadDirection.LEFT.value]: [ bottom, middle, right ],
+			[RoadDirection.TOP.value]: [[
+				{ direction: dLeft, position: pRight },
+				{ direction: dBottom, position: pMiddle },
+				{ direction: dBottom, position: pBottom }
+			]],
+			[RoadDirection.LEFT.value]: [[
+				{ direction: dTop, position: pBottom },
+				{ direction: dRight, position: pMiddle },
+				{ direction: dRight, position: pRight }
+			]]
 		},
 		graphics: {
 			image: imgRoadCorner,
@@ -75,8 +118,16 @@ export default class RoadType {
 	static STRAIGHT_LEFT_RIGHT = {
 		value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value,
 		victoryPath: {
-			[RoadDirection.RIGHT.value]: [ left, middle, right ],
-			[RoadDirection.LEFT.value]: [ right, middle, left ],
+			[RoadDirection.RIGHT.value]: [[
+				{ direction: dLeft, position: pRight },
+				{ direction: dLeft, position: pMiddle },
+				{ direction: dLeft, position: pLeft }
+			]],
+			[RoadDirection.LEFT.value]: [[
+				{ direction: dRight, position: pLeft },
+				{ direction: dRight, position: pMiddle },
+				{ direction: dRight, position: pRight }
+			]]
 		},
 		graphics: {
 			image: imgRoadStraight,
@@ -87,8 +138,16 @@ export default class RoadType {
 	static STRAIGHT_TOP_BOTTOM = {
 		value: RoadDirection.TOP.value + RoadDirection.BOTTOM.value,
 		victoryPath: {
-			[RoadDirection.BOTTOM.value]: [ top, middle, bottom ],
-			[RoadDirection.TOP.value]: [ bottom, middle, top ],
+			[RoadDirection.BOTTOM.value]: [[
+				{ direction: dTop, position: pBottom },
+				{ direction: dTop, position: pMiddle },
+				{ direction: dTop, position: pTop }
+			]],
+			[RoadDirection.TOP.value]: [[
+				{ direction: dBottom, position: pTop },
+				{ direction: dBottom, position: pMiddle },
+				{ direction: dBottom, position: pBottom }
+			]]
 		},
 		graphics: {
 			image: imgRoadStraight,
@@ -100,18 +159,41 @@ export default class RoadType {
 	static T_TOP_BOTTOM_RIGHT = {
 		value: RoadDirection.TOP.value + RoadDirection.RIGHT.value + RoadDirection.BOTTOM.value,
 		victoryPath: {
-			[RoadDirection.BOTTOM.value]: {
-				[RoadDirection.RIGHT.value]: [ right, middle, top ],
-				[RoadDirection.BOTTOM.value]: [ bottom, middle, top ],
-			},
-			[RoadDirection.TOP.value]: {
-				[RoadDirection.RIGHT.value]: [ right, middle, bottom ],
-				[RoadDirection.TOP.value]: [ top, middle, bottom ],
-			},
-			[RoadDirection.LEFT.value]: {
-				[RoadDirection.TOP.value]: [ top, middle, right ],
-				[RoadDirection.BOTTOM.value]: [ bottom, middle, right ],
-			}
+			[RoadDirection.BOTTOM.value]: [
+				[
+					{ direction: dLeft, position: pRight },
+					{ direction: dTop, position: pMiddle },
+					{ direction: dTop, position: pTop }
+				], [
+					{ direction: dTop, position: pBottom },
+					{ direction: dTop, position: pMiddle },
+					{ direction: dTop, position: pTop }
+				]
+			],
+			[RoadDirection.TOP.value]: [
+				[
+					{ direction: dLeft, position: pRight },
+					{ direction: dBottom, position: pMiddle },
+					{ direction: dBottom, position: bottom }
+				],
+				[
+					{ direction: dBottom, position: pTop },
+					{ direction: dBottom, position: pMiddle },
+					{ direction: dBottom, position: pBottom }
+				]
+			],
+			[RoadDirection.LEFT.value]: [
+				[
+					{ direction: dBottom, position: pTop },
+					{ direction: dRight, position: pMiddle },
+					{ direction: dRight, position: pRight }
+				],
+				[
+					{ direction: dTop, position: pBottom },
+					{ direction: dRight, position: pMiddle },
+					{ direction: dRight, position: pRight }
+				]
+			]
 		},
 		graphics: {
 			image: imgRoadT,
@@ -123,18 +205,42 @@ export default class RoadType {
 	static T_TOP_BOTTOM_LEFT = {
 		value: RoadDirection.TOP.value + RoadDirection.LEFT.value + RoadDirection.BOTTOM.value,
 		victoryPath: {
-			[RoadDirection.BOTTOM.value]: {
-				[RoadDirection.LEFT.value]: [ left, middle, top ],
-				[RoadDirection.BOTTOM.value]: [ bottom, middle, top ],
-			},
-			[RoadDirection.TOP.value]: {
-				[RoadDirection.LEFT.value]: [ left, middle, bottom ],
-				[RoadDirection.TOP.value]: [ top, middle, bottom ],
-			},
-			[RoadDirection.RIGHT.value]: {
-				[RoadDirection.TOP.value]: [ top, middle, left ],
-				[RoadDirection.BOTTOM.value]: [ bottom, middle, left ],
-			}
+			[RoadDirection.BOTTOM.value]: [
+				[
+					{ direction: dRight, position: pLeft },
+					{ direction: dTop, position: pMiddle },
+					{ direction: dTop, position: pTop }
+				],
+				[
+					{ direction: dTop, position: pBottom },
+					{ direction: dTop, position: pMiddle },
+					{ direction: dTop, position: pTop }
+				]
+			],
+			[RoadDirection.TOP.value]: [
+				[
+					{ direction: dRight, position: pLeft },
+					{ direction: dBottom, position: pMiddle },
+					{ direction: dBottom, position: pBottom }
+				],
+				[
+					{ direction: dBottom, position: pTop },
+					{ direction: dBottom, position: pMiddle },
+					{ direction: dBottom, position: pBottom }
+				]
+			],
+			[RoadDirection.RIGHT.value]: [
+				[
+					{ direction: dBottom, position: pTop },
+					{ direction: dLeft, position: pMiddle },
+					{ direction: dLeft, position: pLeft }
+				],
+				[
+					{ direction: dTop, position: pBottom },
+					{ direction: dLeft, position: pMiddle },
+					{ direction: dLeft, position: pLeft }
+				]
+			]
 		},
 		graphics: {
 			image: imgRoadT,
@@ -146,18 +252,42 @@ export default class RoadType {
 	static T_LEFT_RIGHT_TOP = {
 		value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value + RoadDirection.TOP.value,
 		victoryPath: {
-			[RoadDirection.RIGHT.value]: {
-				[RoadDirection.TOP.value]: [ top, middle, left ],
-				[RoadDirection.RIGHT.value]: [ right, middle, left ],
-			},
-			[RoadDirection.LEFT.value]: {
-				[RoadDirection.TOP.value]: [ top, middle, right ],
-				[RoadDirection.LEFT.value]: [ left, middle, right ],
-			},
-			[RoadDirection.BOTTOM.value]: {
-				[RoadDirection.LEFT.value]: [ left, middle, top ],
-				[RoadDirection.RIGHT.value]: [ right, middle, top ],
-			}
+			[RoadDirection.RIGHT.value]: [
+				[
+					{ direction: dBottom, position: pTop },
+					{ direction: dLeft, position: pMiddle },
+					{ direction: dLeft, position: pLeft }
+				],
+				[
+					{ direction: dLeft, position: pRight },
+					{ direction: dLeft, position: pMiddle },
+					{ direction: dLeft, position: pLeft }
+				]
+			],
+			[RoadDirection.LEFT.value]: [
+				[
+					{ direction: dBottom, position: pTop },
+					{ direction: dRight, position: pMiddle },
+					{ direction: dRight, position: pRight }
+				],
+				[
+					{ direction: dRight, position: pLeft },
+					{ direction: dRight, position: pMiddle },
+					{ direction: dRight, position: pRight }
+				]
+			],
+			[RoadDirection.BOTTOM.value]: [
+				[
+					{ direction: dRight, position: pLeft },
+					{ direction: dTop, position: pMiddle },
+					{ direction: dTop, position: pTop }
+				],
+				[
+					{ direction: dLeft, position: pRight },
+					{ direction: dTop, position: pMiddle },
+					{ direction: dTop, position: pTop }
+				]
+			]
 		},
 		graphics: {
 			image: imgRoadT,
@@ -168,18 +298,42 @@ export default class RoadType {
 	static T_LEFT_RIGHT_BOTTOM = {
 		value: RoadDirection.RIGHT.value + RoadDirection.LEFT.value + RoadDirection.BOTTOM.value,
 		victoryPath: {
-			[RoadDirection.RIGHT.value]: {
-				[RoadDirection.BOTTOM.value]: [ bottom, middle, left ],
-				[RoadDirection.RIGHT.value]: [ right, middle, left ],
-			},
-			[RoadDirection.LEFT.value]: {
-				[RoadDirection.BOTTOM.value]: [ bottom, middle, right ],
-				[RoadDirection.LEFT.value]: [ left, middle, right ],
-			},
-			[RoadDirection.TOP.value]: {
-				[RoadDirection.LEFT.value]: [ left, middle, bottom ],
-				[RoadDirection.RIGHT.value]: [ right, middle, bottom ],
-			}
+			[RoadDirection.RIGHT.value]: [
+				[
+					{ direction: dTop, position: pBottom },
+					{ direction: dLeft, position: pMiddle },
+					{ direction: dLeft, position: pLeft }
+				],
+				[
+					{ direction: dLeft, position: pRight },
+					{ direction: dLeft, position: pMiddle },
+					{ direction: dLeft, position: pLeft }
+				]
+			],
+			[RoadDirection.LEFT.value]: [
+				[
+					{ direction: dTop, position: pBottom },
+					{ direction: dRight, position: pMiddle },
+					{ direction: dRight, position: pRight }
+				],
+				[
+					{ direction: dRight, position: pLeft },
+					{ direction: dRight, position: pMiddle },
+					{ direction: dRight, position: pRight }
+				]
+			],
+			[RoadDirection.TOP.value]: [
+				[
+					{ direction: dRight, position: pLeft },
+					{ direction: dBottom, position: pMiddle },
+					{ direction: dBottom, position: pBottom }
+				],
+				[
+					{ direction: dLeft, position: pRight },
+					{ direction: dBottom, position: pMiddle },
+					{ direction: dBottom, position: pBottom }
+				]
+			]
 		},
 		graphics: {
 			image: imgRoadT,
@@ -191,7 +345,7 @@ export default class RoadType {
 	static HALF_RIGHT = {
 		value: RoadDirection.RIGHT.value,
 		victoryPath: {
-			[RoadDirection.LEFT.value]: [ middle, right ],
+			[RoadDirection.LEFT.value]: [[ middle, right ]]
 		},
 		graphics: {
 			image: imgRoadHalf,
@@ -202,7 +356,7 @@ export default class RoadType {
 	static HALF_BOTTOM = {
 		value: RoadDirection.BOTTOM.value,
 		victoryPath: {
-			[RoadDirection.TOP.value]: [ middle, bottom ],
+			[RoadDirection.TOP.value]: [[ middle, bottom ]]
 		},
 		graphics: {
 			image: imgRoadHalf,
@@ -213,7 +367,7 @@ export default class RoadType {
 	static HALF_LEFT = {
 		value: RoadDirection.LEFT.value,
 		victoryPath: {
-			[RoadDirection.RIGHT.value]: [ middle, left ],
+			[RoadDirection.RIGHT.value]: [[ middle, left ]]
 		},
 		graphics: {
 			image: imgRoadHalf,
@@ -224,7 +378,7 @@ export default class RoadType {
 	static HALF_TOP = {
 		value: RoadDirection.TOP.value,
 		victoryPath: {
-			[RoadDirection.BOTTOM.value]: [ middle, top ],
+			[RoadDirection.BOTTOM.value]: [[ middle, top ]]
 		},
 		graphics: {
 			image: imgRoadHalf,
