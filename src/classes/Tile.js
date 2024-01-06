@@ -9,12 +9,15 @@ export default class Tile {
 	#roadType;
 	#id;
 	#image;
+	#victoryDirection;
 	#subPositions = new Map();
 	constructor(args = {}) {
-		const { position, roadType, id } = args;
+		const { position, roadType, id, victoryDirection = null } = args;
 		this.position = position;
 		this.id = id;
 		this.roadType = roadType;
+		if (victoryDirection !== null && !RoadDirection.isDirection(victoryDirection)) throw new Error(`'victoryDirection' must be a valid RoadDirection.`);
+		this.#victoryDirection = victoryDirection;
 	}
 
 	get id() {
@@ -53,6 +56,10 @@ export default class Tile {
 	set image(value) {
 		if (!(value instanceof Object)) throw new Error(`'image' must be one of the legal objects.`);
 		this.#image = value;
+	}
+
+	get victoryDirection() {
+		return this.#victoryDirection;
 	}
 
 	addItem(args = {}) {

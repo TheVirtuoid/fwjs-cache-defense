@@ -8,6 +8,7 @@ import RoadDirection from "../../src/classes/types/RoadDirection.js";
 const id = 'test';
 const position = new Pos({ x: 5, y: 5 });
 const roadType = RoadType.HALF_RIGHT;
+const victoryDirection = RoadDirection.RIGHT;
 
 const item1 = new Item({ id: 'test1', type: ItemType.MONSTER.ALIEN });
 const item2 = new Item({ id: 'test2', type: ItemType.MONSTER.ALIEN });
@@ -34,6 +35,9 @@ describe('Tile', () => {
 		it('should throw error if position is not a Pos class', () => {
 			expect(() => new Tile({ id, roadType, position: 0 })).to.throw(`'position' must be a Pos class.`);
 		});
+		it('should throw error if victoryDirection is specified and not a RoadDirection', () => {
+			expect(() => new Tile({ id, roadType, position, victoryDirection: 'test' })).to.throw(`'victoryDirection' must be a valid RoadDirection.`);
+		});
 		it('should create the instance', () => {
 			const tile = new Tile({ id, roadType, position });
 			expect(tile).to.be.instanceOf(Tile);
@@ -41,6 +45,14 @@ describe('Tile', () => {
 		it('should have an id', () => {
 			const tile = new Tile({ id, roadType, position });
 			expect(tile.id).to.equal('test');
+		});
+		it('should have victoryDirection set as null', () => {
+			const tile = new Tile({ id, roadType, position });
+			expect(tile.victoryDirection).to.be.null;
+		});
+		it('should have victoryDirection set as RoadDirection.RIGHT', () => {
+			const tile = new Tile({ id, roadType, position, victoryDirection });
+			expect(tile.victoryDirection).to.equal(RoadDirection.RIGHT);
 		});
 		it('should have the correct roadType', () => {
 			const tile = new Tile({ id, roadType, position });

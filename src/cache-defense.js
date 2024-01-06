@@ -14,6 +14,7 @@ phaserConfig.scene = GameScene;
 
 const startingPosition = new Pos({ x: 5, y: 5 });
 const startingTile = new Tile({ id: 'start', roadType: RoadType.HALF_LEFT, position: startingPosition });
+const openingVictoryPath = [ new Pos({ x: 0, y:1 }), new Pos({ x: 1, y: 1 }), null];
 
 let alien;
 let scene;
@@ -37,7 +38,6 @@ document.getElementById('next-tile').addEventListener('click', () => {
 	while (openTiles.length) {
 		const tile = openTiles.shift();
 		const possibleTiles = tiles.getNextLegalTiles(tile);
-		console.log(`---possible roads length = ${possibleTiles.length}`);
 		possibleTiles.forEach((possibleTile) => {
 			const { legalRoadTypes, position } = possibleTile;
 			if (legalRoadTypes.length) {
@@ -53,9 +53,11 @@ document.getElementById('next-tile').addEventListener('click', () => {
 
 const placeMonsters = () => {
 	openTiles.forEach((openTile) => {
-		const { position } = openTile;
+		const { position, roadType } = openTile;
 		const id = `monster-${monsterCount++}`;
 		const monster = new Item({ id, type: ItemType.MONSTER.ALIEN });
+		// determin victoryPath
+
 		addItem(monster, openTile, new Pos({ x: 1, y: 1 }));
 		monster.image.anims.play('alien-walk', true);
 		monsters.set(id, monster);
