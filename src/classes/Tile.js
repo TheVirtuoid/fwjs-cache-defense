@@ -86,4 +86,5 @@ export default class Tile {
 		if (!RoadDirection.isDirection(direction)) throw new Error(`'direction' must be a valid RoadDirection.`);
 		return new Pos({ x: this.position.x + direction.x, y: this.position.y + direction.y });
 	}
+
 }

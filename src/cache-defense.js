@@ -25,8 +25,6 @@ const tiles = new Tiles();
 const tilesById = new Map();*/
 let openTiles = [];
 
-openTiles.push(startingTile);
-
 let openTilePosition = new Pos({ x: 5, y: 5 });
 let openTileDirection = RoadDirection.LEFT;
 
@@ -34,7 +32,18 @@ document.getElementById('next-tile').addEventListener('click', () => {
 	const addedTiles = [];
 	while (openTiles.length) {
 		const tile = openTiles.shift();
-		const openDirections = [];
+		const possibleTiles = tiles.getNextLegalTiles(tile);
+		console.log(`---possible roads length = ${possibleTiles.length}`);
+		possibleTiles.forEach((possibleTile) => {
+			const { legalRoadTypes, position } = possibleTile;
+			if (legalRoadTypes.length) {
+				const whichRoad = Math.floor(Math.random() * legalRoadTypes.length);
+				const newRoad = new Tile({ id: position.toString(), roadType: legalRoadTypes[whichRoad], position });
+				addedTiles.push(addTile(newRoad));
+			}
+		});
+		// console.log(possibleRoads);
+		/*const openDirections = [];
 		if (tile.roadType.value & RoadDirection.TOP.value) openDirections.push(RoadDirection.TOP);
 		if (tile.roadType.value & RoadDirection.RIGHT.value) openDirections.push(RoadDirection.RIGHT);
 		if (tile.roadType.value & RoadDirection.BOTTOM.value) openDirections.push(RoadDirection.BOTTOM);
@@ -44,12 +53,12 @@ document.getElementById('next-tile').addEventListener('click', () => {
 			if (!tiles.get(nextPosition.toString())) {
 				addedTiles.push(addNextTile(tile.position, direction));
 			}
-		});
+		});*/
 	}
 	openTiles = addedTiles;
 });
 
-const addNextTile = (tilePosition, tileDirection) => {
+/*const addNextTile = (tilePosition, tileDirection) => {
 	const openTile = tiles.get(tilePosition.toString());
 	const openDirection = tileDirection;
 
@@ -63,7 +72,7 @@ const addNextTile = (tilePosition, tileDirection) => {
 	const whichRoad = Math.floor(Math.random() * validRoadTypes.length);
 	const newRoad = new Tile({ id: 'test', roadType: validRoadTypes[whichRoad], position: nextPosition });
 	return addTile(newRoad);
-}
+}*/
 
 const waitForGameReady = (game) => {
 	let counter = 500;
@@ -151,8 +160,7 @@ const processMonsterMovement = (monster) => {
 
 const addTile = (tile) => {
 	const { roadType, position } = tile;
-	tiles.set(position.toString(), tile);
-	tilesById.set(tile.id, tile);
+	tiles.addTile(tile);
 	tile.image = scene.addImage(roadType.graphics, position.x, position.y);
 	return tile;
 }
@@ -168,6 +176,7 @@ const continueGame = (game) => {
 	try {
 		scene = game.scene.getScenes()[0];
 		addTile(startingTile);
+		openTiles.push(startingTile);
 		const cache = new Item({ id: 'cache', type: ItemType.CACHE.BASE });
 		addItem(cache, startingTile, new Pos({ x: 1, y: 1 }));
 

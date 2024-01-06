@@ -28,10 +28,10 @@ export default class Tiles {
 		[...RoadDirection.ROAD_DIRECTIONS].forEach((direction) => {
 			if ((roadType.value & direction.value) !== 0) {
 				const newPosition = new Pos({ x: position.x + direction.x, y: position.y + direction.y });
-				console.log(`---------getting legal ${roadType.value} (${position.toString()}), ${direction.value} at ${newPosition.toString()}-------------------`);
+				// console.log(`---------getting legal ${roadType.value} (${position.toString()}), ${direction.value} at ${newPosition.toString()}-------------------`);
 				const legalRoadTypes = this.#processNextLegalTiles(position, newPosition, roadType, direction);
 				if (legalRoadTypes.length) {
-					console.log(`    length = ${legalRoadTypes.length}`);
+					// console.log(`    length = ${legalRoadTypes.length}`);
 					legalTiles.push({ position: newPosition, direction, legalRoadTypes });
 				}
 			}
