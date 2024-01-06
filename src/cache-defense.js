@@ -17,6 +17,10 @@ const startingTile = new Tile({ id: 'start', roadType: RoadType.HALF_LEFT, posit
 
 let alien;
 let scene;
+
+const monsters = new Map();
+let monsterCount = 0;
+
 const speed = .5;
 
 const tiles = new Tiles();
@@ -42,37 +46,21 @@ document.getElementById('next-tile').addEventListener('click', () => {
 				addedTiles.push(addTile(newRoad));
 			}
 		});
-		// console.log(possibleRoads);
-		/*const openDirections = [];
-		if (tile.roadType.value & RoadDirection.TOP.value) openDirections.push(RoadDirection.TOP);
-		if (tile.roadType.value & RoadDirection.RIGHT.value) openDirections.push(RoadDirection.RIGHT);
-		if (tile.roadType.value & RoadDirection.BOTTOM.value) openDirections.push(RoadDirection.BOTTOM);
-		if (tile.roadType.value & RoadDirection.LEFT.value) openDirections.push(RoadDirection.LEFT);
-		openDirections.forEach((direction) => {
-			const nextPosition = tile.getNextPosition(direction);
-			if (!tiles.get(nextPosition.toString())) {
-				addedTiles.push(addNextTile(tile.position, direction));
-			}
-		});*/
 	}
 	openTiles = addedTiles;
+	placeMonsters();
 });
 
-/*const addNextTile = (tilePosition, tileDirection) => {
-	const openTile = tiles.get(tilePosition.toString());
-	const openDirection = tileDirection;
-
-	const nextPosition = openTile.getNextPosition(openDirection);
-
-	// determine which road types are legal. These road types must have the opposite of openDirection as one of their paths
-	const oppositeDirection = RoadDirection.getOpposite(openDirection);
-	const validRoadTypes =
-			[...RoadType.ROAD_TYPES].filter((roadType) => roadType.value & oppositeDirection.value && roadType.value !== oppositeDirection.value);
-	// console.log(validRoadTypes);
-	const whichRoad = Math.floor(Math.random() * validRoadTypes.length);
-	const newRoad = new Tile({ id: 'test', roadType: validRoadTypes[whichRoad], position: nextPosition });
-	return addTile(newRoad);
-}*/
+const placeMonsters = () => {
+	openTiles.forEach((openTile) => {
+		const { position } = openTile;
+		const id = `monster-${monsterCount++}`;
+		const monster = new Item({ id, type: ItemType.MONSTER.ALIEN });
+		addItem(monster, openTile, new Pos({ x: 1, y: 1 }));
+		monster.image.anims.play('alien-walk', true);
+		monsters.set(id, monster);
+	});
+};
 
 const waitForGameReady = (game) => {
 	let counter = 500;
@@ -179,6 +167,13 @@ const continueGame = (game) => {
 		openTiles.push(startingTile);
 		const cache = new Item({ id: 'cache', type: ItemType.CACHE.BASE });
 		addItem(cache, startingTile, new Pos({ x: 1, y: 1 }));
+
+		scene.anims.create({
+			key: 'alien-walk',
+			frames: scene.anims.generateFrameNumbers(ItemType.MONSTER.ALIEN.graphics.key, { frames: [0, 1, 2, 1] }),
+			frameRate: 4,
+			repeat: -1
+		});
 
 
 
