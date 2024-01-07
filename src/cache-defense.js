@@ -19,10 +19,15 @@ const startingTile = new Tile({
 	position: startingPosition,
 	victoryDirection: RoadDirection.LEFT
 });
-const openingVictoryPath = [ new Pos({ x: 0, y:1 }), new Pos({ x: 1, y: 1 }), null];
+const openingVictoryPath = [
+	{ direction: RoadDirection.RIGHT, position: new Pos({ x: 5, y: 5 }), subPosition: new Pos({ x: 0, y:1 }) },
+	{ direction: RoadDirection.RIGHT, position: new Pos({ x: 5, y: 5 }), subPosition: new Pos({ x: 1, y: 1 }) },
+	{ position: null }
+];
 
 let alien;
 let scene;
+let running = false;
 
 const monsters = new Map();
 let monsterCount = 0;
@@ -60,7 +65,7 @@ document.getElementById('next-tile').addEventListener('click', () => {
 	}
 	openTiles = addedTiles;
 	placeMonsters();
-	//runMonsters();
+	runMonsters();
 });
 
 const placeMonsters = () => {
@@ -90,8 +95,10 @@ const placeMonsters = () => {
 			const { direction, position: subPosition } = entry;
 			path.push({ direction, position, subPosition });
 		});
-		path.push({ position: null });
-		console.log(path);
+		monster.victoryPath = path.concat(openingVictoryPath);
+		monster.finished = false;
+		monster.movementStep = -1;
+		console.log(path.concat(openingVictoryPath));
 
 
 
@@ -102,10 +109,7 @@ const placeMonsters = () => {
 };
 
 const runMonsters = () => {
-monsters.forEach((monster) => {
-		monster.finished = false;
-		monster.movementStep = -1;
-	});
+	running = true;
 };
 
 const waitForGameReady = (game) => {
@@ -131,7 +135,11 @@ const waitForGameReady = (game) => {
 };
 
 const updateCallback = () => {
-	// processMonsterMovement(alien);
+	if (running) {
+		monsters.forEach((monster) => {
+			processMonsterMovement(monster);
+		});
+	}
 }
 
 const processMonsterMovement = (monster) => {
@@ -221,7 +229,7 @@ const continueGame = (game) => {
 			repeat: -1
 		});
 
-
+		scene.updateCallback = updateCallback;
 
 
 		/*scene = game.scene.getScenes()[0];
